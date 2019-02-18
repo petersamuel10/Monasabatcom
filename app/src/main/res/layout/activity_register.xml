@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register">
+
+    <RelativeLayout
+        android:layout_margin="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
+            android:src="@drawable/logo"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            />
+
+        <ScrollView
+            android:layout_below="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/register_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_margin="20dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/fullName_reg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/border"
+                        android:drawableStart="@drawable/user_icon"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/user_name"
+                        android:inputType="text"
+                        android:padding="5dp" />
+
+                    <EditText
+                        android:id="@+id/email-reg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/border"
+                        android:drawableStart="@drawable/email"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress"
+                        android:padding="5dp" />
+
+                    <EditText
+                        android:id="@+id/mobile_reg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/border"
+                        android:drawableStart="@drawable/ic_phone_black_24dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/mobile"
+                        android:inputType="phone"
+                        android:padding="5dp" />
+
+                    <EditText
+                        android:id="@+id/password_reg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/border"
+                        android:drawableStart="@drawable/password"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:padding="5dp" />
+
+                    <EditText
+                        android:id="@+id/confirm_password_reg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/border"
+                        android:drawableStart="@drawable/password"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/confirm_password"
+                        android:inputType="textPassword"
+                        android:padding="5dp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_below="@+id/register_info"
+                    android:id="@+id/btnRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="@string/register"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background ="@drawable/button_style"
+                    />
+
+                <TextView
+                    android:id="@+id/have_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/have_account"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+
+        </ScrollView>
+
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

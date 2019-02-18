@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1B4694</color>
+    <color name="colorPrimaryDark">#1B4694</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="bottom_nav_true">#1B4694</color>
+    <color name="bottom_nav_false">#C6C6C6</color>
+    <color name="black">#000</color>
+    <color name="grey">#D7D7D7</color>
+    <color name="emailFontColor">#C6C6C6</color>
+    <color name="blue">#007AFF</color>
+    <color name="background">#f0f0f0</color>
+    <color name="orange">#FFDC5C</color>
+    <color name="golden">#EBC61F</color>
+</resources>
