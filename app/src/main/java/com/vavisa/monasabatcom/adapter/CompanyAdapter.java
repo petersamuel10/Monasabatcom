@@ -14,36 +14,49 @@ import java.util.ArrayList;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyViewHolder> {
 
-    ArrayList<Company> companies;
-    Context mContext;
+  private ArrayList<Company> companies;
+  private Context context;
+  private int viewType;
 
-    public CompanyAdapter() {
-        companies = new ArrayList<>();
+  public CompanyAdapter(Context context, ArrayList<Company> companies, int viewType) {
+    this.context = context;
+    this.companies = companies;
+    this.viewType = viewType;
+  }
+
+  @NonNull
+  @Override
+  public CompanyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+    View view = null;
+    switch (viewType) {
+      case 1:
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_company, null);
+        break;
+
+      case 2:
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_company2, null);
+        break;
+
+      case 3:
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_company3, null);
+        break;
     }
 
+    return new CompanyViewHolder(view);
+  }
 
-    @NonNull
-    @Override
-    public CompanyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_company,null);
-        mContext = parent.getContext();
+  @Override
+  public void onBindViewHolder(@NonNull CompanyViewHolder companyViewHolder, int position) {
+    companyViewHolder.bind(companies.get(position));
+  }
 
-        return new CompanyViewHolder(view);
-    }
+  @Override
+  public int getItemCount() {
+    return companies.size();
+  }
 
-    @Override
-    public void onBindViewHolder(@NonNull CompanyViewHolder companyViewHolder, int position) {
-        companyViewHolder.bind(companies.get(position));
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return companies.size();
-    }
-
-    public void addCompany(ArrayList<Company> newCompany)
-    {
-        companies.addAll(newCompany);
-    }
+  /*public void addCompany(ArrayList<Company> newCompany)
+  {
+      companies.addAll(newCompany);
+  }*/
 }

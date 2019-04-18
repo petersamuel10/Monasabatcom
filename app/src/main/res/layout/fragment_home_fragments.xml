@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,14 +15,30 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             android:padding="10dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/search_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_search_white_24dp" />
+
+                <ImageButton
+                    android:id="@+id/filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@+id/search_bar"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_filter" />
 
                 <TextView
                     android:id="@+id/title_name"
@@ -30,8 +47,60 @@
                     android:layout_centerHorizontal="true"
                     android:text="@string/home"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/search_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/search_text"
+                        android:layout_width="0dp"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="5dp"
+                        android:background="@drawable/rounded_border_white_filled"
+                        android:drawableStart="@drawable/ic_search_gray_24dp"
+                        android:hint="@string/search"
+                        android:imeOptions="actionSearch"
+                        android:paddingStart="5dp"
+                        android:textColorHint="#bebebe"
+                        android:textColor="@android:color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/cancel_button"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/clear_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_cancel_filled"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/search_text"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/cancel_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/cancel"
+                        android:textColor="@android:color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
 
             </RelativeLayout>
 
@@ -87,7 +156,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/home_recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                        android:layout_height="match_parent" />
                 </LinearLayout>
 
             </ScrollView>

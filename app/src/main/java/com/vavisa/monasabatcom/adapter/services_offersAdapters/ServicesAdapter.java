@@ -2,46 +2,68 @@ package com.vavisa.monasabatcom.adapter.services_offersAdapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
+import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.models.companyDetails.Services;
 
 import java.util.ArrayList;
 
-public class ServicesAdapter extends RecyclerView.Adapter<ServicesViewHolder> {
+public class ServicesAdapter extends ArrayAdapter<Services> {
 
-    ArrayList<Services> servicesList;
-    Context mContext;
+  private ArrayList<Services> servicesList;
+  private Context context;
 
-    public ServicesAdapter(ArrayList<Services> services) {
-        this.servicesList = services;
+  public ServicesAdapter(
+      @NonNull Context context, int resource, @NonNull ArrayList<Services> objects) {
+    super(context, resource, objects);
+    this.context = context;
+    this.servicesList = objects;
+  }
+
+  @Override
+  public int getCount() {
+    return servicesList.size();
+  }
+
+  @NonNull
+  @Override
+  public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+    final ViewHolder viewHolder;
+    if (convertView == null) {
+      convertView =
+          LayoutInflater.from(parent.getContext())
+              .inflate(R.layout.service_list_item, parent, false);
+      viewHolder = new ViewHolder();
+      viewHolder.serviceName = convertView.findViewById(R.id.service_name);
+      viewHolder.servicePrice = convertView.findViewById(R.id.service_price);
+      convertView.setTag(viewHolder);
+    } else {
+      viewHolder = (ViewHolder) convertView.getTag();
     }
 
-    @NonNull
-    @Override
-    public ServicesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service,null);
-        mContext = parent.getContext();
-
-        return new ServicesViewHolder(view);
+    if (Common.isArabic) {
+      viewHolder.serviceName.setText(servicesList.get(position).getNameAR());
+    } else {
+      viewHolder.serviceName.setText(servicesList.get(position).getNameEN());
     }
+    viewHolder.servicePrice.setText(
+        servicesList.get(position).getPrice()
+            + " "
+            + context.getResources().getString(R.string.kd));
 
-    @Override
-    public void onBindViewHolder(@NonNull ServicesViewHolder holder, int position) {
-        holder.bind(servicesList.get(position));
-    }
+    return convertView;
+  }
 
-    @Override
-    public int getItemCount() {
-        return servicesList.size();
-    }
-
-    public void addAddresses(ArrayList<Services> newService)
-    {
-        servicesList.addAll(newService);
-    }
+  private static class ViewHolder {
+    TextView serviceName;
+    TextView servicePrice;
+  }
 }
