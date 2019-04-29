@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.vavisa.monasabatcom">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:name=".ApplicationClass"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_reound"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity"></activity>
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:icon">
+        <activity android:name=".MainActivity" />
         <activity android:name=".Login" />
         <activity android:name=".Register" />
         <activity android:name=".AddNewAddress" />
         <activity android:name=".ForgetPassword" />
         <activity android:name=".CompletePayment" />
+        <activity android:name=".activities.FilterActivity" />
         <activity
             android:name=".Welcome"
             android:screenOrientation="portrait"
@@ -33,15 +34,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".notification.NotificationExtenderBareBonesExample"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false">
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
                 <action android:name="com.onesignal.NotificationExtender" />
             </intent-filter>
         </service>
-        <activity android:name=".ChooseLanguage"></activity>
+
+        <activity android:name=".ChooseLanguage" />
     </application>
 
 </manifest>

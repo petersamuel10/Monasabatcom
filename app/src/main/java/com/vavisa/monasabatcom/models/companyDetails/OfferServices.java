@@ -37,7 +37,6 @@ public class OfferServices {
         this.price = price;
     }
 
-
     public Integer getId() {
         return id;
     }

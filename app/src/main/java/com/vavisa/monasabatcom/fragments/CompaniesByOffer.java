@@ -1,6 +1,5 @@
 package com.vavisa.monasabatcom.fragments;
 
-
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,6 @@ import android.widget.TextView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.adapter.Company2Adapter;
-import com.vavisa.monasabatcom.adapter.Company3Adapter;
 import com.vavisa.monasabatcom.adapter.CompanyAdapter;
 import com.vavisa.monasabatcom.models.Company;
 
@@ -35,230 +32,168 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+/** A simple {@link Fragment} subclass. */
 public class CompaniesByOffer extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.sl)
-    SwipeRefreshLayout sl;
-    @BindView(R.id.com_by_offer_recy)
-    RecyclerView com_offer_recy;
-    @BindView(R.id.com_offer_progress)
-    ProgressBar progressBar;
-    @BindView(R.id.title)
-    TextView title;
-    @BindView(R.id.arrow)
-    ImageView arrowAr;
-    @BindView(R.id.empty_list)
-    TextView emptyList;
-    @BindView(R.id.first)
-    ImageView first;
-    @BindView(R.id.second)
-    ImageView second;
-    @BindView(R.id.third)
-    ImageView third;
-    @OnClick(R.id.back)
-    public void setBack()
-    {getActivity().onBackPressed();}
+  @BindView(R.id.sl)
+  SwipeRefreshLayout sl;
 
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    CompanyAdapter adapter;
-    Company2Adapter adapter2;
-    Company3Adapter adapter3;
-    ProgressDialog progressDialog;
+  @BindView(R.id.com_by_offer_recy)
+  RecyclerView com_offer_recy;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.companies_by_offer, container, false);
-        ButterKnife.bind(this,view);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setCancelable(false);
+  @BindView(R.id.com_offer_progress)
+  ProgressBar progressBar;
 
-        title.setText(Common.offerName);
+  @BindView(R.id.title)
+  TextView title;
 
-        setUpSwipeRefreshLayout();
+  @BindView(R.id.arrow)
+  ImageView arrowAr;
 
-        //setup recyclerView
+  @BindView(R.id.empty_list)
+  TextView emptyList;
+
+  @BindView(R.id.first)
+  ImageView first;
+
+  @BindView(R.id.second)
+  ImageView second;
+
+  @BindView(R.id.third)
+  ImageView third;
+
+  @OnClick(R.id.back)
+  public void setBack() {
+    getActivity().onBackPressed();
+  }
+
+  CompositeDisposable compositeDisposable = new CompositeDisposable();
+  CompanyAdapter adapter;
+  ProgressDialog progressDialog;
+  private int viewType = 1;
+  private ArrayList<Company> companyList = new ArrayList<>();
+
+  @Override
+  public View onCreateView(
+      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    View view = inflater.inflate(R.layout.companies_by_offer, container, false);
+    ButterKnife.bind(this, view);
+    progressDialog = new ProgressDialog(getActivity());
+    progressDialog.setCancelable(false);
+
+    title.setText(Common.offerName);
+
+    setUpSwipeRefreshLayout();
+
+    title.setText(Common.offerName);
+    first.setOnClickListener(this);
+    second.setOnClickListener(this);
+    third.setOnClickListener(this);
+
+    if (Common.isArabic)
+      arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
+
+    requestData();
+    iconViewColor(first, second, third);
+
+    return view;
+  }
+
+  @Override
+  public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.first:
+        viewType = 1;
         setupRecyclerView();
-        title.setText(Common.offerName);
-        first.setOnClickListener(this);
-        second.setOnClickListener(this);
-        third.setOnClickListener(this);
+        iconViewColor(first, second, third);
+        break;
 
-        if(Common.isArabic)
-            arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
+      case R.id.second:
+        viewType = 2;
+        setupRecyclerView();
+        iconViewColor(second, first, third);
+        break;
 
-            requestData();
-            iconViewColor(first,second,third);
+      case R.id.third:
+        viewType = 3;
+        setupRecyclerView();
+        iconViewColor(third, first, second);
+        break;
+    }
+  }
 
-        return view;
+  public void iconViewColor(ImageView blue, ImageView grey, ImageView grey2) {
+
+    blue.setColorFilter(getResources().getColor(R.color.blue));
+    grey.setColorFilter(getResources().getColor(R.color.bottom_nav_false));
+    grey2.setColorFilter(getResources().getColor(R.color.bottom_nav_false));
+  }
+
+  private void requestData() {
+    if (Common.isConnectToTheInternet(getActivity())) {
+
+      progressDialog.show();
+
+      compositeDisposable.add(
+          Common.getAPI()
+              .getCompaniesByOffer(Common.offerId)
+              .subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(
+                  new Consumer<ArrayList<Company>>() {
+                    @Override
+                    public void accept(ArrayList<Company> companies) throws Exception {
+                      if (companies.size() > 0) {
+                        emptyList.setVisibility(View.GONE);
+                        companyList = companies;
+                        setupRecyclerView();
+                        progressDialog.dismiss();
+                      } else progressDialog.dismiss();
+                    }
+                  }));
+    } else errorConnectionMess();
+  }
+
+  private void setupRecyclerView() {
+
+    switch (viewType) {
+      case 1:
+        com_offer_recy.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        break;
+
+      case 2:
+      case 3:
+        com_offer_recy.setLayoutManager(new LinearLayoutManager(getActivity()));
+        break;
     }
 
+    /*com_offer_recy.setHasFixedSize(true);
+    com_offer_recy.setLayoutManager(new GridLayoutManager(getContext(), 2));
+    LayoutAnimationController controller =
+        AnimationUtils.loadLayoutAnimation(com_offer_recy.getContext(), R.anim.layout_fall_down);
+    com_offer_recy.setLayoutAnimation(controller);*/
+    adapter = new CompanyAdapter(getActivity(), companyList, viewType);
+    com_offer_recy.setAdapter(adapter);
+  }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.first:
-                setupRecyclerView();
-                requestData();
-                iconViewColor(first,second,third);
-                break;
-
-            case R.id.second:
-                setupRecyclerView2();
-                requestData2();
-                iconViewColor(second,first,third);
-                break;
-
-            case R.id.third:
-                setupRecyclerView3();
-                requestData3();
-                iconViewColor(third,first,second);
-                break;
-        }
-
-    }
-
-    public void iconViewColor(ImageView blue, ImageView grey, ImageView grey2) {
-
-        blue.setColorFilter(getResources().getColor(R.color.blue));
-        grey.setColorFilter(getResources().getColor(R.color.bottom_nav_false));
-        grey2.setColorFilter(getResources().getColor(R.color.bottom_nav_false));
-
-    }
-
-    private void requestData() {
-        if(Common.isConnectToTheInternet(getActivity())) {
-
-            progressDialog.show();
-
-            compositeDisposable.add(Common.getAPI().getCompaniesByOffer(Common.offerId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<ArrayList<Company>>() {
-                        @Override
-                        public void accept(ArrayList<Company> companies) throws Exception {
-                            if (companies.size() > 0) {
-                                emptyList.setVisibility(View.GONE);
-                                adapter.addCompany(companies);
-                                adapter.notifyDataSetChanged();
-                                progressDialog.dismiss();
-                            } else
-                                progressDialog.dismiss();
-                        }
-                    }));
-        }else
-            errorConnectionMess();
-    }
-    private void setupRecyclerView() {
-
-        com_offer_recy.setHasFixedSize(true);
-        com_offer_recy.setLayoutManager(new GridLayoutManager(getContext(),2));
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(com_offer_recy.getContext(),R.anim.layout_fall_down);
-        com_offer_recy.setLayoutAnimation(controller);
-        adapter = new CompanyAdapter();
-        com_offer_recy.setAdapter(adapter);
-
-    }
-
-    private void requestData2() {
-        if(Common.isConnectToTheInternet(getActivity())) {
-
-            progressDialog.show();
-
-            compositeDisposable.add(Common.getAPI().getCompanies(Common.categoryId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<ArrayList<Company>>() {
-                        @Override
-                        public void accept(ArrayList<Company> companies) throws Exception {
-                            if (companies.size() > 0) {
-                                emptyList.setVisibility(View.GONE);
-                                adapter2.addCompany(companies);
-                                adapter2.notifyDataSetChanged();
-                                progressDialog.dismiss();
-                            }else
-                                progressDialog.dismiss();
-                        }
-                    }));
-        }else
-            errorConnectionMess();
-    }
-    private void setupRecyclerView2() {
-
-        com_offer_recy.setHasFixedSize(true);
-        com_offer_recy.setLayoutManager(new LinearLayoutManager(getContext()));
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(com_offer_recy.getContext(),R.anim.layout_fall_down);
-        com_offer_recy.setLayoutAnimation(controller);
-        adapter2 = new Company2Adapter();
-        com_offer_recy.setAdapter(adapter2);
-    }
-
-    private void requestData3() {
-        if(Common.isConnectToTheInternet(getActivity())) {
-
-            progressDialog.show();
-
-            compositeDisposable.add(Common.getAPI().getCompanies(Common.categoryId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<ArrayList<Company>>() {
-                        @Override
-                        public void accept(ArrayList<Company> companies) throws Exception {
-                            if (companies.size() > 0) {
-                                emptyList.setVisibility(View.GONE);
-                                adapter3.addCompany(companies);
-                                adapter3.notifyDataSetChanged();
-                                progressDialog.dismiss();
-                            }else
-                                progressDialog.dismiss();
-                        }
-                    }));
-        }else
-            errorConnectionMess();
-    }
-    private void setupRecyclerView3() {
-
-        com_offer_recy.setHasFixedSize(true);
-        com_offer_recy.setLayoutManager(new LinearLayoutManager(getContext()));
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(com_offer_recy.getContext(),R.anim.layout_fall_down);
-        com_offer_recy.setLayoutAnimation(controller);
-        adapter3 = new Company3Adapter();
-        com_offer_recy.setAdapter(adapter3);
-    }
-
-    private void setUpSwipeRefreshLayout() {
-        sl.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-        sl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                if (adapter != null) {
-                    setupRecyclerView();
-                    requestData();
-                } else if (adapter2 != null) {
-                    setupRecyclerView2();
-                    requestData2();
-                } else if (adapter3 != null) {
-                    setupRecyclerView3();
-                    requestData3();
-                }
-
-                sl.setRefreshing(false);
-            }
+  private void setUpSwipeRefreshLayout() {
+    sl.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+    sl.setOnRefreshListener(
+        new SwipeRefreshLayout.OnRefreshListener() {
+          @Override
+          public void onRefresh() {
+            setupRecyclerView();
+            sl.setRefreshing(false);
+          }
         });
-    }
-    public void errorConnectionMess(){
+  }
 
-        AlertDialog.Builder error = new AlertDialog.Builder(getContext());
-        error.setMessage(R.string.error_connection);
-        AlertDialog dialog = error.create();
-        dialog.show();
-        sl.setRefreshing(false);
-    }
-
+  public void errorConnectionMess() {
+    AlertDialog.Builder error = new AlertDialog.Builder(getContext());
+    error.setMessage(R.string.error_connection);
+    AlertDialog dialog = error.create();
+    dialog.show();
+    sl.setRefreshing(false);
+  }
 }

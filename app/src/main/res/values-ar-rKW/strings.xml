@@ -86,7 +86,6 @@
     <string name="address">العنوان</string>
     <string name="date">التاريخ</string>
     <string name="time">الوقت</string>
-    <string name="total_amount">المجموع الكلى</string>
     <string name="payment_process">عملية الدفع تمت بنجاح</string>
     <string name="continueTxt">استمرار</string>
     <string name="english">English</string>
@@ -108,4 +107,23 @@
     <string name="not_valide">غير متاح</string>
     <string name="missing_data">البيانات غير مكتمله</string>
     <string name="empty_list">القائمة فارغة.</string>
+    <string name="add_to_cart">أضف إلى السلة</string>
+    <string name="search">بحث</string>
+    <string name="filter">تصنيف</string>
+    <string name="working_hours">ساعات العمل:</string>
+    <string name="services_and_how_to_serve">الخدمة وطريقة التقديم:</string>
+    <string name="service_time">وقت التجهيز:</string>
+    <string name="requirements">المتطلبات:</string>
+    <string name="duration_of_stay">مدة البقاء:</string>
+    <string name="date_and_time">التاريخ والوقت</string>
+    <string name="extras">الإضافات</string>
+    <string name="extra_notes">ملاحظات إضافية</string>
+    <string name="women_service">خدمة نسائية</string>
+    <string name="service_details">تفاصيل الخدمة</string>
+    <string name="cart">السلة</string>
+    <string name="sub_total">المجموع:</string>
+    <string name="delivery">التوصيل:</string>
+    <string name="total_amount">مجموع الطلب:</string>
+    <string name="where_when">أين/متى</string>
+
 </resources>

@@ -1,5 +1,8 @@
 package com.vavisa.monasabatcom.webService;
 
+import android.content.Intent;
+
+import com.google.gson.JsonElement;
 import com.vavisa.monasabatcom.models.Address;
 import com.vavisa.monasabatcom.models.Appointment;
 import com.vavisa.monasabatcom.models.Category;
@@ -10,6 +13,8 @@ import com.vavisa.monasabatcom.models.Offer;
 import com.vavisa.monasabatcom.models.OrderDetails;
 import com.vavisa.monasabatcom.models.PageData;
 import com.vavisa.monasabatcom.models.PaymentUrl;
+import com.vavisa.monasabatcom.models.SearchHour;
+import com.vavisa.monasabatcom.models.Services;
 import com.vavisa.monasabatcom.models.User;
 import com.vavisa.monasabatcom.models.companyDetails.CompanyDetailsModel;
 import com.vavisa.monasabatcom.models.makeAppointment.MakeAppointment;
@@ -24,104 +29,114 @@ import retrofit2.http.POST;
 
 public interface APIInterface {
 
-    @POST("GetCategories")
+    @POST("GetCategories/")
     Observable<ArrayList<Category>> getCategory();
 
-    @POST("Register")
+    @POST("Register/")
     Observable<Integer>register(@Body User user);
 
-    @POST("Login")
+    @POST("Login/")
     Observable<Integer>login(@Body User user);
 
     @FormUrlEncoded
-    @POST("GetProfile")
+    @POST("GetProfile/")
     Observable<User>getProfile(@Field("UserId") Integer userId , @Field("Password") String Password);
 
-    @POST("GetOfferTypes")
+    @POST("GetOfferTypes/")
     Observable<ArrayList<Offer>> getOffers();
 
     @FormUrlEncoded
-    @POST("GetUserFavorites")
+    @POST("GetUserFavorites/")
     Observable<ArrayList<Company>> getFavouriteList(@Field("UserId") Integer userId);
 
     @FormUrlEncoded
-    @POST("GetCompaniesByOffer")
+    @POST("GetCompaniesByOffer/")
     Observable<ArrayList<Company>> getCompaniesByOffer(@Field("TypeId") Integer userId);
 
     @FormUrlEncoded
-    @POST("Editprofile")
+    @POST("Editprofile/")
     Observable<Integer> editProfile(@Field("UserId") Integer userId,@Field("Name") String name,@Field("Email") String email,@Field("Mobile") String mobile);
 
     @FormUrlEncoded
-    @POST("GetUserAddresses")
+    @POST("GetUserAddresses/")
     Observable<ArrayList<Address>> getUserAddresses(@Field("UserId") Integer userId);
 
-    @POST("GetGovernorates")
+    @POST("GetGovernorates/")
     Observable<ArrayList<Governorate>> getGovernorates();
 
     @FormUrlEncoded
-    @POST("GetCities")
+    @POST("GetCities/")
     Observable<ArrayList<City>> getCities(@Field("GovernorateId") Integer governorateId);
 
-    @POST("AddAddress")
+    @POST("GetSearchHours")
+    Observable<ArrayList<SearchHour>> getSearchHours();
+
+    @POST("AddAddress/")
     Observable<Integer> addAddress(@Body Address address);
 
-    @POST("EditAddress")
+    @POST("EditAddress/")
     Observable<Integer> editAddress(@Body Address address);
 
     @FormUrlEncoded
-    @POST("DeleteAddress")
+    @POST("DeleteAddress/")
     Observable<Integer> deleteAddress(@Field("AddressId")Integer addressId);
 
     @FormUrlEncoded
-    @POST("ChangePassword")
+    @POST("ChangePassword/")
     Observable<Integer> changePassword(@Field("UserId") Integer userId,@Field("OldPassword") String oldPassword,@Field("Password") String password);
 
     @FormUrlEncoded
-    @POST("GetUserOrders")
+    @POST("GetUserOrders/")
     Observable<ArrayList<Appointment>> getUserOrders(@Field("UserId") Integer userId);
 
     @FormUrlEncoded
-    @POST("ForgotPassword")
+    @POST("ForgotPassword/")
     Observable<Integer> forgotPassword(@Field("Email") String email,@Field("Language") String lan);
-
-    @POST("GetFeaturedCompanies")
-    Observable<ArrayList<Company>> getFeaturedCompanies();
 
     @FormUrlEncoded
     @POST("GetCompanies")
+    Observable<ArrayList<Company>> getFeaturedCompanies(@Field("CategoryId")Integer CategoryId,@Field("CityId")Integer CityId,
+                                                        @Field("SearchDate")String SearchDate,@Field("SearchHour")String SearchHour,
+                                                        @Field("IsFeatured")Integer IsFeatured,@Field("PageNo")Integer PageNo,@Field("PageSize") Integer PageSize);
+
+    @FormUrlEncoded
+    @POST("GetCompanies/")
     Observable<ArrayList<Company>> getCompanies(@Field("CategoryId") Integer categoryId);
 
     @FormUrlEncoded
     @POST("GetCompanyDetails")
-    Observable<CompanyDetailsModel> getCompanyDetails(@Field("CompanyId") Integer companyId,@Field("UserId") Integer userId);
+    Observable<CompanyDetailsModel> getCompanyDetails(@Field("CompanyId") Integer companyId, @Field("UserId") Integer userId);
 
     @FormUrlEncoded
-    @POST("Rating")
+    @POST("GetServiceDetails")
+    Observable<Services> getServiceDetails(@Field("ServiceId") Integer companyId);
+
+    @FormUrlEncoded
+    @POST("Rating/")
     Observable<Integer> rating(@Field("CompanyId") Integer companyId,@Field("UserId") Integer userId,@Field("Rate") Integer rating);
 
     @FormUrlEncoded
-    @POST("MarkAsFavorite")
+    @POST("MarkAsFavorite/")
     Observable<Integer> markAsFavorite(@Field("UserId") Integer userId,@Field("CompanyId") Integer companyId);
 
-    @POST("AddOrder")
+    @POST("AddOrder/")
     Observable<Integer> addOrder(@Body MakeAppointment makeAppointment);
 
     @FormUrlEncoded
-    @POST("GetOrderDetails")
+    @POST("GetOrderDetails/")
     Observable<OrderDetails> getOrderDetails(@Field("OrderId")Integer orderId);
 
     @FormUrlEncoded
-    @POST("CheckAppointmentDate")
+    @POST("CheckAppointmentDate/")
     Observable<Integer> checkAppointmentDate(@Field("CompanyId")Integer orderId,@Field("AppointmentDate") String AppointmentDate);
 
 
     @FormUrlEncoded
-    @POST("GetPages")
+    @POST("GetPages/")
     Observable<PageData> getPages(@Field("PageId")Integer pageId);
 
     @FormUrlEncoded
-    @POST("Payorder")
+    @POST("Payorder/")
     Observable<PaymentUrl> getPayment (@Field("Orderid") Integer Orderid);
 
 }

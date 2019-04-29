@@ -81,7 +81,7 @@ public class CategoryFragment extends Fragment {
     }
     private void setupRecyclerView() {
 
-        home_recyclerView.setHasFixedSize(true);
+        home_recyclerView.setHasFixedSize(false);
         home_recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(home_recyclerView.getContext(),R.anim.layout_fall_down);
         home_recyclerView.setLayoutAnimation(controller);
