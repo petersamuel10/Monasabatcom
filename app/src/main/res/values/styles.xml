@@ -26,10 +26,12 @@
         <item name="colorAccent">@android:color/white</item>
     </style>
 
-    <style name="RatingBar" parent="Theme.AppCompat">
+    <style name="RatingBar" parent="@android:style/Widget.RatingBar">
         <item name="colorAccent">@color/orange</item>
         <item name="colorControlNormal">@color/orange</item>
         <item name="colorControlActivated">@color/golden</item>
+
+        <item name="android:maxHeight">@dimen/_4sdp</item>
     </style>
 
     <style name="RatingDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -59,5 +61,19 @@
         <item name="colorAccent">@color/blue</item>
         <item name="android:color">@color/nav_color</item>
     </style>
+
+    <style name = "MyDialog" parent="AppTheme" >
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <item name = "android:backgroundDimEnabled">true</item>
+        <item name = "android:windowBackground" >@android:color/transparent</item >
+    </style >
+
+    <style name="PauseDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_down</item>
+        <item name="android:windowExitAnimation">@anim/slide_up</item>
+    </style>
+
 
 </resources>

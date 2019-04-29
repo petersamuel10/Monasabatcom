@@ -1,5 +1,6 @@
 package com.vavisa.monasabatcom;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,17 +11,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.ViewHolder;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.fragments.CategoryFragment;
-import com.vavisa.monasabatcom.fragments.CompanyDetails;
 import com.vavisa.monasabatcom.fragments.CompanyDetailsFragment;
 import com.vavisa.monasabatcom.fragments.FavouriteFragment;
 import com.vavisa.monasabatcom.fragments.HomeFragment;
@@ -67,6 +64,8 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
 
+    Common.mActivity = this;
+
     bottomNavigationView.setOnNavigationItemSelectedListener(this);
     if (Common.booking) {
       // loadFragment(new CompanyDetails());
@@ -79,7 +78,8 @@ public class MainActivity extends AppCompatActivity
     Paper.init(this);
     checkAuthentication();
 
-    final DialogPlus dialogPlus =
+
+/*    final DialogPlus dialogPlus =
         DialogPlus.newDialog(this)
             .setContentHolder(new ViewHolder(R.layout.home_pop_up))
             .setContentBackgroundResource(android.R.color.transparent)
@@ -104,8 +104,10 @@ public class MainActivity extends AppCompatActivity
           }
         });
 
-    dialogPlus.show();
+    dialogPlus.show();*/
   }
+
+
 
   private void checkAuthentication() {
     if (Paper.book("Monasabatcom").contains("currentUser"))

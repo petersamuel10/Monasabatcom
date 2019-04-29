@@ -31,8 +31,6 @@ public class Company {
     private String Logo;
 
 
-
-
     public Company(Integer id, String nameAR, String nameEN, String aboutAR, String aboutEN, Float rating, Integer ratingCount, String logo) {
         Id = id;
         NameAR = nameAR;

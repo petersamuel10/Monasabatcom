@@ -1,8 +1,12 @@
 package com.vavisa.monasabatcom.webService;
 
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.vavisa.monasabatcom.Common.Common;
+import com.vavisa.monasabatcom.R;
 
 import java.io.IOException;
 
@@ -32,15 +36,20 @@ public class Controller {
                 new Interceptor() {
                   @Override
                   public Response intercept(Chain chain) throws IOException {
+                      try {
 
-                    Request originalRequest = chain.request();
+                          Request originalRequest = chain.request();
 
-                    Request.Builder builder =
-                        originalRequest.newBuilder().header("Authorization", AUTHORIZATION);
+                          Request.Builder builder =
+                                  originalRequest.newBuilder().header("Authorization", AUTHORIZATION);
 
-                    Request newRequest = builder.build();
+                          Request newRequest = builder.build();
+                          return chain.proceed(newRequest);
 
-                    return chain.proceed(newRequest);
+                      }catch (Exception e){
+                          //Toast.makeText(Common.mActivity, R.string.error_occure,Toast.LENGTH_LONG);
+                      }
+                      return null;
                   }
                 })
             .build();

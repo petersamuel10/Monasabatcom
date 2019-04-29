@@ -132,5 +132,6 @@
     <string name="sub_total">Sub total:</string>
     <string name="delivery">Delivery:</string>
     <string name="total_amount">Total amount:</string>
+    <string name="where_when">Where/When</string>
 
 </resources>

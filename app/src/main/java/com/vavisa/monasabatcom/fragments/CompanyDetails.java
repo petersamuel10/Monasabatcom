@@ -63,40 +63,28 @@ public class CompanyDetails extends Fragment
 
   @BindView(R.id.arrow)
   ImageView arrowAr;
-
   @BindView(R.id.com_nameTitle)
   TextView com_name_title;
-
   @BindView(R.id.slider)
   SliderLayout slider;
-
   @BindView(R.id.com_name)
   TextView com_name;
-
   @BindView(R.id.rating_ic)
   ImageView rating_ic;
-
   @BindView(R.id.ic_share)
   ImageView share_ic;
-
   @BindView(R.id.fav_ic)
   ImageView fav_ic;
-
   @BindView(R.id.com_rating)
   RatingBar ratingBar;
-
   @BindView(R.id.com_ratingCount)
   TextView com_ratingCount;
-
   @BindView(R.id.working_time)
   TextView workingTime;
-
   @BindView(R.id.com_about)
   TextView com_about;
-
   @BindView(R.id.services)
   LinearLayout serviceLayout;
-
   @OnClick(R.id.btnReserva)
   public void makeAppoint() {
     userId =

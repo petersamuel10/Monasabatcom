@@ -124,5 +124,6 @@
     <string name="sub_total">المجموع:</string>
     <string name="delivery">التوصيل:</string>
     <string name="total_amount">مجموع الطلب:</string>
+    <string name="where_when">أين/متى</string>
 
 </resources>

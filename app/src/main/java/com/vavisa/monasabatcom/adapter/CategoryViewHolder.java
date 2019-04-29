@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -45,7 +46,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
     public void bind(Category category)
     {
         mCategory = category;
-        Picasso.with(Common.mActivity).load(category.getPhoto()).into(category_image);
+        Glide.with(Common.mActivity).load(category.getPhoto()).placeholder(Common.mActivity.getResources().getDrawable(R.drawable.logo)).into(category_image);
         if (Common.isArabic)
             category_name.setText(category.getNameAR());
         else

@@ -1,5 +1,8 @@
 package com.vavisa.monasabatcom.webService;
 
+import android.content.Intent;
+
+import com.google.gson.JsonElement;
 import com.vavisa.monasabatcom.models.Address;
 import com.vavisa.monasabatcom.models.Appointment;
 import com.vavisa.monasabatcom.models.Category;
@@ -10,6 +13,8 @@ import com.vavisa.monasabatcom.models.Offer;
 import com.vavisa.monasabatcom.models.OrderDetails;
 import com.vavisa.monasabatcom.models.PageData;
 import com.vavisa.monasabatcom.models.PaymentUrl;
+import com.vavisa.monasabatcom.models.SearchHour;
+import com.vavisa.monasabatcom.models.Services;
 import com.vavisa.monasabatcom.models.User;
 import com.vavisa.monasabatcom.models.companyDetails.CompanyDetailsModel;
 import com.vavisa.monasabatcom.models.makeAppointment.MakeAppointment;
@@ -63,6 +68,9 @@ public interface APIInterface {
     @POST("GetCities/")
     Observable<ArrayList<City>> getCities(@Field("GovernorateId") Integer governorateId);
 
+    @POST("GetSearchHours")
+    Observable<ArrayList<SearchHour>> getSearchHours();
+
     @POST("AddAddress/")
     Observable<Integer> addAddress(@Body Address address);
 
@@ -85,16 +93,23 @@ public interface APIInterface {
     @POST("ForgotPassword/")
     Observable<Integer> forgotPassword(@Field("Email") String email,@Field("Language") String lan);
 
-    @POST("GetFeaturedCompanies/")
-    Observable<ArrayList<Company>> getFeaturedCompanies();
+    @FormUrlEncoded
+    @POST("GetCompanies")
+    Observable<ArrayList<Company>> getFeaturedCompanies(@Field("CategoryId")Integer CategoryId,@Field("CityId")Integer CityId,
+                                                        @Field("SearchDate")String SearchDate,@Field("SearchHour")String SearchHour,
+                                                        @Field("IsFeatured")Integer IsFeatured,@Field("PageNo")Integer PageNo,@Field("PageSize") Integer PageSize);
 
     @FormUrlEncoded
     @POST("GetCompanies/")
     Observable<ArrayList<Company>> getCompanies(@Field("CategoryId") Integer categoryId);
 
     @FormUrlEncoded
-    @POST("GetCompanyDetails/")
-    Observable<CompanyDetailsModel> getCompanyDetails(@Field("CompanyId") Integer companyId,@Field("UserId") Integer userId);
+    @POST("GetCompanyDetails")
+    Observable<CompanyDetailsModel> getCompanyDetails(@Field("CompanyId") Integer companyId, @Field("UserId") Integer userId);
+
+    @FormUrlEncoded
+    @POST("GetServiceDetails")
+    Observable<Services> getServiceDetails(@Field("ServiceId") Integer companyId);
 
     @FormUrlEncoded
     @POST("Rating/")

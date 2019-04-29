@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.fragments.CompanyDetails;
 import com.vavisa.monasabatcom.fragments.CompanyDetailsFragment;
 import com.vavisa.monasabatcom.models.Company;
 
@@ -27,21 +27,16 @@ public class CompanyViewHolder extends RecyclerView.ViewHolder {
 
   @BindView(R.id.company_card)
   CardView company_card;
-
   @BindView(R.id.com_photo)
   ImageView company_photo;
-
   @BindView(R.id.com_name)
   TextView company_name;
-
   @BindView(R.id.com_about)
   TextView company_about;
-
   @BindView(R.id.com_rating)
   RatingBar ratingBar;
-
-  @BindView(R.id.com_ratingCount)
-  TextView ratingCount;
+ /* @BindView(R.id.com_ratingCount)
+  TextView ratingCount;*/
 
   @OnClick(R.id.company_card)
   public void Company_details() {
@@ -67,11 +62,11 @@ public class CompanyViewHolder extends RecyclerView.ViewHolder {
       company_name.setText(company.getNameAR());
       company_about.setText(company.getAboutAR());
     } else {
-      company_name.setText(company.getNameEN());
-      company_about.setText(company.getAboutEN());
+      company_name.setText(Html.fromHtml(company.getNameEN()));
+      company_about.setText(Html.fromHtml(company.getAboutEN()));
     }
     Picasso.with(Common.mActivity).load(company.getLogo()).into(company_photo);
     ratingBar.setRating(company.getRating());
-    ratingCount.setText("(" + String.valueOf(company.getRatingCount()) + ")");
+   // ratingCount.setText("(" + String.valueOf(company.getRatingCount()) + ")");
   }
 }

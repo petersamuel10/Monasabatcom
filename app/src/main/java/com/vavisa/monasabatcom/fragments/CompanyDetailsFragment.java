@@ -6,9 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +31,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.vavisa.monasabatcom.utility.ListSizeUtility.setListViewHeightBasedOnChildren;
-import static com.vavisa.monasabatcom.utility.ListSizeUtility.setRecyclerViewHeightBasedOnChildren;
 
 public class CompanyDetailsFragment extends Fragment implements View.OnClickListener {
 
@@ -79,9 +75,6 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
       companyDescription = fragmentView.findViewById(R.id.about);
       serviceListView = fragmentView.findViewById(R.id.service_list);
 
-      // serviceListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-      // serviceListView.addItemDecoration(
-      //  new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL));
       progressDialog = new ProgressDialog(getActivity());
 
       backButton.setOnClickListener(this);
@@ -97,11 +90,10 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
       error.setMessage(R.string.error_connection);
       AlertDialog dialog = error.create();
       dialog.show();
-      // getActivity().onBackPressed();
     }
 
     userId =
-        (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : null;
+        (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
 
     return fragmentView;
   }
@@ -110,7 +102,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
     progressDialog.show();
     compositeDisposable.add(
         Common.getAPI()
-            .getCompanyDetails(Common.companyId, userId)
+            .getCompanyDetails(Common.companyId,userId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
