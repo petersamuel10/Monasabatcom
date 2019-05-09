@@ -52,31 +52,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/whereLN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:padding="@dimen/_2sdp"
             android:background="@drawable/rounded_light_gray_border_white_filled"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/where_tag">
 
-            <com.jaredrummler.materialspinner.MaterialSpinner
+            <TextView
                 android:id="@+id/where"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:padding="@dimen/_8sdp"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_14ssp"
-                app:ms_text_color="@color/colorPrimary"
-                app:ms_padding_top="@dimen/_4sdp"
-                app:ms_padding_bottom="@dimen/_4sdp"
-                app:ms_padding_right="@dimen/_4sdp"
-                app:ms_padding_left="@dimen/_4sdp"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/del_city"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/del_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_cancel_filled"
+                android:tint="@color/blueDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
 
 
         <TextView
@@ -89,21 +101,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/whereLN" />
 
-        <TextView
-            android:id="@+id/when"
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/whenLn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:textSize="@dimen/_14ssp"
-            android:padding="@dimen/_6sdp"
-            android:textColor="@color/colorPrimary"
             android:background="@drawable/rounded_light_gray_border_white_filled"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/when_tag" />
+            app:layout_constraintTop_toBottomOf="@+id/when_tag">
+
+            <TextView
+                android:id="@+id/when"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:padding="@dimen/_8sdp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/del_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/del_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_cancel_filled"
+                android:tint="@color/blueDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/time_tag"
@@ -113,34 +147,45 @@
             android:layout_marginTop="12dp"
             android:text="Time"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/when"/>
+            app:layout_constraintTop_toBottomOf="@+id/whenLn"/>
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/timeLN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:padding="@dimen/_2sdp"
             android:background="@drawable/rounded_light_gray_border_white_filled"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time_tag">
 
-            <com.jaredrummler.materialspinner.MaterialSpinner
+            <TextView
                 android:id="@+id/time"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:padding="@dimen/_8sdp"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_14ssp"
-                app:ms_text_color="@color/colorPrimary"
-                app:ms_padding_top="@dimen/_4sdp"
-                app:ms_padding_bottom="@dimen/_4sdp"
-                app:ms_padding_right="@dimen/_4sdp"
-                app:ms_padding_left="@dimen/_4sdp"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/del_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/del_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_cancel_filled"
+                android:tint="@color/blueDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+        </android.support.constraint.ConstraintLayout>
 
         <Button
             android:id="@+id/search_button"

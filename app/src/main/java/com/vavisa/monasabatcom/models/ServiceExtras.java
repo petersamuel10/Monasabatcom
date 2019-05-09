@@ -22,9 +22,9 @@ public class ServiceExtras {
     private String nameEN;
     @SerializedName("Price")
     @Expose
-    private String price;
+    private Float price;
 
-    public ServiceExtras(int id, int serviceId, String nameAR, String nameEN, String price) {
+    public ServiceExtras(int id, int serviceId, String nameAR, String nameEN, Float price) {
         this.id = id;
         ServiceId = serviceId;
         this.nameAR = nameAR;
@@ -64,11 +64,11 @@ public class ServiceExtras {
         this.nameEN = nameEN;
     }
 
-    public String getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 }

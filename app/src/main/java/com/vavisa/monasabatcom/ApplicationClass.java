@@ -26,7 +26,6 @@ public class ApplicationClass extends Application {
                 .init();
     }
 
-
     private class ExampleNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
         // This fires when a notification is opened by tapping on it.
         @Override

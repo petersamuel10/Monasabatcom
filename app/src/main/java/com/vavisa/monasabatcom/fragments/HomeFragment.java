@@ -3,7 +3,7 @@ package com.vavisa.monasabatcom.fragments;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,7 +17,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.activities.FilterActivity;
@@ -37,6 +35,7 @@ import com.vavisa.monasabatcom.adapter.CompanyAdapter;
 import com.vavisa.monasabatcom.models.City;
 import com.vavisa.monasabatcom.models.Company;
 import com.vavisa.monasabatcom.models.SearchHour;
+import com.vavisa.monasabatcom.utility.Constants;
 import com.vavisa.monasabatcom.utility.KeyboardUtility;
 
 import java.util.ArrayList;
@@ -52,11 +51,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
-import static com.vavisa.monasabatcom.constants.Constants.RESULT_OK;
+import static com.vavisa.monasabatcom.utility.Constants.RESULT_OK;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-
-    private static final String TAG = "HomeFragment";
 
     @BindView(R.id.pb)
     ProgressBar pb;
@@ -74,8 +71,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     ImageView third;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    CompanyAdapter adapter;
-    ProgressDialog progressDialog;
+    CompanyAdapter adapter = new CompanyAdapter();
     private View fragmentView;
     private ConstraintLayout searchLayout;
     private ImageButton clearText;
@@ -85,47 +81,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private int viewType = 1;
 
     List<City> allCitiesList = new ArrayList<>();
-    List<SearchHour> searchHoursList = new ArrayList<>();
-    ArrayList<String> cityNameList,hoursList;
+    ArrayList<SearchHour> searchHoursList_ = new ArrayList<>();
+    ArrayList<String> cityNameList, hoursList;
 
-    MaterialSpinner whereSpinner,whenSpinner;
-    TextView date_txt;
+    private String[] timeList;
+    private String[] cityList;
+    private int cityItemPosition = 0;
+    private int timeItemPosition = 0;
 
-    String searchDate = "-1",searchHour = "-1",cityName;
-    int cityId = -1,pageNo = 1,categoryId = -1;
+    TextView city_txt, date_txt, time_txt;
+
+    String searchDate = "-1", searchHour = "-1", cityName = "";
+    int cityId = -1, pageNo = 1, categoryId = -1;
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_home_fragments, container, false);
-
-            Toolbar toolbar = fragmentView.findViewById(R.id.toolBar);
-            ImageButton searchButton = toolbar.findViewById(R.id.search_bar);
-            ImageButton filterButton = toolbar.findViewById(R.id.filter);
-            searchLayout = fragmentView.findViewById(R.id.search_layout);
-            clearText = searchLayout.findViewById(R.id.clear_text);
-            cancelSearch = searchLayout.findViewById(R.id.cancel_button);
-            searchText = searchLayout.findViewById(R.id.search_text);
-            search_ed = fragmentView.findViewById(R.id.search_ed);
-
-            clearText.setOnClickListener(this);
-            cancelSearch.setOnClickListener(this);
-            searchButton.setOnClickListener(this);
-            filterButton.setOnClickListener(this);
-            search_ed.setOnClickListener(this);
-
+            reference();
             getCities();
             getTime();
 
         }
 
-/*    // that use to move between fragments
-    Common.mActivity = getActivity();*/
 
         ButterKnife.bind(this, fragmentView);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setCancelable(false);
 
         first.setOnClickListener(this);
         second.setOnClickListener(this);
@@ -218,14 +199,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     .subscribe(new Consumer<ArrayList<City>>() {
                         @Override
                         public void accept(ArrayList<City> cities) throws Exception {
-                            for (City city : cities) {
-                                allCitiesList.add(city);
-                                if(Common.isArabic)
-                                    cityNameList.add(city.getNameAR());
-                                else
-                                    cityNameList.add(city.getNameEN());
-                            }
 
+                            if (cities == null)
+                                cityList = new String[0];
+                            else {
+                                allCitiesList.addAll(cities);
+                                cityList = new String[cities.size()];
+                                for (int i = 0; i < cities.size(); i++) {
+                                    if (Common.isArabic)
+                                        cityList[i] = cities.get(i).getNameAR();
+                                    else
+                                        cityList[i] = cities.get(i).getNameEN();
+                                }
+                            }
                         }
                     }));
 
@@ -243,9 +229,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     .subscribe(new Consumer<ArrayList<SearchHour>>() {
                         @Override
                         public void accept(ArrayList<SearchHour> searchHourList) throws Exception {
-                            for (SearchHour searchHour : searchHourList) {
-                                searchHoursList.add(searchHour);
-                                hoursList.add(searchHour.getHour());
+
+                            if (searchHourList == null)
+                                timeList = new String[0];
+                            else {
+                                searchHoursList_.addAll(searchHourList);
+                                timeList = new String[searchHourList.size()];
+                                for (int i = 0; i < searchHourList.size(); i++) {
+                                    timeList[i] = searchHourList.get(i).getHour();
+                                }
                             }
                         }
                     }));
@@ -255,82 +247,130 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void showPopDialog() {
 
-       final Dialog dialog = new Dialog(getActivity(), R.style.MyDialog);
+        final Dialog dialog = new Dialog(getActivity(), R.style.MyDialog);
         dialog.setContentView(R.layout.home_pop_up);
         dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
 
-
+        // for dialog
         Button searchButton = dialog.findViewById(R.id.search_button);
         TextView skipButton = dialog.findViewById(R.id.skip_button);
+        ImageView del_city = dialog.findViewById(R.id.del_city);
+        ImageView del_date = dialog.findViewById(R.id.del_date);
+        ImageView del_time = dialog.findViewById(R.id.del_time);
 
-        whereSpinner = dialog.findViewById(R.id.where);
+        city_txt = dialog.findViewById(R.id.where);
         date_txt = dialog.findViewById(R.id.when);
-        whenSpinner = dialog.findViewById(R.id.time);
+        time_txt = dialog.findViewById(R.id.time);
 
-       /* // get for first time before selected
-        City s = allCitiesList.get(0);
-        cityId = s.getId();
-        if (Common.isArabic)
-            cityName = s.getNameAR();
-        else
-            cityName = s.getNameEN();
+        del_city.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                city_txt.setText("");
+                cityId = -1;
+                cityName = "";
+            }
+        });
+        del_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                date_txt.setText("");
+                searchDate = "-1";
+            }
+        });
+        del_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                time_txt.setText("");
+                searchHour = "-1";
+            }
+        });
 
-        SearchHour h = searchHoursList.get(0);
-        searchHour = h.getHour();*/
-
-
+        city_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCityList();
+            }
+        });
         date_txt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { selectDate(); }});
-
-        whereSpinner.setItems(cityNameList);
-        whenSpinner.setItems(hoursList);
-
-        whereSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+            public void onClick(View v) {
+                selectDate();
+            }
+        });
+        time_txt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-
-                City s = allCitiesList.get(position);
-                cityId = s.getId();
-                if (Common.isArabic)
-                    cityName = s.getNameAR();
-                else
-                    cityName = s.getNameEN();
+            public void onClick(View v) {
+                showTimeList();
             }
         });
 
-        whenSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                SearchHour s = searchHoursList.get(position);
-                searchHour = s.getHour();
-            }
-        });
 
         searchButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       search_ed.setTextColor(getResources().getColor(R.color.colorPrimary));
-                        if(searchDate.equals("-1"))
-                            search_ed.setText(cityName+" - "+ searchHour);
-                        else
-                            search_ed.setText(cityName+" - "+ searchDate + " - "+searchHour);
+                        String search_title = "";
+                        search_ed.setTextColor(getResources().getColor(R.color.colorPrimary));
+                        if (!cityName.equals("")) search_title += cityName;
+                        if (!searchDate.equals("-1")) search_title += ((search_title.equals(""))?"":" - ") + searchDate;
+                        if (!searchHour.equals("-1")) search_title += ((search_title.equals(""))?"":" - ") + searchHour;
+                        search_ed.setText(search_title);
+
                         requestData();
                         dialog.dismiss();
                     }
                 });
 
-        skipButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        if (!cityName.equals("")) city_txt.setText(cityName);
+        if (!searchHour.equals("-1")) time_txt.setText(searchHour);
+        if (!searchDate.equals("-1")) date_txt.setText(searchDate);
+
 
         dialog.show();
 
+    }
+
+    public void showCityList() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setSingleChoiceItems(cityList, cityItemPosition, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+
+                cityItemPosition = position;
+                dialog.dismiss();
+                cityId = allCitiesList.get(position).getId();
+                cityName = cityList[position];
+                city_txt.setText(cityName);
+
+            }
+        });
+
+        builder.create().show();
+    }
+
+    public void showTimeList() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setSingleChoiceItems(timeList, timeItemPosition, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+
+                timeItemPosition = position;
+                dialog.dismiss();
+                searchHour = timeList[position];
+                time_txt.setText(searchHour);
+            }
+        });
+
+        builder.create().show();
     }
 
     public void selectDate() {
@@ -374,7 +414,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             pb.setVisibility(View.VISIBLE);
             compositeDisposable.add(
                     Common.getAPI()
-                            .getFeaturedCompanies(categoryId, cityId, searchDate, searchHour, 0, pageNo, 10)
+                            .getCompanies(categoryId, cityId, searchDate, searchHour, 1, pageNo, 10)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -383,10 +423,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                         public void accept(ArrayList<Company> companies) throws Exception {
                                             if (companies.size() > 0) {
                                                 emptyList.setVisibility(GONE);
+                                                companyListView.setVisibility(View.VISIBLE);
                                                 companyList = companies;
                                                 setupRecyclerView();
                                                 pb.setVisibility(GONE);
-                                            } else progressDialog.dismiss();
+                                            } else {
+                                                pb.setVisibility(GONE);
+                                                companyListView.setVisibility(GONE);
+                                                adapter.notifyDataSetChanged();
+                                                emptyList.setVisibility(View.VISIBLE);
+                                            }
                                         }
                                     }));
 
@@ -406,15 +452,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
         }
 
-        adapter = new CompanyAdapter(getActivity(), companyList, viewType);
+        adapter = new CompanyAdapter(getActivity(), companyList, Constants.TAB_HOME, viewType,searchDate,searchHour);
         companyListView.setAdapter(adapter);
-
-
-        // companyListView.setHasFixedSize(true);
-
-    /*LayoutAnimationController controller =
-        AnimationUtils.loadLayoutAnimation(companyListView.getContext(), R.anim.layout_fall_down);
-    companyListView.setLayoutAnimation(controller);*/
     }
 
     private void setUpSwipeRefreshLayout() {
@@ -439,13 +478,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         sl.setRefreshing(false);
     }
 
+    private void reference() {
+
+        Toolbar toolbar = fragmentView.findViewById(R.id.toolBar);
+        ImageButton searchButton = toolbar.findViewById(R.id.search_bar);
+        ImageButton filterButton = toolbar.findViewById(R.id.filter);
+        searchLayout = fragmentView.findViewById(R.id.search_layout);
+        clearText = searchLayout.findViewById(R.id.clear_text);
+        cancelSearch = searchLayout.findViewById(R.id.cancel_button);
+        searchText = searchLayout.findViewById(R.id.search_text);
+        search_ed = fragmentView.findViewById(R.id.search_ed);
+
+        clearText.setOnClickListener(this);
+        cancelSearch.setOnClickListener(this);
+        searchButton.setOnClickListener(this);
+        filterButton.setOnClickListener(this);
+        search_ed.setOnClickListener(this);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
             String filterName = data.getStringExtra("filter");
-            Log.i(TAG, "Received result " + filterName);
             // apply filter here
         }
     }

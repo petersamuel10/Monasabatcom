@@ -92,7 +92,7 @@
     <string name="select_date_time">الرجاء اختيار التاريخ والوقت</string>
     <string name="select_service">الرجاء اختيار الخدمة</string>
     <string name="appointment_not_avaliable">الموعد غير متوفر</string>
-    <string name="select_date">الرجاء اختيار التاريخ اولا</string>
+    <string name="select_date">اختيار التاريخ </string>
     <string name="invalid_time">الرجاء ادخال الوقت الصحيح</string>
     <string name="enter_email_password">الرجاء ادخال البريد الالكترونى وكلمه المرور</string>
     <string name="user_not_exist">المستخدم غير موجود</string>
@@ -106,7 +106,7 @@
     <string name="error_occure">حدث خطا</string>
     <string name="not_valide">غير متاح</string>
     <string name="missing_data">البيانات غير مكتمله</string>
-    <string name="empty_list">القائمة فارغة.</string>
+    <string name="empty_list">لا يوجد شركات.</string>
     <string name="add_to_cart">أضف إلى السلة</string>
     <string name="search">بحث</string>
     <string name="filter">تصنيف</string>
@@ -125,5 +125,19 @@
     <string name="delivery">التوصيل:</string>
     <string name="total_amount">مجموع الطلب:</string>
     <string name="where_when">أين/متى</string>
+    <string name="offer_details">تفاصيل العرض</string>
+    <string name="offers_and_how_to_serve">العرض وطريقة التقديم:</string>
+    <string name="offer_time">وقت العرض:</string>
+    <string name="select_time">"اختار الوقت "</string>
+    <string name="leave_review">أترك رأيك</string>
+    <string name="please_login_to_view_wishlist">الرجاء تسجيل الدخول لاظهار قائمة المفضلة</string>
+    <string name="click_here_to_login">اضغط هنا لتسجيل الدخول</string>
+    <string name="please_select_date_first">الرجاء اختيار التاريخ اولا</string>
+    <string name="pay_on_delivery">الدفع عند الاستلام</string>
+    <string name="pay_a_deposit">دفع عربون</string>
+    <string name="pay_full_amount_in_advance">دفع المبلغ بالكامل مقدما</string>
+    <string name="cart_contain_services_from">العربة بها خدمات من شركات اخرى . هل تريد حذفها واضافة طلب جديد؟</string>
+    <string name="the_company_cant_deliver_to">الشركة لا يمكنها التوصيل لهذا العنوان.</string>
+
 
 </resources>

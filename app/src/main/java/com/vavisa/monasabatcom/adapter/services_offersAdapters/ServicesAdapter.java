@@ -1,10 +1,10 @@
 package com.vavisa.monasabatcom.adapter.services_offersAdapters;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.vavisa.monasabatcom.Common.Common;
+import com.vavisa.monasabatcom.MainActivity;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.fragments.ServiceDetailsFragment;
 import com.vavisa.monasabatcom.models.companyDetails.Services;
@@ -21,13 +22,27 @@ import java.util.ArrayList;
 public class ServicesAdapter extends ArrayAdapter<Services> {
 
     private ArrayList<Services> servicesList;
-    private Context context;
+    private Activity activity;
+    private String tab_tag;
+    private String companyId, company_name_ar,
+            company_name_en,searchDate,searchHour;
 
     public ServicesAdapter(
-            @NonNull Context context, int resource, @NonNull ArrayList<Services> objects) {
-        super(context, resource, objects);
-        this.context = context;
+            @NonNull Activity activity, int resource,
+            @NonNull ArrayList<Services> objects,
+            String company_id, String company_name_ar,
+            String company_name_en, String searchDate,
+            String searchHour, String tab_tag) {
+
+        super(activity, resource, objects);
+        this.activity = activity;
         this.servicesList = objects;
+        this.tab_tag = tab_tag;
+        this.companyId = company_id;
+        this.company_name_ar = company_name_ar;
+        this.company_name_en = company_name_en;
+        this.searchDate = searchDate;
+        this.searchHour = searchHour;
     }
 
     @Override
@@ -52,13 +67,19 @@ public class ServicesAdapter extends ArrayAdapter<Services> {
                 @Override
                 public void onClick(View v) {
 
+                    // send company id used when send order
                     Bundle bundle = new Bundle();
                     bundle.putString("serviceId", String.valueOf(servicesList.get(position).getId()));
-                    ServiceDetailsFragment serviceFragment = new ServiceDetailsFragment();
+                    bundle.putString("companyId", companyId);
+                    bundle.putString("company_name_ar", company_name_ar);
+                    bundle.putString("company_name_en", company_name_en);
+                    bundle.putString("searchDate", searchDate);
+                    bundle.putString("searchHour", searchHour);
+                    bundle.putString("tag", tab_tag);
+                    Fragment serviceFragment = new ServiceDetailsFragment();
                     serviceFragment.setArguments(bundle);
-                    FragmentManager fragmentManager = Common.mActivity.getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.main_fragment, serviceFragment).addToBackStack(null).commit();
 
+                    ((MainActivity) activity).pushFragments(tab_tag, serviceFragment, true);
                 }
             });
 
@@ -75,7 +96,7 @@ public class ServicesAdapter extends ArrayAdapter<Services> {
         viewHolder.servicePrice.setText(
                 servicesList.get(position).getPrice()
                         + " "
-                        + context.getResources().getString(R.string.kd));
+                        + activity.getResources().getString(R.string.kd));
 
         return convertView;
     }

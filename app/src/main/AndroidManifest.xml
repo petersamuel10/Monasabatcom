@@ -15,8 +15,17 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.AddressesActivity"></activity>
+        <activity android:name=".activities.AppointmentDetails" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".Login" />
+        <activity
+            android:name=".activities.CartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CartThem"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".Register" />
         <activity android:name=".AddNewAddress" />
         <activity android:name=".ForgetPassword" />

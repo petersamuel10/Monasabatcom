@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
@@ -7,7 +9,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context=".fragments.CompanyDetails">
-
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolBar"
@@ -73,13 +74,22 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <include
+        layout="@layout/layout_common_progressbar"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar">
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        android:visibility="gone">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -89,7 +99,7 @@
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/slider"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="350dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 app:auto_cycle="false"
@@ -175,7 +185,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rating_count" />
 
-
             <TextView
                 android:id="@+id/working_time"
                 android:layout_width="wrap_content"
@@ -189,7 +198,7 @@
 
             <TextView
                 android:id="@+id/about"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
@@ -197,7 +206,6 @@
                 android:lineSpacingExtra="8dp"
                 android:textColor="#666666"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/working_hours_tag" />
 
@@ -231,20 +239,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:isScrollContainer="false"
-                app:layout_constraintBottom_toTopOf="@+id/view3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/services_tag" />
 
             <View
-                android:id="@+id/view3"
+                android:id="@+id/view4"
                 android:layout_width="match_parent"
-                android:layout_height="0.3dp"
-                android:layout_marginBottom="64dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="16dp"
+                android:background="#e1e1e1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/service_list" />
+
+            <TextView
+                android:id="@+id/offers_tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="8dp"
+                android:text="@string/offers"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+            <ListView
+                android:id="@+id/offers_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:isScrollContainer="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/offers_tag" />
+
 
             <TextView
                 android:id="@+id/working_hours_tag"
@@ -260,5 +292,4 @@
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

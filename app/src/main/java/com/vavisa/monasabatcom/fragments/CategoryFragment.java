@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -31,6 +32,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CategoryFragment extends Fragment {
 
+    @BindView(R.id.pb)
+    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.category_recyclerView)
@@ -39,7 +42,6 @@ public class CategoryFragment extends Fragment {
 
     private CategoryAdapter homeAdapter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    ProgressDialog progressDialog;
 
 
     @Override
@@ -47,8 +49,6 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
       View view =inflater.inflate(R.layout.fragment_category, container, false);
-      progressDialog = new ProgressDialog(getActivity());
-      progressDialog.setCancelable(false);
 
       ButterKnife.bind(this,view);
 
@@ -64,7 +64,7 @@ public class CategoryFragment extends Fragment {
 
     private void requestData() {
         if(Common.isConnectToTheInternet(getActivity())) {
-            progressDialog.show();
+           pb.setVisibility(View.VISIBLE);
             compositeDisposable.add(Common.getAPI().getCategory()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -73,7 +73,7 @@ public class CategoryFragment extends Fragment {
                         public void accept(ArrayList<Category> categories) throws Exception {
                             homeAdapter.addCategory(categories);
                             homeAdapter.notifyDataSetChanged();
-                            progressDialog.dismiss();
+                            pb.setVisibility(View.GONE);
                         }
                     }));
         }else
@@ -85,13 +85,7 @@ public class CategoryFragment extends Fragment {
         home_recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(home_recyclerView.getContext(),R.anim.layout_fall_down);
         home_recyclerView.setLayoutAnimation(controller);
-        /*
-        home_recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.HORIZONTAL));
-        home_recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
-                */
-        homeAdapter = new CategoryAdapter();
+        homeAdapter = new CategoryAdapter(getActivity());
         home_recyclerView.setAdapter(homeAdapter);
     }
 

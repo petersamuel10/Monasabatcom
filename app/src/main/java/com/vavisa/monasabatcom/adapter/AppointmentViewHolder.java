@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.fragments.AppointmentDetails;
+import com.vavisa.monasabatcom.fragments.AppointmentDetail;
 import com.vavisa.monasabatcom.models.Appointment;
 
 import butterknife.BindView;
@@ -38,7 +38,7 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder {
         Common.orderId =appointmentId;
 
 
-        Fragment fragment = new AppointmentDetails();
+        Fragment fragment = new AppointmentDetail();
         FragmentManager fragmentManager = Common.mActivity.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_fragment, fragment).addToBackStack(null).commit();
     }

@@ -23,13 +23,9 @@ import com.vavisa.monasabatcom.CompletePayment;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.models.OrderDetails;
 import com.vavisa.monasabatcom.models.companyDetails.CompanyDetailsModel;
-import com.vavisa.monasabatcom.models.companyDetails.OfferServices;
 import com.vavisa.monasabatcom.models.companyDetails.Offers;
 import com.vavisa.monasabatcom.models.companyDetails.ServiceExtras;
 import com.vavisa.monasabatcom.models.companyDetails.Services;
-import com.vavisa.monasabatcom.models.makeAppointment.ExtrasOrder;
-import com.vavisa.monasabatcom.models.makeAppointment.OfferOrder;
-import com.vavisa.monasabatcom.models.makeAppointment.ServicesOrder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AppointmentDetails extends Fragment {
+public class AppointmentDetail extends Fragment {
 
     @BindView(R.id.com_name)
     TextView companyName;
@@ -81,7 +77,6 @@ public class AppointmentDetails extends Fragment {
     @OnClick(R.id.back)
     public void setBack(){
         getActivity().onBackPressed();
-        Common.makeResr = true;
     }
     @OnClick(R.id.btnReservation)
     public void completeReservation(){
@@ -116,7 +111,7 @@ public class AppointmentDetails extends Fragment {
       ButterKnife.bind(this,view);
 
       if(Common.newOrder) {
-          bindNewOrderDetails();
+         // bindNewOrderDetails();
           Common.newOrder = false;
       }
       else
@@ -178,19 +173,19 @@ public class AppointmentDetails extends Fragment {
 
             if (orderDetails.getOffers().size() > 0) {
                 for (Offers offer : orderDetails.getOffers()) {
-                    setServices(offersLayout, offer.getNameAR(), offer.getPrice(), true);
+                  //  setServices(offersLayout, offer.getNameAR(), offer.getPrice(), true);
 
                     LinearLayout extraLayout = new LinearLayout(getActivity());
                     extraLayout.setLayoutParams(linear_description);
                     extraLayout.setOrientation(LinearLayout.VERTICAL);
 
 
-                    for (OfferServices offerServices : offer.getOfferServices()) {
+                   /* for (OfferServices offerServices : offer.getOfferServices()) {
                         setServicesExtra(extraLayout, offerServices.getNameAR(), offerServices.getPrice());
                     }
                     LinearLayout count = new LinearLayout(getActivity());
                     count.setLayoutParams(linear_description);
-                    serviceSetElegantNumberAndNote(extraLayout, offersLayout, count, offer.getQty(), null);
+                    serviceSetElegantNumberAndNote(extraLayout, offersLayout, count, offer.getQty(), null);*/
                 }
             } else
                 offerTxt.setVisibility(View.GONE);
@@ -217,19 +212,19 @@ public class AppointmentDetails extends Fragment {
 
             if (orderDetails.getOffers().size() > 0) {
                 for (Offers offer : orderDetails.getOffers()) {
-                    setServices(offersLayout, offer.getNameEN(), offer.getPrice(), true);
+                   // setServices(offersLayout, offer.getNameEN(), offer.getPrice(), true);
 
                     LinearLayout extraLayout = new LinearLayout(getActivity());
                     extraLayout.setLayoutParams(linear_description);
                     extraLayout.setOrientation(LinearLayout.VERTICAL);
 
 
-                    for (OfferServices offerServices : offer.getOfferServices()) {
+                  /*  for (OfferServices offerServices : offer.getOfferServices()) {
                         setServicesExtra(extraLayout, offerServices.getNameEN(), offerServices.getPrice());
                     }
                     LinearLayout count = new LinearLayout(getActivity());
                     count.setLayoutParams(linear_description);
-                    serviceSetElegantNumberAndNote(extraLayout, offersLayout, count, offer.getQty(), null);
+                    serviceSetElegantNumberAndNote(extraLayout, offersLayout, count, offer.getQty(), null);*/
                 }
             } else
                 offerTxt.setVisibility(View.GONE);
@@ -244,7 +239,7 @@ public class AppointmentDetails extends Fragment {
         totalAmount.setText(orderDetails.getTotalAmount()+" "+getResources().getString(R.string.kd));
     }
 
-    private void bindNewOrderDetails() {
+  /*  private void bindNewOrderDetails() {
 
         RelativeLayout.LayoutParams linear_description = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -344,7 +339,7 @@ public class AppointmentDetails extends Fragment {
         totalAmount.setText(Common.totalAmount+" "+getResources().getString(R.string.kd));
 
 
-    }
+    }*/
 
 
     private void makeOrder() {

@@ -70,7 +70,8 @@
                 android:id="@+id/addresses_rec"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="3dp"/>
+                android:padding="3dp"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
             <android.support.v4.widget.ContentLoadingProgressBar
                 android:id="@+id/addresses_progress"

@@ -98,7 +98,7 @@
     <string name="select_date_time">Please select date and time</string>
     <string name="select_service">Please select sevice</string>
     <string name="appointment_not_avaliable">Appointment not avaliable</string>
-    <string name="select_date">Select  date first</string>
+    <string name="select_date">Select date :</string>
     <string name="invalid_time">Invalid Time</string>
     <string name="enter_email_password">Please enter email and password</string>
     <string name="user_not_exist">User not exist</string>
@@ -114,7 +114,7 @@
     <string name="error_occure">Error occurred</string>
     <string name="missing_data">Missing required data</string>
     <string name="not_valide">Not avaliable</string>
-    <string name="empty_list">Empty list.</string>
+    <string name="empty_list">There is no companies.</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="search">Search</string>
     <string name="filter">Filter</string>
@@ -133,5 +133,18 @@
     <string name="delivery">Delivery:</string>
     <string name="total_amount">Total amount:</string>
     <string name="where_when">Where/When</string>
+    <string name="offer_details">Offer details</string>
+    <string name="offers_and_how_to_serve">offers and how to serve :</string>
+    <string name="offer_time">Offer time:</string>
+    <string name="select_time">Select_time</string>
+    <string name="leave_review">Leave a review</string>
+    <string name="please_login_to_view_wishlist">Please login to view your favorite list.</string>
+    <string name="click_here_to_login">Click here to login</string>
+    <string name="please_select_date_first">Please select date first</string>
+    <string name="pay_on_delivery">Pay on delivery</string>
+    <string name="pay_a_deposit">Pay a deposit</string>
+    <string name="pay_full_amount_in_advance">Required pay in advance</string>
+    <string name="cart_contain_services_from">Cart contain services from another company.Do you with to clear your cart and start a new order here?</string>
+    <string name="the_company_cant_deliver_to">The company can\'t deliver to the city of this address</string>
 
 </resources>

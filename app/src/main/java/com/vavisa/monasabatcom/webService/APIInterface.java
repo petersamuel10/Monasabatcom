@@ -1,7 +1,5 @@
 package com.vavisa.monasabatcom.webService;
 
-import android.content.Intent;
-
 import com.google.gson.JsonElement;
 import com.vavisa.monasabatcom.models.Address;
 import com.vavisa.monasabatcom.models.Appointment;
@@ -17,7 +15,8 @@ import com.vavisa.monasabatcom.models.SearchHour;
 import com.vavisa.monasabatcom.models.Services;
 import com.vavisa.monasabatcom.models.User;
 import com.vavisa.monasabatcom.models.companyDetails.CompanyDetailsModel;
-import com.vavisa.monasabatcom.models.makeAppointment.MakeAppointment;
+import com.vavisa.monasabatcom.models.companyDetails.Offers;
+import com.vavisa.monasabatcom.models.orderModels.MakeAppointment;
 
 import java.util.ArrayList;
 
@@ -93,27 +92,30 @@ public interface APIInterface {
     @POST("ForgotPassword/")
     Observable<Integer> forgotPassword(@Field("Email") String email,@Field("Language") String lan);
 
-    @FormUrlEncoded
-    @POST("GetCompanies")
-    Observable<ArrayList<Company>> getFeaturedCompanies(@Field("CategoryId")Integer CategoryId,@Field("CityId")Integer CityId,
-                                                        @Field("SearchDate")String SearchDate,@Field("SearchHour")String SearchHour,
-                                                        @Field("IsFeatured")Integer IsFeatured,@Field("PageNo")Integer PageNo,@Field("PageSize") Integer PageSize);
 
     @FormUrlEncoded
     @POST("GetCompanies/")
-    Observable<ArrayList<Company>> getCompanies(@Field("CategoryId") Integer categoryId);
+    Observable<ArrayList<Company>> getCompanies(@Field("CategoryId")Integer CategoryId,@Field("CityId")Integer CityId,
+                                                @Field("SearchDate")String SearchDate,@Field("SearchHour")String SearchHour,
+                                                @Field("IsFeatured")Integer IsFeatured,@Field("PageNo")Integer PageNo,@Field("PageSize") Integer PageSize);
 
     @FormUrlEncoded
     @POST("GetCompanyDetails")
-    Observable<CompanyDetailsModel> getCompanyDetails(@Field("CompanyId") Integer companyId, @Field("UserId") Integer userId);
+    Observable<CompanyDetailsModel> getCompanyDetails(@Field("CompanyId") Integer companyId,@Field("SearchDate")String SearchDate,
+                                                      @Field("SearchHour")String SearchHour, @Field("UserId") Integer userId);
 
     @FormUrlEncoded
     @POST("GetServiceDetails")
-    Observable<Services> getServiceDetails(@Field("ServiceId") Integer companyId);
+    Observable<Services> getServiceDetails(@Field("ServiceId") Integer ServiceId);
+
+    @FormUrlEncoded
+    @POST("GetOfferDetails")
+    Observable<Offers> getOfferDetails(@Field("OfferId") Integer OfferId);
 
     @FormUrlEncoded
     @POST("Rating/")
-    Observable<Integer> rating(@Field("CompanyId") Integer companyId,@Field("UserId") Integer userId,@Field("Rate") Integer rating);
+    Observable<Integer> rating(@Field("CompanyId") Integer companyId,@Field("UserId") Integer userId,
+                               @Field("Rate") Float rating,@Field("Comment") String comment);
 
     @FormUrlEncoded
     @POST("MarkAsFavorite/")
@@ -138,5 +140,14 @@ public interface APIInterface {
     @FormUrlEncoded
     @POST("Payorder/")
     Observable<PaymentUrl> getPayment (@Field("Orderid") Integer Orderid);
+
+    @POST("GetSplashScreen")
+    Observable<JsonElement> getSplashScreen ();
+
+    @FormUrlEncoded
+    @POST("CheckAndGetDeliveryCost")
+    Observable<Integer> checkAndGetDeliveryCost (@Field("CompanyId") Integer companyId,@Field("AddressId") Integer addressId );
+
+
 
 }

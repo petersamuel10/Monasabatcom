@@ -1,28 +1,36 @@
 package com.vavisa.monasabatcom.fragments;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.vavisa.monasabatcom.Common.Common;
+import com.vavisa.monasabatcom.Login;
+import com.vavisa.monasabatcom.MainActivity;
 import com.vavisa.monasabatcom.R;
+import com.vavisa.monasabatcom.activities.CartActivity;
+import com.vavisa.monasabatcom.adapter.services_offersAdapters.OffersAdapter;
 import com.vavisa.monasabatcom.adapter.services_offersAdapters.ServicesAdapter;
 import com.vavisa.monasabatcom.models.companyDetails.CompanyDetailsModel;
 import com.vavisa.monasabatcom.models.companyDetails.Photos;
+import com.vavisa.monasabatcom.utility.Constants;
 
 import io.paperdb.Paper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,143 +42,285 @@ import static com.vavisa.monasabatcom.utility.ListSizeUtility.setListViewHeightB
 
 public class CompanyDetailsFragment extends Fragment implements View.OnClickListener {
 
-  private View fragmentView;
-  private SliderLayout slider;
-  private TextView companyName;
-  private ImageView rating;
-  private ImageView share;
-  private ImageView favorite;
-  private RatingBar ratingBar;
-  private TextView ratingCount;
-  private TextView workingTime;
-  private TextView companyDescription;
-  private ListView serviceListView;
-  private CompositeDisposable compositeDisposable = new CompositeDisposable();
-  private ProgressDialog progressDialog;
-  private int userId;
-  private CompanyDetailsModel companyDetails;
-  private ServicesAdapter servicesAdapter;
+    private ProgressBar pb;
+    private ScrollView scrollView;
+    private View fragmentView, offer_border_view;
+    private SliderLayout slider;
+    private TextView companyName, offer_tag;
+    private ImageView rating, share, favorite;
+    private RatingBar ratingBar;
+    private TextView cart_quantity, ratingCount, workingTime, companyDescription;
+    private ListView serviceListView, offersListView;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private int userId;
+    private CompanyDetailsModel companyDetails;
+    private ServicesAdapter servicesAdapter;
+    private OffersAdapter offersAdapter;
 
-  @Nullable
-  @Override
-  public View onCreateView(
-      @NonNull LayoutInflater inflater,
-      @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
+    private int company_id;
+    private String tab_tag, searchDate, searchHour;
 
-    if (fragmentView == null) {
-      fragmentView = inflater.inflate(R.layout.fragment_company_details, container, false);
 
-      Toolbar toolbar = fragmentView.findViewById(R.id.toolBar);
-      ImageView backButton = toolbar.findViewById(R.id.back_button);
+    @Nullable
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
 
-      slider = fragmentView.findViewById(R.id.slider);
-      companyName = fragmentView.findViewById(R.id.company_name);
-      rating = fragmentView.findViewById(R.id.ic_rating);
-      share = fragmentView.findViewById(R.id.ic_share);
-      favorite = fragmentView.findViewById(R.id.ic_fav);
-      ratingBar = fragmentView.findViewById(R.id.rating);
-      ratingCount = fragmentView.findViewById(R.id.rating_count);
-      workingTime = fragmentView.findViewById(R.id.working_time);
-      companyDescription = fragmentView.findViewById(R.id.about);
-      serviceListView = fragmentView.findViewById(R.id.service_list);
+        if (fragmentView == null) {
+            fragmentView = inflater.inflate(R.layout.fragment_company_details, container, false);
+            reference();
 
-      progressDialog = new ProgressDialog(getActivity());
+            userId =
+                    (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
 
-      backButton.setOnClickListener(this);
-      rating.setOnClickListener(this);
-      share.setOnClickListener(this);
-      favorite.setOnClickListener(this);
+            company_id = Integer.parseInt(getArguments().getString("companyId"));
+            tab_tag = getArguments().getString("tag");
+            searchDate = getArguments().getString("searchDate");
+            searchHour = getArguments().getString("searchHour");
+
+            if (Common.cart.getServices().size() > 0) {
+                cart_quantity.setVisibility(View.VISIBLE);
+                cart_quantity.setText(String.valueOf(Common.cart.getServices().size()));
+            } else
+                cart_quantity.setVisibility(View.GONE);
+
+
+        }
+
+        if (Common.isConnectToTheInternet(getContext())) {
+            requestData();
+        } else {
+            AlertDialog.Builder error = new AlertDialog.Builder(getContext());
+            error.setMessage(R.string.error_connection);
+            AlertDialog dialog = error.create();
+            dialog.show();
+        }
+
+
+        return fragmentView;
     }
 
-    if (Common.isConnectToTheInternet(getContext())) {
-      requestData();
-    } else {
-      AlertDialog.Builder error = new AlertDialog.Builder(getContext());
-      error.setMessage(R.string.error_connection);
-      AlertDialog dialog = error.create();
-      dialog.show();
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (Common.cart.getServices().size() > 0) {
+            cart_quantity.setVisibility(View.VISIBLE);
+            cart_quantity.setText(String.valueOf(Common.cart.getServices().size()));
+        } else
+            cart_quantity.setVisibility(View.GONE);
     }
 
-    userId =
-        (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
-
-    return fragmentView;
-  }
-
-  private void requestData() {
-    progressDialog.show();
-    compositeDisposable.add(
-        Common.getAPI()
-            .getCompanyDetails(Common.companyId,userId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                new Consumer<CompanyDetailsModel>() {
-                  @Override
-                  public void accept(CompanyDetailsModel companyDetailsModel) {
-                    progressDialog.dismiss();
-                    companyDetails = companyDetailsModel;
-                    bindData();
-                  }
-                }));
-  }
-
-  private void bindData() {
-    setupSlider();
-    if (Common.isArabic) {
-      companyName.setText(companyDetails.getNameAR());
-      companyDescription.setText(companyDetails.getAboutAR());
-    } else {
-      companyName.setText(companyDetails.getNameEN());
-      companyDescription.setText(companyDetails.getAboutEN());
+    private void requestData() {
+        pb.setVisibility(View.VISIBLE);
+        compositeDisposable.add(
+                Common.getAPI()
+                        .getCompanyDetails(company_id, searchDate, searchHour, userId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                new Consumer<CompanyDetailsModel>() {
+                                    @Override
+                                    public void accept(CompanyDetailsModel companyDetailsModel) {
+                                        pb.setVisibility(View.GONE);
+                                        scrollView.setVisibility(View.VISIBLE);
+                                        companyDetails = companyDetailsModel;
+                                        try {
+                                            bindData();
+                                        } catch (Exception e) {
+                                        }
+                                    }
+                                }));
     }
 
-    ratingBar.setRating(companyDetails.getRating());
-    ratingCount.setText("(" + companyDetails.getRatingCount() + ")");
-    workingTime.setText(
-        getResources().getString(R.string.from)
-            + " "
-            + companyDetails.getWorkingFromTime()
-            + " "
-            + getResources().getString(R.string.to)
-            + " "
-            + companyDetails.getWorkingToTime());
+    private void bindData() {
+        setupSlider();
+        if (Common.isArabic) {
+            companyName.setText(companyDetails.getNameAR());
+            companyDescription.setText(Html.fromHtml(companyDetails.getAboutAR()));
+        } else {
+            companyName.setText(companyDetails.getNameEN());
+            companyDescription.setText(Html.fromHtml(companyDetails.getAboutEN()));
+        }
 
-    servicesAdapter =
-        new ServicesAdapter(
-            getActivity(), android.R.layout.simple_list_item_1, companyDetails.getServices());
-    serviceListView.setAdapter(servicesAdapter);
-    setListViewHeightBasedOnChildren(serviceListView);
-  }
+        ratingBar.setRating(companyDetails.getRating());
+        ratingCount.setText("(" + companyDetails.getRatingCount() + ")");
+        workingTime.setText(
+                getString(R.string.from)
+                        + " "
+                        + companyDetails.getWorkingFromTime()
+                        + " "
+                        + getString(R.string.to)
+                        + " "
+                        + companyDetails.getWorkingToTime());
 
-  private void setupSlider() {
-    for (Photos photo : companyDetails.getPhoto()) {
-      TextSliderView textSliderView = new TextSliderView(getContext());
-      textSliderView.image(photo.getPhoto()).setScaleType(BaseSliderView.ScaleType.Fit);
-      slider.addSlider(textSliderView);
+        // send company id used when send order
+        servicesAdapter =
+                new ServicesAdapter(
+                        getActivity(), android.R.layout.simple_list_item_1,
+                        companyDetails.getServices(), String.valueOf(company_id),
+                        companyDetails.getNameAR(), companyDetails.getNameEN(),
+                        searchDate,searchHour,tab_tag);
+        serviceListView.setAdapter(servicesAdapter);
+        setListViewHeightBasedOnChildren(serviceListView);
+
+
+        if (companyDetails.getOffers().size() == 0) {
+
+            offer_border_view.setVisibility(View.GONE);
+            offer_tag.setVisibility(View.GONE);
+            offersListView.setVisibility(View.GONE);
+        } else {
+            offersAdapter =
+                    new OffersAdapter(getActivity(), android.R.layout.simple_list_item_1, companyDetails.getOffers(), tab_tag);
+            offersListView.setAdapter(offersAdapter);
+            setListViewHeightBasedOnChildren(offersListView);
+        }
     }
 
-    // slider.setPresetTransformer(SliderLayout.Transformer.Background2Foreground);
-    slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-  }
+    private void setupSlider() {
+        for (Photos photo : companyDetails.getPhoto()) {
+            TextSliderView textSliderView = new TextSliderView(getContext());
+            textSliderView.image(photo.getPhoto()).empty(R.drawable.placeholder).setScaleType(BaseSliderView.ScaleType.Fit);
+            slider.addSlider(textSliderView);
+        }
 
-  @Override
-  public void onClick(View v) {
-
-    switch (v.getId()) {
-      case R.id.back_button:
-        getActivity().onBackPressed();
-        break;
-
-      case R.id.ic_rating:
-        break;
-
-      case R.id.ic_fav:
-        break;
-
-      case R.id.ic_share:
-        break;
+        // slider.setPresetTransformer(SliderLayout.Transformer.Background2Foreground);
+        slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
     }
-  }
+
+    private void setShare() {
+        userId =
+                (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
+        if (userId == 0) {
+            Common.booking = true;
+            getActivity().startActivity(new Intent(getContext(), Login.class));
+        } else {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, companyName.getText().toString().trim());
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
+    }
+
+    private void setFavourite() {
+        userId =
+                (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
+        if (userId != 0) {
+            if (companyDetails.getFavourite()) {
+                favorite.setImageDrawable(
+                        getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                companyDetails.setFavourite(false);
+            } else {
+                favorite.setImageDrawable(
+                        getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+                companyDetails.setFavourite(true);
+            }
+            compositeDisposable.add(
+                    Common.getAPI()
+                            .markAsFavorite(userId, companyDetails.getId())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    new Consumer<Integer>() {
+                                        @Override
+                                        public void accept(Integer integer) throws Exception {
+                                            if (integer > 0) {
+                                                /*if (companyDetails.getFavourite()) {
+                                                    favorite.setImageDrawable(
+                                                            getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                                                    companyDetails.setFavourite(false);
+                                                } else {
+                                                    favorite.setImageDrawable(
+                                                            getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+                                                    companyDetails.setFavourite(true);
+                                                }*/
+                                            }
+                                        }
+                                    }));
+        } else {
+            Common.booking = true;
+            getActivity().startActivity(new Intent(getContext(), Login.class));
+        }
+    }
+
+    private void showRatingDialog() {
+
+        Fragment rating = new Rating();
+        Bundle bundle = new Bundle();
+        bundle.putString("com_id", String.valueOf(companyDetails.getId()));
+        bundle.putString("com_name", (Common.isArabic) ? companyDetails.getNameAR() : companyDetails.getNameEN());
+        bundle.putString("com_image", companyDetails.getLogo());
+
+        rating.setArguments(bundle);
+
+        ((MainActivity) getActivity()).pushFragments(Constants.TAB_HOME, rating, true);
+
+       /* userId =
+                (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
+        if (userId != 0) {
+            ((MainActivity)getActivity()).pushFragments(Constants.TAB_HOME,new Rating(),true);
+        } else {
+            Common.booking = true;
+            getActivity().startActivity(new Intent(getContext(), Login.class));
+        }*/
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.back_button:
+                getActivity().onBackPressed();
+                break;
+            case R.id.cart_icon:
+                getContext().startActivity(new Intent(getContext(), CartActivity.class));
+                break;
+            case R.id.ic_rating:
+                showRatingDialog();
+                break;
+            case R.id.ic_fav:
+                setFavourite();
+                break;
+            case R.id.ic_share:
+                setShare();
+                break;
+        }
+    }
+
+    private void reference() {
+        Toolbar toolbar = fragmentView.findViewById(R.id.toolBar);
+        ImageView backButton = toolbar.findViewById(R.id.back_button);
+        ImageView cart = toolbar.findViewById(R.id.cart_icon);
+        cart_quantity = toolbar.findViewById(R.id.cart_quantity);
+
+        pb = fragmentView.findViewById(R.id.pb);
+        scrollView = fragmentView.findViewById(R.id.scroll);
+        slider = fragmentView.findViewById(R.id.slider);
+        companyName = fragmentView.findViewById(R.id.company_name);
+        rating = fragmentView.findViewById(R.id.ic_rating);
+        share = fragmentView.findViewById(R.id.ic_share);
+        favorite = fragmentView.findViewById(R.id.ic_fav);
+        ratingBar = fragmentView.findViewById(R.id.rating);
+        ratingCount = fragmentView.findViewById(R.id.rating_count);
+        workingTime = fragmentView.findViewById(R.id.working_time);
+        companyDescription = fragmentView.findViewById(R.id.about);
+        serviceListView = fragmentView.findViewById(R.id.service_list);
+        offer_border_view = fragmentView.findViewById(R.id.view4);
+        offer_tag = fragmentView.findViewById(R.id.offers_tag);
+        offersListView = fragmentView.findViewById(R.id.offers_list);
+
+        backButton.setOnClickListener(this);
+        cart.setOnClickListener(this);
+        rating.setOnClickListener(this);
+        share.setOnClickListener(this);
+        favorite.setOnClickListener(this);
+
+        if(Common.isArabic)
+            backButton.setRotation(180);
+
+    }
 }

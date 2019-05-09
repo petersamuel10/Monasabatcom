@@ -1,7 +1,6 @@
 package com.vavisa.monasabatcom.ProfileFragments;
 
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -28,41 +28,38 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class Terms_conditions extends Fragment {
 
+    @BindView(R.id.pb)
+    ProgressBar pb;
     @BindView(R.id.wb_terms)
     WebView webView_terms;
     @BindView(R.id.arrow)
     ImageView arrowAr;
+
     @OnClick(R.id.back)
-    public void setBack()
-    {getActivity().onBackPressed();}
-
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    ProgressDialog progressDialog;
-
-    public Terms_conditions() {
-        // Required empty public constructor
+    public void setBack() {
+        getActivity().onBackPressed();
     }
 
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.profile_terms_conditions, container, false);
-        ButterKnife.bind(this,view);
-        progressDialog = new ProgressDialog(getActivity());
-        if(Common.isArabic)
+        View view = inflater.inflate(R.layout.profile_terms_conditions, container, false);
+        ButterKnife.bind(this, view);
+
+        if (Common.isArabic)
             arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
 
         getData();
 
-     return view;
+        return view;
     }
 
     private void getData() {
-        if(Common.isConnectToTheInternet(getActivity())) {
-            progressDialog.show();
-
+        if (Common.isConnectToTheInternet(getActivity())) {
+            pb.setVisibility(View.VISIBLE);
             compositeDisposable.add(Common.getAPI().getPages(1)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -70,20 +67,20 @@ public class Terms_conditions extends Fragment {
                         @Override
                         public void accept(PageData pageData) throws Exception {
                             bindData(pageData);
-                            progressDialog.dismiss();
+                            pb.setVisibility(View.GONE);
                         }
                     }));
-        }else
-           errorConnectionMess();
+        } else
+            errorConnectionMess();
     }
 
     private void bindData(PageData pageData) {
-        if(Common.isArabic){
+        if (Common.isArabic) {
             String head = "<head><style type='text/css'>@font-face {font-family: 'arial';src: url('file:///android_asset/AvenirLTStd-Book.otf');}body {font-family: 'verdana';text-align: justify;background-color:#00000000;}</style></head>";
             String myHtmlString = "<html>" + head +
                     "<body style=\"font-family: arial\">" + pageData.getContentAR() + "</body></html>";
             webView_terms.loadDataWithBaseURL("", myHtmlString, "text/html", "utf-8", "");
-        }else {
+        } else {
             String head = "<head><style type='text/css'>@font-face {font-family: 'arial';src: url('file:///android_asset/AvenirLTStd-Book.otf');}body {font-family: 'verdana';text-align: justify;background-color:#00000000;}</style></head>";
             String myHtmlString = "<html>" + head +
                     "<body style=\"font-family: arial\">" + pageData.getContentEN() + "</body></html>";
@@ -91,7 +88,7 @@ public class Terms_conditions extends Fragment {
         }
     }
 
-    public void errorConnectionMess(){
+    public void errorConnectionMess() {
 
         AlertDialog.Builder error = new AlertDialog.Builder(getActivity());
         error.setMessage(R.string.error_connection);

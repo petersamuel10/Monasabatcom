@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.vavisa.monasabatcom.ProfileFragments.Terms_conditions">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -45,6 +46,8 @@
 
         </android.support.v7.widget.Toolbar>
 
+        <include layout="@layout/layout_common_progressbar"/>
+
         <LinearLayout
             android:layout_below="@+id/toolBar"
             android:layout_width="match_parent"
@@ -59,6 +62,6 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>

@@ -1,4 +1,4 @@
-package com.vavisa.monasabatcom.models.makeAppointment;
+package com.vavisa.monasabatcom.models.orderModels;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

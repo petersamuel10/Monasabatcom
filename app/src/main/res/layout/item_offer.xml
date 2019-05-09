@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/offer_logo"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:scaleType="fitXY"
             android:src="@drawable/logo"/>
         <TextView
@@ -29,7 +29,7 @@
             android:textSize="18sp"
             android:text="tyutuy"
             android:textColor="@android:color/black"
-            android:padding="10dp"
+            android:padding="18dp"
             android:gravity="center"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>

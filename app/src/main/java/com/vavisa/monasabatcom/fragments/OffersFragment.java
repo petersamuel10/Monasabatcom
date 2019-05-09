@@ -1,7 +1,6 @@
 package com.vavisa.monasabatcom.fragments;
 
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vavisa.monasabatcom.Common.Common;
@@ -29,8 +29,12 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.GONE;
+
 public class OffersFragment extends Fragment {
 
+    @BindView(R.id.pb)
+    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.offer_recyclerView)
@@ -40,30 +44,26 @@ public class OffersFragment extends Fragment {
 
     private OfferAdapter offerAdapter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    ProgressDialog progressDialog;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_offers_fragments, container, false);
-        ButterKnife.bind(this,view);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setCancelable(false);
+        View view = inflater.inflate(R.layout.fragment_offers_fragments, container, false);
+        ButterKnife.bind(this, view);
 
         setUpSwipeRefreshLayout();
 
         setupRecyclerView();
         requestData();
 
-
         return view;
     }
 
     private void requestData() {
         if (Common.isConnectToTheInternet(getContext())) {
-            progressDialog.show();
+            pb.setVisibility(View.VISIBLE);
             compositeDisposable.add(Common.getAPI().getOffers()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -71,12 +71,16 @@ public class OffersFragment extends Fragment {
                         @Override
                         public void accept(ArrayList<Offer> offers) throws Exception {
                             if (offers.size() > 0) {
+                                pb.setVisibility(GONE);
                                 emptyList.setVisibility(View.GONE);
                                 offerAdapter.addOffer(offers);
+                                offer_recyclerView.setVisibility(View.VISIBLE);
+                            } else {
+                                pb.setVisibility(GONE);
+                                offer_recyclerView.setVisibility(GONE);
                                 offerAdapter.notifyDataSetChanged();
-                                progressDialog.dismiss();
-                            } else
-                                progressDialog.dismiss();
+                                emptyList.setVisibility(View.VISIBLE);
+                            }
                         }
                     })
             );
@@ -88,9 +92,9 @@ public class OffersFragment extends Fragment {
 
         offer_recyclerView.setHasFixedSize(true);
         offer_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(offer_recyclerView.getContext(),R.anim.layout_fall_down);
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(offer_recyclerView.getContext(), R.anim.layout_fall_down);
         offer_recyclerView.setLayoutAnimation(controller);
-        offerAdapter = new OfferAdapter();
+        offerAdapter = new OfferAdapter(getActivity());
         offer_recyclerView.setAdapter(offerAdapter);
     }
 
@@ -100,7 +104,7 @@ public class OffersFragment extends Fragment {
             @Override
             public void onRefresh() {
 
-                if(offerAdapter!=null) {
+                if (offerAdapter != null) {
                     setupRecyclerView();
                     requestData();
                 }
@@ -109,7 +113,7 @@ public class OffersFragment extends Fragment {
         });
     }
 
-    public void errorConnectionMess(){
+    public void errorConnectionMess() {
 
         AlertDialog.Builder error = new AlertDialog.Builder(getContext());
         error.setMessage(R.string.error_connection);

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.Login;
+import com.vavisa.monasabatcom.MainActivity;
 import com.vavisa.monasabatcom.ProfileFragments.Addresses;
 import com.vavisa.monasabatcom.ProfileFragments.Appointment;
 import com.vavisa.monasabatcom.ProfileFragments.ChangePassword;
@@ -23,6 +24,7 @@ import com.vavisa.monasabatcom.ProfileFragments.Settings;
 import com.vavisa.monasabatcom.ProfileFragments.Support;
 import com.vavisa.monasabatcom.ProfileFragments.Terms_conditions;
 import com.vavisa.monasabatcom.R;
+import com.vavisa.monasabatcom.utility.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -200,8 +202,7 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
 
     public void selectOption(Fragment  fragment)
     {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.main_fragment, fragment).addToBackStack(null).commit();
+        ((MainActivity)getActivity()).pushFragments(Constants.TAB_PROFILE,fragment,true);
     }
 
 }

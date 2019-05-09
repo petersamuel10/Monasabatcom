@@ -4,5 +4,5 @@
     android:layout_height="wrap_content"
     android:indeterminate="true"
     android:theme="@style/GeneralLinearProgress"
-    android:visibility="visible"
+    android:visibility="gone"
     xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -1,6 +1,5 @@
 package com.vavisa.monasabatcom.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.constants.Constants;
+import com.vavisa.monasabatcom.utility.Constants;
 
 import java.util.ArrayList;
 import java.util.List;

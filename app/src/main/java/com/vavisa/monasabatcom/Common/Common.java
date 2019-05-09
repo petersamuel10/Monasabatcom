@@ -1,16 +1,25 @@
 package com.vavisa.monasabatcom.Common;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.TextView;
 
+import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.models.Address;
 import com.vavisa.monasabatcom.models.Offer;
 import com.vavisa.monasabatcom.models.User;
 import com.vavisa.monasabatcom.models.companyDetails.CompanyDetailsModel;
 import com.vavisa.monasabatcom.models.companyDetails.Services;
-import com.vavisa.monasabatcom.models.makeAppointment.MakeAppointment;
+import com.vavisa.monasabatcom.models.orderModels.CartModel;
+import com.vavisa.monasabatcom.models.orderModels.MakeAppointment;
+import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
+import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 import com.vavisa.monasabatcom.webService.APIInterface;
 import com.vavisa.monasabatcom.webService.Controller;
 import com.vavisa.monasabatcom.webService.Payment;
@@ -19,46 +28,40 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Common {
 
     public static User currentUser;
-    public static Integer offerId;
-    public static Integer categoryId;
-    public static Integer companyId;
-    public static String categoryName;
-    public static String offerName;
     public static boolean isArabic = false;
     public static FragmentActivity mActivity;
-    public static CompanyDetailsModel companyDetails;
+/*    public static CompanyDetailsModel companyDetails;*/
 
     public static Boolean isEditAddress = false;
     public static MakeAppointment appointment;
-    public static Boolean makeResr = false;
+    /*public static Boolean makeResr = false;*/
     public static Boolean showReserBtn = false;
     public static Boolean newOrder = false;
-    public static Boolean booking  = false;
+    public static Boolean booking = false;
     public static Integer orderId = 0;
-    public static Float totalAmount;
-    public static String date;
-    public static String time;
+   /* public static String date;
+    public static String time;*/
     public static Address address;
-    public static List<Services> services;
-    public static List<Offer> offers;
+  /*  public static List<Services> services;
+    public static List<Offer> offers;*/
+    public static CartModel cart;
 
 
-    public static APIInterface getAPI ()
-    {
+    public static APIInterface getAPI() {
         return new Controller().getAPI();
     }
 
-    public static APIInterface getPayment ()
-    {
+    public static APIInterface getPayment() {
         return new Payment().getAPI();
     }
 
-    public static Boolean isConnectToTheInternet (Context context) {
+    public static Boolean isConnectToTheInternet(Context context) {
 
         boolean connected = false;
         final ConnectivityManager cm = (ConnectivityManager) context
@@ -113,6 +116,26 @@ public class Common {
         }
         return connected;
 
+    }
+
+    public static void errorAlert(Context context,String message_str) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_error_alert);
+
+        TextView message = dialog.findViewById(R.id.alert_message);
+        TextView ok = dialog.findViewById(R.id.ok);
+
+        message.setText(message_str);
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }
 
