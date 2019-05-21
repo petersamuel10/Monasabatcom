@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,8 @@ import com.vavisa.monasabatcom.AddNewAddress;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.Interface.RecyclerViewItemClickListener;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.adapter.AddressAdapter;
-import com.vavisa.monasabatcom.models.Address;
+import com.vavisa.monasabatcom.adapter.profileAdpaters.AddressAdapter;
+import com.vavisa.monasabatcom.models.profile.Address;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +68,8 @@ public class Addresses extends Fragment implements RecyclerViewItemClickListener
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
 
+        recyclerViewItemClickListener = this;
+
         if (Common.isArabic) {
             arrow.setRotation(180);
         }
@@ -103,7 +104,7 @@ public class Addresses extends Fragment implements RecyclerViewItemClickListener
                     @Override
                     public void accept(ArrayList<Address> addresses) throws Exception {
                         list.addAll(addresses);
-                        adapter = new AddressAdapter(addresses,true);
+                        adapter = new AddressAdapter(addresses,false);
                         address_rec.setAdapter(adapter);
                         adapter.setListener(recyclerViewItemClickListener);
                         progressDialog.dismiss();

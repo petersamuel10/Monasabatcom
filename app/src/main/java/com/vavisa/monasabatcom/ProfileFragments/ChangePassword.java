@@ -24,9 +24,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ChangePassword extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.old_password)
@@ -39,9 +36,11 @@ public class ChangePassword extends Fragment implements View.OnClickListener {
     Button changeBtn;
     @BindView(R.id.arrow)
     ImageView arrowAr;
+
     @OnClick(R.id.back)
-    public void setBack()
-    {getActivity().onBackPressed();}
+    public void setBack() {
+        getActivity().onBackPressed();
+    }
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     ProgressDialog progressDialog;
@@ -52,11 +51,11 @@ public class ChangePassword extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.profile_change_password, container, false);
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
 
-        if(Common.isArabic)
+        if (Common.isArabic)
             arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
 
         changeBtn.setOnClickListener(this);
@@ -67,28 +66,22 @@ public class ChangePassword extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if(Common.isConnectToTheInternet(getContext())){
-            String oldPassword,newPassword,confirm;
+        if (Common.isConnectToTheInternet(getContext())) {
+            String oldPassword, newPassword, confirm;
             oldPassword = oldPasswordEt.getText().toString();
             newPassword = newPasswordEt.getText().toString();
             confirm = confirm_passwordEt.getText().toString();
 
-            if (validatePassword(oldPassword,newPassword,confirm))
-            {
-                changePassword(oldPassword,newPassword);
+            if (validatePassword(oldPassword, newPassword, confirm)) {
+                changePassword(oldPassword, newPassword);
             }
         } else
-        {
-            AlertDialog.Builder error = new AlertDialog.Builder(getContext());
-            error.setMessage(R.string.error_connection);
-            AlertDialog dialog = error.create();
-            dialog.show();
-        }
+            Common.errorAlert(getContext(), getString(R.string.error_connection));
     }
 
     private void changePassword(String oldPassword, String newPassword) {
         progressDialog.show();
-        compositeDisposable.add(Common.getAPI().changePassword(Common.currentUser.getId(),oldPassword,newPassword)
+        compositeDisposable.add(Common.getAPI().changePassword(Common.currentUser.getId(), oldPassword, newPassword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Integer>() {
@@ -96,31 +89,32 @@ public class ChangePassword extends Fragment implements View.OnClickListener {
                     public void accept(Integer integer) throws Exception {
                         progressDialog.dismiss();
 
-                        if(integer>0)
+                        if (integer > 0) {
                             Toast.makeText(getContext(), R.string.change_password_successfully, Toast.LENGTH_SHORT).show();
-                        else if(integer==-4)
-                            Toast.makeText(getContext(),R.string.incorrect_password, Toast.LENGTH_SHORT).show();
-                        else if (integer==-3)
-                            Toast.makeText(getContext(),R.string.no_user_email, Toast.LENGTH_SHORT).show();
+                            getActivity().onBackPressed();
+                        }else if (integer == -4) {
+                            Common.errorAlert(getContext(), getString(R.string.incorrect_password));
+                            oldPasswordEt.setText("");
+                        } else if (integer == -3)
+                            Common.errorAlert(getContext(), getString(R.string.no_user_email));
                         else
-                            Toast.makeText(getContext(),R.string.error_connection, Toast.LENGTH_SHORT).show();
+                            Common.errorAlert(getContext(), getString(R.string.error_occure));
                     }
                 }));
     }
 
     private boolean validatePassword(String oldPassword, String password, String confirm) {
 
-        if(oldPassword == null || oldPassword.trim().length() == 0){
+        if (oldPassword == null || oldPassword.trim().length() == 0) {
             Toast.makeText(getContext(), R.string.error_invalid_password, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(password == null || password.trim().length() == 0){
+        if (password == null || password.trim().length() == 0) {
             Toast.makeText(getContext(), R.string.error_invalid_password, Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(confirm==null || !password.contentEquals(confirm))
-        {
+        if (confirm == null || !password.contentEquals(confirm)) {
             Toast.makeText(getContext(), R.string.not_match, Toast.LENGTH_SHORT).show();
             return false;
         }

@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-/**
- * Created by jesus on 11/24/2018.
- */
 
 public class Services {
 

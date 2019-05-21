@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 
 public class CompanyDetails {
+
     @SerializedName("Id")
     @Expose
     private Integer id;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 
 public class CompanyDetailsModel {
+
     @SerializedName("Id")
     @Expose
     private Integer id;
@@ -49,6 +50,12 @@ public class CompanyDetailsModel {
     @SerializedName("AboutEN")
     @Expose
     private String aboutEN;
+    @SerializedName("TermsAndConditionsAR")
+    @Expose
+    private String TermsAndConditionsAR;
+    @SerializedName("TermsAndConditionsEn")
+    @Expose
+    private String TermsAndConditionsEn;
     @SerializedName("Rating")
     @Expose
     private Float rating;
@@ -231,6 +238,22 @@ public class CompanyDetailsModel {
 
     public void setAboutEN(String aboutEN) {
         this.aboutEN = aboutEN;
+    }
+
+    public String getTermsAndConditionsAR() {
+        return TermsAndConditionsAR;
+    }
+
+    public void setTermsAndConditionsAR(String termsAndConditionsAR) {
+        TermsAndConditionsAR = termsAndConditionsAR;
+    }
+
+    public String getTermsAndConditionsEn() {
+        return TermsAndConditionsEn;
+    }
+
+    public void setTermsAndConditionsEn(String termsAndConditionsEn) {
+        TermsAndConditionsEn = termsAndConditionsEn;
     }
 
     public Float getRating() {

@@ -4,7 +4,6 @@ package com.vavisa.monasabatcom.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.vavisa.monasabatcom.ProfileFragments.ChangePassword;
 import com.vavisa.monasabatcom.ProfileFragments.Language;
 import com.vavisa.monasabatcom.ProfileFragments.ProfileDetails;
 import com.vavisa.monasabatcom.ProfileFragments.Settings;
-import com.vavisa.monasabatcom.ProfileFragments.Support;
 import com.vavisa.monasabatcom.ProfileFragments.Terms_conditions;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.utility.Constants;
@@ -51,8 +49,6 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
     LinearLayout settings;
     @BindView(R.id.conditions)
     LinearLayout conditions;
-    @BindView(R.id.support)
-    LinearLayout support;
     @BindView(R.id.change_pass)
     LinearLayout change_password;
     @BindView(R.id.login_logout)
@@ -69,12 +65,8 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
     ImageView l5;
     @BindView(R.id.l6)
     ImageView l6;
-    @BindView(R.id.l7)
-    ImageView l7;
     @BindView(R.id.l8)
     ImageView l8;
-    @BindView(R.id.l9)
-    ImageView l9;
     @BindView(R.id.ic_login)
     ImageView loginBtn;
 
@@ -101,19 +93,8 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
         }
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_account, container, false);
-
         ButterKnife.bind(this, view);
         //check if there is current user
-        if (Paper.book("Monasabatcom").contains("currentUser")) {
-            bindData();
-            userInfo.setVisibility(View.VISIBLE);
-            change_password.setVisibility(View.VISIBLE);
-            support.setVisibility(View.VISIBLE);
-            login_logout.setText(R.string.logout);
-            loginBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_logout));
-
-            //login_logout.setTextColor(getResources().getColor(R.color.colorAccent));
-        }
 
         if(Common.isArabic)
             changeArrow();
@@ -125,10 +106,22 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
         language.setOnClickListener(this);
         settings.setOnClickListener(this);
         conditions.setOnClickListener(this);
-        support.setOnClickListener(this);
         change_password.setOnClickListener(this);
         login_logout.setOnClickListener(this);
         return view;
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (Paper.book("Monasabatcom").contains("currentUser")) {
+            bindData();
+            userInfo.setVisibility(View.VISIBLE);
+            change_password.setVisibility(View.VISIBLE);
+            login_logout.setText(R.string.logout);
+            loginBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_logout));
+        }
+
     }
 
     private void changeArrow() {
@@ -138,9 +131,7 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
         l4.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_left_black_24dp));
         l5.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_left_black_24dp));
         l6.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_left_black_24dp));
-        l7.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_left_black_24dp));
         l8.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_left_black_24dp));
-        l9.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_left_black_24dp));
     }
 
     private void bindData() {
@@ -177,10 +168,6 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
                 selectOption(new Terms_conditions());
                 break;
 
-            case R.id.support:
-                selectOption(new Support());
-                break;
-
             case R.id.change_pass:
                 selectOption(new ChangePassword());
                 break;
@@ -190,7 +177,6 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
                     Paper.book("Monasabatcom").delete("currentUser");
                     userInfo.setVisibility(View.GONE);
                     change_password.setVisibility(View.GONE);
-                    support.setVisibility(View.GONE);
                     login_logout.setText(R.string.login);
                    // login_logout.setTextColor(getResources().getColor(R.color.colorPrimary));
                    } else {

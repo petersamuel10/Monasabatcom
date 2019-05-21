@@ -88,7 +88,7 @@ public class CompaniesByOffer extends Fragment implements View.OnClickListener {
         third.setOnClickListener(this);
 
         if (Common.isArabic)
-            arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
+            arrowAr.setRotation(180);
 
         requestData();
         iconViewColor(first, second, third);

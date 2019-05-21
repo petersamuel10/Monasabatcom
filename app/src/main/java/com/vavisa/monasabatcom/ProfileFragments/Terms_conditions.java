@@ -1,6 +1,7 @@
 package com.vavisa.monasabatcom.ProfileFragments;
 
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +15,8 @@ import android.widget.ProgressBar;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.models.PageData;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +60,15 @@ public class Terms_conditions extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(Common.isArabic)
+            setLanguage("ar");
+        else
+            setLanguage("en");
+    }
+
     private void getData() {
         if (Common.isConnectToTheInternet(getActivity())) {
             pb.setVisibility(View.VISIBLE);
@@ -94,5 +106,14 @@ public class Terms_conditions extends Fragment {
         error.setMessage(R.string.error_connection);
         AlertDialog dialog = error.create();
         dialog.show();
+    }
+
+    public void setLanguage(String lang)
+    {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale= locale;
+        getContext().getResources().updateConfiguration(config,getContext().getResources().getDisplayMetrics());
     }
 }

@@ -72,14 +72,15 @@
 
     <include layout="@layout/layout_common_progressbar" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offer_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/service_toolbar"
         android:visibility="gone">
 
         <android.support.constraint.ConstraintLayout
@@ -97,11 +98,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <TextView
                 android:id="@+id/offer_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:textColor="@android:color/black"
@@ -116,27 +118,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/offer_images" />
 
             <TextView
-                android:id="@+id/offer_description"
-                android:layout_width="wrap_content"
+                android:id="@+id/pay_status"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/border_corner_red"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColor="@android:color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/offer_name" />
+
+            <TextView
+                android:id="@+id/offer_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:lineSpacingExtra="8dp"
+                android:textColor="#666666"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pay_status" />
 
             <TextView
                 android:id="@+id/how_to_serve_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/offers_and_how_to_serve"
                 android:textColor="@android:color/black"
@@ -172,7 +190,7 @@
                 android:id="@+id/offer_time_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/offer_time"
                 android:textColor="@android:color/black"
@@ -196,7 +214,7 @@
                 android:id="@+id/requirements_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/requirements"
                 android:textColor="@android:color/black"
@@ -208,7 +226,7 @@
                 android:id="@+id/duration_of_stay_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/duration_of_stay"
                 android:textColor="@android:color/black"
@@ -228,6 +246,30 @@
                 app:layout_constraintStart_toEndOf="@+id/duration_of_stay_tag"
                 app:layout_constraintTop_toTopOf="@+id/duration_of_stay_tag" />
 
+            <TextView
+                android:id="@+id/order_before_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/should_order_before"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/duration_of_stay_tag" />
+
+            <TextView
+                android:id="@+id/order_before"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/order_before_tag"
+                app:layout_constraintTop_toTopOf="@+id/order_before_tag" />
+
             <View
                 android:id="@+id/view4"
                 android:layout_width="match_parent"
@@ -236,86 +278,60 @@
                 android:background="#d7d7d7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/duration_of_stay_tag" />
+                app:layout_constraintTop_toBottomOf="@+id/order_before_tag" />
 
             <TextView
                 android:id="@+id/date_and_time_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/date_and_time"
+                android:text="@string/appointment_date"
                 android:textColor="@android:color/black"
                 android:textSize="17sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view4" />
 
-            <EditText
+            <TextView
                 android:id="@+id/date"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/edit_text_light_gray_border"
+                android:drawableStart="@drawable/ic_date_range_black_24dp"
                 android:drawableEnd="@drawable/ic_arrow_down_black_24dp"
-                android:focusable="false"
+                android:drawablePadding="@dimen/_8sdp"
+                android:gravity="center_vertical"
                 android:hint="@string/date"
-                android:paddingStart="8dp"
+                android:padding="@dimen/_4sdp"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date_and_time_tag" />
 
-            <EditText
+            <TextView
                 android:id="@+id/time"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/edit_text_light_gray_border"
+                android:drawableStart="@drawable/ic_access_time_black_24dp"
                 android:drawableEnd="@drawable/ic_arrow_down_black_24dp"
-                android:focusable="false"
+                android:drawablePadding="@dimen/_8ssp"
+                android:gravity="center_vertical"
                 android:hint="@string/time"
-                android:paddingStart="8dp"
+                android:padding="@dimen/_4sdp"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date" />
-
-            <View
-                android:id="@+id/view5"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginTop="24dp"
-                android:background="#d7d7d7"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/time" />
-
-            <TextView
-                android:id="@+id/offer_extras_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/extras"
-                android:textColor="@android:color/black"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view5" />
-
-            <ListView
-                android:id="@+id/extras_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/offer_extras_tag" />
 
             <View
                 android:id="@+id/view6"
@@ -325,7 +341,7 @@
                 android:background="#d7d7d7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/extras_list" />
+                app:layout_constraintTop_toBottomOf="@+id/time" />
 
             <TextView
                 android:id="@+id/extra_notes_tag"
@@ -350,10 +366,9 @@
                 android:background="@drawable/rounded_gray_border"
                 android:gravity="top"
                 android:maxLines="8"
-                android:paddingStart="8dp"
+                android:padding="4dp"
                 android:textColor="@android:color/black"
-                android:textSize="17sp"
-                android:textStyle="bold"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/extra_notes_tag" />
@@ -373,18 +388,21 @@
             <Button
                 android:id="@+id/add_to_cart"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="48dp"
-                android:background="#e6ad10"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:background="@drawable/border_corner_darkblue"
                 android:text="@string/add_to_cart"
                 android:textAllCaps="false"
+                android:textSize="@dimen/_14ssp"
+                android:padding="@dimen/_2sdp"
                 android:textColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/women_service_check" />
 
         </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

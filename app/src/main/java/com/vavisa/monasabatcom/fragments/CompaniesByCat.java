@@ -27,7 +27,7 @@ import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.activities.FilterActivity;
 import com.vavisa.monasabatcom.adapter.CompanyAdapter;
-import com.vavisa.monasabatcom.models.City;
+import com.vavisa.monasabatcom.models.profile.City;
 import com.vavisa.monasabatcom.models.Company;
 import com.vavisa.monasabatcom.models.SearchHour;
 import com.vavisa.monasabatcom.utility.Constants;
@@ -67,6 +67,8 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
     ImageView second;
     @BindView(R.id.third)
     ImageView third;
+    @BindView(R.id.arrow)
+    ImageView back;
 
     @OnClick(R.id.back)
     public void back() { getActivity().onBackPressed(); }
@@ -381,7 +383,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
             pb.setVisibility(View.VISIBLE);
             compositeDisposable.add(
                     Common.getAPI()
-                            .getCompanies(categoryId, cityId, searchDate, searchHour, 0, pageNo, 10)
+                            .getCompanies("",categoryId,-1, cityId, searchDate, searchHour, 0, pageNo, 10)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -450,6 +452,8 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
         Toolbar toolbar = fragmentView.findViewById(R.id.toolBar);
         title = toolbar.findViewById(R.id.title_cat);
         search_ed = fragmentView.findViewById(R.id.search_ed);
+        if(Common.isArabic)
+            back.setRotation(180);
 
         search_ed.setOnClickListener(this);
     }

@@ -2,7 +2,8 @@ package com.vavisa.monasabatcom.models.orderModels;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vavisa.monasabatcom.models.Address;
+import com.vavisa.monasabatcom.models.profile.Address;
+import com.vavisa.monasabatcom.models.companyDetails.PaymentMethod;
 
 import java.util.ArrayList;
 
@@ -11,17 +12,25 @@ public class CartModel {
     // for show in cart activity
     private String company_name_ar;
     private String company_name_en;
+    private String terms_ar;
+    private String terms_en;
     private Address address;
+    private Float total;
+    private Boolean isDeposit = false;
+    private Boolean isAdvance = false;
+    private ArrayList<PaymentMethod> paymentMethod;
+
 
     public CartModel(Integer company_id, Integer userId, Integer addressId,
                      Integer paymentMethodId, Float deliveryCost, ArrayList<ServicesOrder> services,
-                     ArrayList<OfferOrder> offers) {
+                     ArrayList<OfferOrder> offers,ArrayList<PaymentMethod> paymentMethod) {
         this.company_id = company_id;
         this.userId = userId;
         this.addressId = addressId;
         this.paymentMethodId = paymentMethodId;
         this.deliveryCost = deliveryCost;
         this.services = services;
+        this.paymentMethod = paymentMethod;
         this.offers = offers;
     }
 
@@ -63,12 +72,60 @@ public class CartModel {
         this.company_name_en = company_name_en;
     }
 
+    public String getTerms_ar() {
+        return terms_ar;
+    }
+
+    public void setTerms_ar(String terms_ar) {
+        this.terms_ar = terms_ar;
+    }
+
+    public String getTerms_en() {
+        return terms_en;
+    }
+
+    public void setTerms_en(String terms_en) {
+        this.terms_en = terms_en;
+    }
+
     public Address getAddress() {
         return address;
     }
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Float getTotal() {
+        return total;
+    }
+
+    public void setTotal(Float total) {
+        this.total = total;
+    }
+
+    public Boolean getDeposit() {
+        return isDeposit;
+    }
+
+    public void setDeposit(Boolean deposit) {
+        isDeposit = deposit;
+    }
+
+    public Boolean getAdvance() {
+        return isAdvance;
+    }
+
+    public void setAdvance(Boolean advance) {
+        isAdvance = advance;
+    }
+
+    public ArrayList<PaymentMethod> getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(ArrayList<PaymentMethod> paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public Integer getCompany_id() {

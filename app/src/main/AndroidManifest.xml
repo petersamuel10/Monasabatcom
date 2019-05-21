@@ -15,11 +15,15 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".activities.AddressesActivity"></activity>
+        <activity android:name=".activities.ServiceEditCart" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.OfferEditCart" android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activities.TermsAndConditions" />
+        <activity android:name=".PaymentResult" />
+        <activity android:name=".activities.AddressesActivity" />
         <activity android:name=".activities.AppointmentDetails" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustNothing" />
+           android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Login" />
         <activity
             android:name=".activities.CartActivity"
@@ -29,7 +33,7 @@
         <activity android:name=".Register" />
         <activity android:name=".AddNewAddress" />
         <activity android:name=".ForgetPassword" />
-        <activity android:name=".CompletePayment" />
+        <activity android:name=".PaymentPage" />
         <activity android:name=".activities.FilterActivity" />
         <activity
             android:name=".Welcome"
@@ -54,6 +58,10 @@
         </service>
 
         <activity android:name=".ChooseLanguage" />
+
+       <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="54cc6074b05a01d36002627727aa0c29a5022a6c" />
     </application>
 
 </manifest>

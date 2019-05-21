@@ -4,38 +4,32 @@
 
     <item
         android:id="@+id/main_nav"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/home"
-
-        />
+        android:icon="@drawable/bottom_home_action"
+        android:title="@string/home" />
 
     <item
         android:id="@+id/category_nav"
-        android:icon="@drawable/ic_border_all_black_24dp"
+        android:icon="@drawable/bottom_category_action"
         android:title="@string/category"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/product_nav"
-        android:icon="@drawable/ic_local_offer_black_24dp"
+        android:icon="@drawable/bottom_offer_action"
         android:title="@string/offers"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/favourite_nav"
-        android:icon="@drawable/ifav"
+        android:icon="@drawable/bottom_favorite_action"
         android:title="@string/favourite"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/account_nav"
-        android:icon="@drawable/ic_perm_identity_black_24dp"
+        android:icon="@drawable/bottom_profile_action"
         android:title="@string/profile"
-        app:showAsAction="ifRoom"
-      />
+        app:showAsAction="ifRoom"/>
 
 
 </menu>

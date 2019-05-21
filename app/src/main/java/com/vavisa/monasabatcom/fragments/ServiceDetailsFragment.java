@@ -1,5 +1,6 @@
 package com.vavisa.monasabatcom.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,11 +34,13 @@ import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.MainActivity;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.activities.CartActivity;
-import com.vavisa.monasabatcom.adapter.ServiceExtraAdapter;
+import com.vavisa.monasabatcom.adapter.services_offersAdapters.ServiceExtraAdapter;
 import com.vavisa.monasabatcom.models.Services;
+import com.vavisa.monasabatcom.models.companyDetails.PaymentMethod;
 import com.vavisa.monasabatcom.models.companyDetails.Photos;
 import com.vavisa.monasabatcom.models.companyDetails.WorkingHours;
 import com.vavisa.monasabatcom.models.orderModels.CartModel;
+import com.vavisa.monasabatcom.models.orderModels.ExtrasOrder;
 import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
 import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 
@@ -52,33 +56,35 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
 
     private ProgressBar pb;
     private NestedScrollView scrollView;
-    private View fragmentView;
+    private View fragmentView, extra_border_view;
+    private TextView service_extras_tag;
     private SliderLayout slider;
-    private TextView cart_quantity, serviceName, servicePayStatus, servicePrice,
-            serviceDescription, howToServe, serviceTime, requirements, durationOfStay;
-    private EditText date_ed, time_ed, extraNotes;
+    private TextView cart_quantity, serviceName, servicePayStatus, servicePrice, serviceDescription, howToServe_tag,
+            howToServe, serviceTime_tag, serviceTime, requirements_tag, requirements, durationOfStay_tag, durationOfStay,
+            order_before_tag,order_before;
+    private EditText extraNotes;
+    private TextView date_ed,time_ed;
     private RecyclerView serviceExtras_rec;
     private CheckBox womenServiceCheck;
     private Button addToCart;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private int serviceId, companyId;
+    private int serviceId, companyId, quantity_int = 0;
     private String company_name_ar, company_name_en, searchDate, searchHour;
     private Services serviceData;
     private String[] dateList, timeList;
     private int date_item_position = 0, time_item_position = 0;
     private ServiceExtraAdapter extraAdapter;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_service_details, container, false);
-
             reference();
 
             serviceId = Integer.parseInt(getArguments().getString("serviceId"));
@@ -88,12 +94,18 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
             searchDate = getArguments().getString("searchDate");
             searchHour = getArguments().getString("searchHour");
 
-            if (Common.cart.getServices().size() > 0) {
+            if (Common.cart.getServices().size() > 0)
+                quantity_int += Common.cart.getServices().size();
+
+            if (Common.cart.getOffers().size() > 0)
+                quantity_int += Common.cart.getOffers().size();
+
+
+            if (quantity_int > 0) {
                 cart_quantity.setVisibility(View.VISIBLE);
-                cart_quantity.setText(String.valueOf(Common.cart.getServices().size()));
+                cart_quantity.setText(String.valueOf(quantity_int));
             } else
                 cart_quantity.setVisibility(View.GONE);
-
 
             if (Common.isConnectToTheInternet(getContext())) {
                 requestData();
@@ -104,6 +116,14 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                 dialog.show();
             }
 
+           /* extraNotes.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.setFocusable(true);
+                    v.setFocusableInTouchMode(true);
+                    return false;
+                }
+            });*/
 
         }
 
@@ -151,18 +171,47 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         }
         servicePrice.setText(serviceData.getPrice() + " " + getString(R.string.kd));
 
-        howToServe.setText(serviceData.getServiceAndPresentationMethod());
-        serviceTime.setText(serviceData.getPreparationTime());
-        requirements.setText(serviceData.getRequirements());
-        durationOfStay.setText(serviceData.getStayDuration());
+        if (serviceData.getServiceAndPresentationMethodEN() == null) {
+            howToServe_tag.setVisibility(View.GONE);
+            howToServe.setVisibility(View.GONE);
+        } else {
+
+            if (Common.isArabic)
+                howToServe.setText(serviceData.getServiceAndPresentationMethodAR());
+            else
+                howToServe.setText(serviceData.getServiceAndPresentationMethodEN());
+        }
+        if (serviceData.getPreparationTime() == null) {
+            serviceTime_tag.setVisibility(View.GONE);
+            serviceTime.setVisibility(View.GONE);
+        } else
+            serviceTime.setText(serviceData.getPreparationTime());
+        if (serviceData.getRequirements() == null) {
+            requirements_tag.setVisibility(View.GONE);
+            requirements.setVisibility(View.GONE);
+        } else
+            requirements.setText(serviceData.getRequirements());
+        if (serviceData.getStayDuration() == null) {
+            durationOfStay_tag.setVisibility(View.GONE);
+            durationOfStay.setVisibility(View.GONE);
+        } else
+            durationOfStay.setText(serviceData.getStayDuration());
+
+        if (serviceData.getDeliveryTime() == null) {
+            order_before_tag.setVisibility(View.GONE);
+            order_before.setVisibility(View.GONE);
+        } else
+            order_before.setText(serviceData.getDeliveryTime()+ getString(R.string.hour));
 
         if (serviceData.getWomenService())
-            womenServiceCheck.setChecked(true);
+            womenServiceCheck.setVisibility(View.VISIBLE);
         else
-            womenServiceCheck.setChecked(false);
+            womenServiceCheck.setVisibility(View.GONE);
 
         switch (serviceData.getPaymentTypeId()) {
             case 1:
+                servicePayStatus.setVisibility(View.GONE);
+                break;
             case 2:
                 servicePayStatus.setText(getString(R.string.pay_a_deposit));
                 break;
@@ -171,8 +220,14 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                 break;
         }
 
-        extraAdapter = new ServiceExtraAdapter(serviceData.getServiceExtras());
-        serviceExtras_rec.setAdapter(extraAdapter);
+        if (serviceData.getServiceExtras().size() > 0) {
+            extraAdapter = new ServiceExtraAdapter(serviceData.getServiceExtras());
+            serviceExtras_rec.setAdapter(extraAdapter);
+        } else {
+            extra_border_view.setVisibility(View.GONE);
+            service_extras_tag.setVisibility(View.GONE);
+        }
+
 
         setupSlider();
         getDateList();
@@ -222,7 +277,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
             for (int i = 0; i < serviceData.getWorkingDaysAndHours().get(date_item_position).getWorkingHours().size(); i++) {
 
                 WorkingHours workingHours = serviceData.getWorkingDaysAndHours().get(date_item_position).getWorkingHours().get(i);
-                String time = workingHours.getFromHour() + "-" + workingHours.getToHour();
+                String time = workingHours.getFromHour() + " - " + workingHours.getToHour();
                 if (workingHours.getFromHour().equals(searchHour)) {
                     time_item_position = i;
                     time_ed.setText(time);
@@ -274,15 +329,19 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
 
     private void addToCart() {
 
+        ArrayList<ExtrasOrder> extrasOrderList = new ArrayList<>();
+        if(serviceData.getServiceExtras().size()>0)
+            extrasOrderList.addAll(extraAdapter.getExtrasOrdersList());
+
         ArrayList<ServicesOrder> servicesOrderList = Common.cart.getServices();
-        servicesOrderList.add(new ServicesOrder(serviceData.getNameAR(), serviceData.getNameEN(), serviceData.getPaymentTypeId(), serviceId,
-                date_ed.getText().toString(), time_ed.getText().toString(), 1, extraNotes.getText().toString(),
-                serviceData.getPrice(), extraAdapter.getExtrasOrdersList()));
+        servicesOrderList.add(new ServicesOrder(serviceData.getNameAR(), serviceData.getNameEN(), serviceData.getPaymentTypeId(),
+                serviceData.getDepositPercentage(), serviceId, date_ed.getText().toString(), time_ed.getText().toString(),
+                womenServiceCheck.isChecked(),1, extraNotes.getText().toString(),
+                serviceData.getPrice(), extrasOrderList));
 
         Common.cart.setCompany_id(companyId);
         Common.cart.setCompany_name_ar(company_name_ar);
         Common.cart.setCompany_name_en(company_name_en);
-        //  Common.cart.setUserId(Common.currentUser.getId());
         Common.cart.setServices(servicesOrderList);
         Common.cart.setPaymentMethodId(serviceData.getPaymentTypeId());
 
@@ -293,10 +352,10 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
     private boolean CheckDateTime() {
 
         if (date_ed.getText().toString().equals("")) {
-            Toast.makeText(getContext(), getString(R.string.select_date_time), Toast.LENGTH_SHORT).show();
+            Common.errorAlert(getContext(), getString(R.string.select_date_time));
             return false;
         } else if (time_ed.getText().toString().equals("")) {
-            Toast.makeText(getContext(), getString(R.string.select_date_time), Toast.LENGTH_SHORT).show();
+            Common.errorAlert(getContext(), getString(R.string.select_date_time));
             return false;
         }
         return true;
@@ -318,7 +377,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
 
                 // clear cart to start new order from another company
                 Common.cart = new CartModel(1, -1, -1, -1,
-                        0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>());
+                        0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(),new ArrayList<PaymentMethod>());
                 addToCart();
                 dialog.dismiss();
             }
@@ -380,12 +439,20 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         servicePayStatus = fragmentView.findViewById(R.id.pay_status);
         servicePrice = fragmentView.findViewById(R.id.service_price);
         serviceDescription = fragmentView.findViewById(R.id.service_description);
+        howToServe_tag = fragmentView.findViewById(R.id.how_to_serve_tag);
         howToServe = fragmentView.findViewById(R.id.how_to_serve);
+        serviceTime_tag = fragmentView.findViewById(R.id.service_time_tag);
         serviceTime = fragmentView.findViewById(R.id.service_time);
+        requirements_tag = fragmentView.findViewById(R.id.requirements_tag);
         requirements = fragmentView.findViewById(R.id.requirements);
+        durationOfStay_tag = fragmentView.findViewById(R.id.duration_of_stay_tag);
         durationOfStay = fragmentView.findViewById(R.id.duration_of_stay);
+        order_before_tag = fragmentView.findViewById(R.id.order_before_tag);
+        order_before = fragmentView.findViewById(R.id.order_before);
         date_ed = fragmentView.findViewById(R.id.date);
         time_ed = fragmentView.findViewById(R.id.time);
+        extra_border_view = fragmentView.findViewById(R.id.view5);
+        service_extras_tag = fragmentView.findViewById(R.id.service_extras_tag);
         extraNotes = fragmentView.findViewById(R.id.extra_notes);
         serviceExtras_rec = fragmentView.findViewById(R.id.extras_list_rec);
         womenServiceCheck = fragmentView.findViewById(R.id.women_service_check);

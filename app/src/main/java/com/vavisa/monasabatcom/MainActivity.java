@@ -14,13 +14,12 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.vavisa.monasabatcom.Common.Common;
-import com.vavisa.monasabatcom.ProfileFragments.ProfileDetails;
 import com.vavisa.monasabatcom.fragments.CategoryFragment;
-import com.vavisa.monasabatcom.fragments.CompanyDetailsFragment;
 import com.vavisa.monasabatcom.fragments.FavouriteFragment;
 import com.vavisa.monasabatcom.fragments.HomeFragment;
 import com.vavisa.monasabatcom.fragments.MyAccountFragment;
 import com.vavisa.monasabatcom.fragments.OffersFragment;
+import com.vavisa.monasabatcom.models.companyDetails.PaymentMethod;
 import com.vavisa.monasabatcom.models.orderModels.CartModel;
 import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
 import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
@@ -54,8 +53,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadLocal();
-        if (Common.booking)
-            if (Common.isArabic) {
+        if (Common.isArabic) {
                 CalligraphyConfig.initDefault(
                         new CalligraphyConfig.Builder()
                                 .setDefaultFontPath("fonts/Changa-Regular.ttf")
@@ -72,11 +70,8 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
         // init activity and cart when app start
         Common.mActivity = this;
-        Common.cart = new CartModel(-1,-1,-1,-1,
-                0.0f,new ArrayList<ServicesOrder>(),new ArrayList<OfferOrder>());
 
         mStack = new HashMap<String, Stack<Fragment>>();
         mStack.put(Constants.TAB_HOME, new Stack<Fragment>());

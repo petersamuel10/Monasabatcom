@@ -32,7 +32,7 @@ import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.activities.FilterActivity;
 import com.vavisa.monasabatcom.adapter.CompanyAdapter;
-import com.vavisa.monasabatcom.models.City;
+import com.vavisa.monasabatcom.models.profile.City;
 import com.vavisa.monasabatcom.models.Company;
 import com.vavisa.monasabatcom.models.SearchHour;
 import com.vavisa.monasabatcom.utility.Constants;
@@ -91,8 +91,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     TextView city_txt, date_txt, time_txt;
 
-    String searchDate = "-1", searchHour = "-1", cityName = "";
-    int cityId = -1, pageNo = 1, categoryId = -1;
+    String search_str = "",searchDate = "-1", searchHour = "-1", cityName = "";
+    int cityId = -1, pageNo = 1, categoryId = -1,filter_id = -1;
 
     @Override
     public View onCreateView(
@@ -102,9 +102,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             reference();
             getCities();
             getTime();
-
         }
-
 
         ButterKnife.bind(this, fragmentView);
 
@@ -126,6 +124,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.toString().trim().length() > 0) {
                             clearText.setVisibility(View.VISIBLE);
+                            search_str = s.toString();
+                            requestData();
                         } else {
                             clearText.setVisibility(GONE);
                         }
@@ -172,13 +172,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             case R.id.clear_text:
                 searchText.setText("");
+                search_str = "";
+                requestData();
                 clearText.setVisibility(GONE);
                 break;
 
             case R.id.cancel_button:
                 searchLayout.setVisibility(GONE);
                 searchText.clearFocus();
-                searchText.setText("");
                 clearText.setVisibility(GONE);
                 KeyboardUtility.hideKeyboardFrom(getActivity(), searchText);
                 break;
@@ -312,8 +313,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         String search_title = "";
                         search_ed.setTextColor(getResources().getColor(R.color.colorPrimary));
                         if (!cityName.equals("")) search_title += cityName;
-                        if (!searchDate.equals("-1")) search_title += ((search_title.equals(""))?"":" - ") + searchDate;
-                        if (!searchHour.equals("-1")) search_title += ((search_title.equals(""))?"":" - ") + searchHour;
+                        if (!searchDate.equals("-1"))
+                            search_title += ((search_title.equals("")) ? "" : " - ") + searchDate;
+                        if (!searchHour.equals("-1"))
+                            search_title += ((search_title.equals("")) ? "" : " - ") + searchHour;
                         search_ed.setText(search_title);
 
                         requestData();
@@ -414,7 +417,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             pb.setVisibility(View.VISIBLE);
             compositeDisposable.add(
                     Common.getAPI()
-                            .getCompanies(categoryId, cityId, searchDate, searchHour, 1, pageNo, 10)
+                            .getCompanies(search_str,categoryId,filter_id, cityId, searchDate, searchHour, 1, pageNo, 10)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -452,7 +455,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
         }
 
-        adapter = new CompanyAdapter(getActivity(), companyList, Constants.TAB_HOME, viewType,searchDate,searchHour);
+        adapter = new CompanyAdapter(getActivity(), companyList, Constants.TAB_HOME, viewType, searchDate, searchHour);
         companyListView.setAdapter(adapter);
     }
 
@@ -501,8 +504,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            String filterName = data.getStringExtra("filter");
-            // apply filter here
+            filter_id = Integer.parseInt(data.getExtras().getString("filter"));
+            requestData();
         }
     }
 }

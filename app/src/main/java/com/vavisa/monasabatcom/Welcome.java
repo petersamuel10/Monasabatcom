@@ -3,17 +3,20 @@ package com.vavisa.monasabatcom;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.gson.JsonElement;
 import com.squareup.picasso.Picasso;
 import com.vavisa.monasabatcom.Common.Common;
-import com.vavisa.monasabatcom.models.User;
+import com.vavisa.monasabatcom.models.companyDetails.PaymentMethod;
+import com.vavisa.monasabatcom.models.orderModels.CartModel;
+import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
+import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -33,6 +36,10 @@ public class Welcome extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         final ImageView splashImage = findViewById(R.id.splash);
+
+        // init activity and cart when app start
+        Common.cart = new CartModel(-1, -1, -1, -1,
+                0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(), new ArrayList<PaymentMethod>());
 
         if(Common.isConnectToTheInternet(getBaseContext())) {
             compositeDisposable.add(Common.getAPI().getSplashScreen()
@@ -55,7 +62,8 @@ public class Welcome extends AppCompatActivity {
                             }
                         }
                     }));
-        }
+        }else
+            Common.errorAlert(this,getString(R.string.error_connection));
 
     }
 

@@ -8,6 +8,10 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ServiceExtras {
+
+    //use for edit cart
+    private int quantity = 0;
+
     @SerializedName("Id")
     @Expose
     private int id;
@@ -30,6 +34,14 @@ public class ServiceExtras {
         this.nameAR = nameAR;
         this.nameEN = nameEN;
         this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public int getId() {

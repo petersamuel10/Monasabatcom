@@ -138,6 +138,40 @@
     <string name="pay_full_amount_in_advance">دفع المبلغ بالكامل مقدما</string>
     <string name="cart_contain_services_from">العربة بها خدمات من شركات اخرى . هل تريد حذفها واضافة طلب جديد؟</string>
     <string name="the_company_cant_deliver_to">الشركة لا يمكنها التوصيل لهذا العنوان.</string>
+    <string name="cart_is_empty">السلة فارغة.</string>
+    <string name="payment_method">طريقة الدفع</string>
+    <string name="knet">كي نت</string>
+    <string name="cash">نقدي</string>
+    <string name="amount_to_pay">كمية الدفع</string>
+    <string name="deposit">عربون</string>
+    <string name="full_amount">المبلغ كامل</string>
+    <string name="total">الإجمالي :</string>
+    <string name="select_payment_method">قم باخيار طريقة الدفع .</string>
+    <string name="select_payment_amount"> قم باختيار كمية الدفع.</string>
+    <string name="the_following_offers_are_not_available">هذه الخدمات غير متاحه :</string>
+    <string name="the_following_services_are_not_available">هذة العروض غير متاحة :</string>
+    <string name="your_appointment_has_been_booked">تم حجز الموعد بنجاح .</string>
+    <string name="due_amount">المبلغ الاجمالي :</string>
+    <string name="all">الكل</string>
+    <string name="order_num">رقم الطلب</string>
+    <string name="order_status">حالة الطلب</string>
+    <string name="order_from">الطلب من</string>
+    <string name="price">السعر :</string>
+    <string name="extra_note">تعليمات إضافية :</string>
+    <string name="paid_amount">"المبلغ المدفوع "</string>
+    <string name="should_order_before">يجب الطلب قبل :</string>
+    <string name="hour">ساعة</string>
+    <string name="by_complete_this_order_i">"بإكمال هذا الطلب , انا اوافق على الشروط والاحكام الخاصة ب  "</string>
+    <string name="payment_id">رقم الدفع :</string>
+    <string name="post_data">التاريخ :</string>
+    <string name="reference_id">رقم المرجع :</string>
+    <string name="result">النتيجة :</string>
+    <string name="transaction_id">رقم التحويل:</string>
+    <string name="message_payment">عملية الدفع قد تمت بنجاح</string>
+    <string name="payment_progress_faild">فشلت عملية الدفع .</string>
+    <string name="amount">المبلغ</string>
+    <string name="the_offer_is_in_cart_select_different_time">هذا العرض موجود بالفعل فالسلة , الرجاء اختيار موعد اخر</string>
+    <string name="edit_cart">تعديل السلة</string>
 
 
 </resources>

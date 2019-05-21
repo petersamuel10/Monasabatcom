@@ -15,9 +15,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.vavisa.monasabatcom.Common.Common;
-import com.vavisa.monasabatcom.models.Address;
-import com.vavisa.monasabatcom.models.City;
-import com.vavisa.monasabatcom.models.Governorate;
+import com.vavisa.monasabatcom.models.profile.Address;
+import com.vavisa.monasabatcom.models.profile.City;
+import com.vavisa.monasabatcom.models.profile.Governorate;
 
 import java.util.ArrayList;
 import java.util.List;

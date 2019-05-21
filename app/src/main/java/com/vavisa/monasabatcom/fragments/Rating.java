@@ -1,6 +1,7 @@
 package com.vavisa.monasabatcom.fragments;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -80,21 +81,43 @@ public class Rating extends Fragment {
         });
     }
 
-
     @OnClick(R.id.rate_button)
     public void rateFun(){
-        compositeDisposable.add(Common.getAPI().rating(Integer.parseInt(com_id), Common.currentUser.getId(),rating_value,comment)
+        compositeDisposable.add(Common.getAPI().rating(Common.currentUser.getId(),Integer.parseInt(com_id),rating_value,comment)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                              .subscribe(new Consumer<Integer>() {
                                  @Override
                                  public void accept(Integer integer) throws Exception {
                                      if (integer == 1)
-                                         getActivity().onBackPressed();
+                                         showMessage();
                                      else
                                          Toast.makeText(getContext(), getString(R.string.error_occure), Toast.LENGTH_SHORT).show();
                                  }
                              }));
+    }
+
+    private void showMessage() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.custom_error_alert);
+        dialog.setCancelable(false);
+
+        TextView message = dialog.findViewById(R.id.alert_message);
+        TextView ok = dialog.findViewById(R.id.ok);
+
+        message.setText(getString(R.string.thanks_rating));
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                getActivity().onBackPressed();
+            }
+        });
+
+        dialog.show();
+
     }
 
 

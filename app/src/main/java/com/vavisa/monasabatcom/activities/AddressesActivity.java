@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,8 +17,8 @@ import com.vavisa.monasabatcom.AddNewAddress;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.Interface.RecyclerViewItemClickListener;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.adapter.AddressAdapter;
-import com.vavisa.monasabatcom.models.Address;
+import com.vavisa.monasabatcom.adapter.profileAdpaters.AddressAdapter;
+import com.vavisa.monasabatcom.models.profile.Address;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +61,7 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
         ImageView arrow = findViewById(R.id.arrow);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
+        recyclerViewItemClickListener = this;
 
         if (Common.isArabic) {
             arrow.setRotation(180);
@@ -132,46 +132,48 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
             Common.isEditAddress = true;
             startActivity(new Intent(this, AddNewAddress.class));
 
-        }
+        }else if(flag == 2)
+            checkAndGetDeliveryCost(Common.cart.getCompany_id(),list.get(position).getId(),list.get(position));
 
     }
 
-    public boolean checkAndGetDeliveryCost(int companyId, int addressId) {
+    public void checkAndGetDeliveryCost(int companyId, final int addressId, final Address address) {
 
         progressDialog.show();
 
-        final int[] result = new int[1];
+        final Float[] result = new Float[1];
 
         compositeDisposable.add(Common.getAPI().checkAndGetDeliveryCost(companyId, addressId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
+                .subscribe(new Consumer<Float>() {
                     @Override
-                    public void accept(Integer integer) throws Exception {
+                    public void accept(Float integer) throws Exception {
                         progressDialog.dismiss();
 
                         result[0] = integer;
+
+                        if (result[0] >= 0){
+                            Common.cart.setAddressId(addressId);
+                            Common.cart.setAddress(address);
+                            Common.cart.setDeliveryCost(integer);
+                            startActivity(new Intent(AddressesActivity.this, AppointmentDetails.class));
+                        }
+                        else if(result[0] == -1)
+                            showErrorAlert(getString(R.string.missing_required_data));
+                        else if(result[0] == -2)
+                            showErrorAlert(getString(R.string.the_company_cant_deliver_to));
+                        else if(result[0] == -3)
+                            showErrorAlert(getBaseContext().getString(R.string.error_occure));
                     }
                 }));
 
 
-        if (result[0] >= 0)
-            return true;
-        else if(result[0] == -1)
-            showErrorAlert(getString(R.string.missing_required_data));
-        else if(result[0] == -2)
-            showErrorAlert(getString(R.string.the_company_cant_deliver_to));
-        else if(result[0] == -3)
-            showErrorAlert(getString(R.string.error_occure));
-
-
-        return false;
     }
-
 
     private void showErrorAlert(String message_str){
 
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(AddressesActivity.this);
         dialog.setContentView(R.layout.custom_error_alert);
 
         TextView message = dialog.findViewById(R.id.alert_message);
@@ -185,5 +187,7 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
                 dialog.dismiss();
             }
         });
+
+        dialog.show();
     }
 }

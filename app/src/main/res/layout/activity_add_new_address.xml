@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/background"
     tools:context=".AddNewAddress">
 
     <android.support.v7.widget.Toolbar
@@ -140,7 +140,7 @@
             android:background="@drawable/border"
             android:inputType="phone"
             android:padding="5dp"
-            android:gravity="center_vertical"
+            android:gravity="start|center_vertical"
             android:hint="@string/phone"/>
 
         <TextView

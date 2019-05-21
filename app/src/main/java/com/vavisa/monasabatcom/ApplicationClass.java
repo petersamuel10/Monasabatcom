@@ -4,11 +4,13 @@ import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.onesignal.OSNotificationAction;
 import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
 import com.vavisa.monasabatcom.notification.ExampleNotificationReceivedHandler;
 
+import io.fabric.sdk.android.Fabric;
 import org.json.JSONObject;
 
 public class ApplicationClass extends Application {
@@ -17,6 +19,7 @@ public class ApplicationClass extends Application {
     public void onCreate() {
         super.onCreate();
 
+        Fabric.with(this, new Crashlytics());
         // OneSignal Initialization
         OneSignal.startInit(this)
                 .setNotificationReceivedHandler(new ExampleNotificationReceivedHandler())

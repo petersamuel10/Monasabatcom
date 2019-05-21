@@ -5,6 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class OfferOrder{
 
+    //to show in cart activity
+    String offer_name_ar;
+    String offer_name_en;
+    Integer payType;
+    Float depositPercentage;
+
     @SerializedName("OfferId")
     @Expose
     Integer offerIdId;
@@ -14,6 +20,9 @@ public class OfferOrder{
     @SerializedName("Time")
     @Expose
     String time;
+    @SerializedName("WomenService")
+    @Expose
+    Boolean WomenService;
     @SerializedName("Quantity")
     @Expose
     Integer quantity;
@@ -23,6 +32,55 @@ public class OfferOrder{
     @SerializedName("Price")
     @Expose
     Float price;
+
+
+    public OfferOrder(String offer_name_ar, String offer_name_en, Integer payType,
+                      Float depositPercentage, Integer offerIdId, String date, String time,
+                      Boolean womenService, Integer quantity, String note, Float price) {
+        this.offer_name_ar = offer_name_ar;
+        this.offer_name_en = offer_name_en;
+        this.payType = payType;
+        this.depositPercentage = depositPercentage;
+        this.offerIdId = offerIdId;
+        this.date = date;
+        this.time = time;
+        WomenService = womenService;
+        this.quantity = quantity;
+        this.note = note;
+        this.price = price;
+    }
+
+    public String getOffer_name_ar() {
+        return offer_name_ar;
+    }
+
+    public void setOffer_name_ar(String offer_name_ar) {
+        this.offer_name_ar = offer_name_ar;
+    }
+
+    public String getOffer_name_en() {
+        return offer_name_en;
+    }
+
+    public void setOffer_name_en(String offer_name_en) {
+        this.offer_name_en = offer_name_en;
+    }
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
+    }
+
+    public Float getDepositPercentage() {
+        return depositPercentage;
+    }
+
+    public void setDepositPercentage(Float depositPercentage) {
+        this.depositPercentage = depositPercentage;
+    }
 
     public Integer getOfferIdId() {
         return offerIdId;
@@ -46,6 +104,14 @@ public class OfferOrder{
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public Boolean getWomenService() {
+        return WomenService;
+    }
+
+    public void setWomenService(Boolean womenService) {
+        WomenService = womenService;
     }
 
     public Integer getQuantity() {

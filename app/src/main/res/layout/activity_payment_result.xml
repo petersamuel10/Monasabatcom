@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".PaymentResult">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/ic_successfull_order" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:gravity="center_horizontal"
+            android:lines="3"
+            android:text="@string/your_appointment_has_been_booked"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/pay_info"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start">
+
+                <LinearLayout
+                    android:id="@+id/knet_titles"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize = "16sp"
+                        android:textColor="@android:color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/result"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize = "16sp"
+                        android:textColor="@android:color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/payment_id"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize = "16sp"
+                        android:textColor="@android:color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/transaction_id"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/order_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize = "16sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical"
+                    android:text="@string/reference_id"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize = "16sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical"
+                    android:text="@string/post_data"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize = "16sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical"
+                    android:text="@string/amount"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="start">
+
+                <LinearLayout
+                    android:id="@+id/knet_info"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start">
+
+                    <TextView
+                        android:id="@+id/result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize = "16sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="gbujuj"/>
+
+                    <TextView
+                        android:id="@+id/payment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize = "16sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="gbujuj"/>
+
+                    <TextView
+                        android:id="@+id/transaction"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize = "16sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="gbujtutyiuj"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/reference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize = "16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:text="gbujtutyiuj"/>
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize = "16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:text="gbujuutuyutyj"/>
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize = "16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:text="gbujuutuyutyj"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/continueBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:background="@drawable/button_style"
+            android:text="@string/continueTxt"
+            android:minHeight="0dp"
+            android:padding="@dimen/_8sdp"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

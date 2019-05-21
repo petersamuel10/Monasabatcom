@@ -29,9 +29,12 @@ public class Services {
     @SerializedName("DescriptionEN")
     @Expose
     private String DescriptionEN;
-    @SerializedName("ServiceAndPresentationMethod")
+    @SerializedName("ServiceAndPresentationMethodAR")
     @Expose
-    private String serviceAndPresentationMethod;
+    private String serviceAndPresentationMethodAR;
+    @SerializedName("ServiceAndPresentationMethodEN")
+    @Expose
+    private String serviceAndPresentationMethodEN;
     @SerializedName("PreparationTime")
     @Expose
     private String PreparationTime;
@@ -52,7 +55,7 @@ public class Services {
     private int PaymentTypeId;
     @SerializedName("DepositPercentage")
     @Expose
-    private int DepositPercentage;
+    private Float DepositPercentage;
     @SerializedName("Price")
     @Expose
     private Float price;
@@ -155,11 +158,11 @@ public class Services {
         PaymentTypeId = paymentTypeId;
     }
 
-    public int getDepositPercentage() {
+    public Float getDepositPercentage() {
         return DepositPercentage;
     }
 
-    public void setDepositPercentage(int depositPercentage) {
+    public void setDepositPercentage(Float depositPercentage) {
         DepositPercentage = depositPercentage;
     }
 
@@ -187,12 +190,20 @@ public class Services {
         this.serviceExtras = serviceExtras;
     }
 
-    public String getServiceAndPresentationMethod() {
-        return serviceAndPresentationMethod;
+    public String getServiceAndPresentationMethodAR() {
+        return serviceAndPresentationMethodAR;
     }
 
-    public void setServiceAndPresentationMethod(String serviceAndPresentationMethod) {
-        this.serviceAndPresentationMethod = serviceAndPresentationMethod;
+    public void setServiceAndPresentationMethodAR(String serviceAndPresentationMethodAR) {
+        this.serviceAndPresentationMethodAR = serviceAndPresentationMethodAR;
+    }
+
+    public String getServiceAndPresentationMethodEN() {
+        return serviceAndPresentationMethodEN;
+    }
+
+    public void setServiceAndPresentationMethodEN(String serviceAndPresentationMethodEN) {
+        this.serviceAndPresentationMethodEN = serviceAndPresentationMethodEN;
     }
 
     public ArrayList<com.vavisa.monasabatcom.models.companyDetails.WorkingDaysAndHours> getWorkingDaysAndHours() {

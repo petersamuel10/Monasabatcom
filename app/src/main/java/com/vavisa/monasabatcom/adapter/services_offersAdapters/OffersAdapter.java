@@ -29,13 +29,25 @@ public class OffersAdapter extends ArrayAdapter<Offers> {
     private ArrayList<Offers> offersList;
     private Activity activity;
     private String tab_tag;
+    private String companyId, company_name_ar,
+            company_name_en,searchDate,searchHour;
 
     public OffersAdapter(
-            @NonNull Activity activity, int resource, @NonNull ArrayList<Offers> objects,String tab_tag) {
+            @NonNull Activity activity, int resource, @NonNull ArrayList<Offers> objects,
+            String company_id, String company_name_ar,
+            String company_name_en, String searchDate,
+            String searchHour, String tab_tag) {
+
         super(activity, resource, objects);
         this.activity = activity;
         this.offersList = objects;
         this.tab_tag = tab_tag;
+        this.companyId = company_id;
+        this.company_name_ar = company_name_ar;
+        this.company_name_en = company_name_en;
+        this.searchDate = searchDate;
+        this.searchHour = searchHour;
+
     }
 
     @Override
@@ -50,7 +62,7 @@ public class OffersAdapter extends ArrayAdapter<Offers> {
         final ViewHolder viewHolder ;
         if(convertView == null){
             convertView = LayoutInflater.from(activity)
-                    .inflate(R.layout.item_service,parent,false);
+                    .inflate(R.layout.service_list_item,parent,false);
 
             viewHolder = new OffersAdapter.ViewHolder();
             viewHolder.offerName = convertView.findViewById(R.id.service_name);
@@ -62,6 +74,11 @@ public class OffersAdapter extends ArrayAdapter<Offers> {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("offerId", String.valueOf(offersList.get(position).getId()));
+                    bundle.putString("companyId", companyId);
+                    bundle.putString("company_name_ar", company_name_ar);
+                    bundle.putString("company_name_en", company_name_en);
+                    bundle.putString("searchDate", searchDate);
+                    bundle.putString("searchHour", searchHour);
                     bundle.putString("tag", tab_tag);
                     Fragment offerFragment = new OfferDetailsFragment();
                     offerFragment.setArguments(bundle);
@@ -82,11 +99,11 @@ public class OffersAdapter extends ArrayAdapter<Offers> {
         } else {
             viewHolder.offerName.setText(offersList.get(position).getNameEN());
         }
+
         viewHolder.offerPrice.setText(
-                offersList.get(position).getPrice()
+                String.valueOf(offersList.get(position).getPrice())
                         + " "
                         + activity.getResources().getString(R.string.kd));
-
 
 
         return convertView;

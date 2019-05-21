@@ -17,7 +17,8 @@ import android.widget.ProgressBar;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.adapter.AppointmentAdapter;
+import com.vavisa.monasabatcom.adapter.profileAdpaters.AppointmentAdapter;
+import com.vavisa.monasabatcom.models.profile.AppointmentModel;
 
 import java.util.ArrayList;
 
@@ -29,9 +30,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Appointment extends Fragment {
 
     @BindView(R.id.appointment_rec)
@@ -75,15 +73,14 @@ public class Appointment extends Fragment {
     return view;
     }
 
-
     private void requestData() {
         progressDialog.show();
         compositeDisposable.add(Common.getAPI().getUserOrders(Common.currentUser.getId())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<ArrayList<com.vavisa.monasabatcom.models.Appointment>>() {
+                                .subscribe(new Consumer<ArrayList<AppointmentModel>>() {
                                     @Override
-                                    public void accept(ArrayList<com.vavisa.monasabatcom.models.Appointment> appointments) throws Exception {
+                                    public void accept(ArrayList<AppointmentModel> appointments) throws Exception {
                                         adapter.addAppointment(appointments);
                                         adapter.notifyDataSetChanged();
                                         progressDialog.dismiss();
@@ -95,11 +92,10 @@ public class Appointment extends Fragment {
 
         appointment_rec.setHasFixedSize(true);
         appointment_rec.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AppointmentAdapter();
+        adapter = new AppointmentAdapter(getActivity());
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(appointment_rec.getContext(),R.anim.layout_fall_down);
         appointment_rec.setLayoutAnimation(controller);
         appointment_rec.setAdapter(adapter);
     }
-
 
 }

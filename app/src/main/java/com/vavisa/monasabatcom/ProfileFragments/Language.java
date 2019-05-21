@@ -19,9 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.paperdb.Paper;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Language extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.english)

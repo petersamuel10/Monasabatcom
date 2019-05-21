@@ -44,9 +44,9 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
 
     private ProgressBar pb;
     private ScrollView scrollView;
-    private View fragmentView, offer_border_view;
+    private View fragmentView, service_border_view, offer_border_view;
     private SliderLayout slider;
-    private TextView companyName, offer_tag;
+    private TextView companyName, service_tag, offer_tag;
     private ImageView rating, share, favorite;
     private RatingBar ratingBar;
     private TextView cart_quantity, ratingCount, workingTime, companyDescription;
@@ -80,13 +80,6 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
             searchDate = getArguments().getString("searchDate");
             searchHour = getArguments().getString("searchHour");
 
-            if (Common.cart.getServices().size() > 0) {
-                cart_quantity.setVisibility(View.VISIBLE);
-                cart_quantity.setText(String.valueOf(Common.cart.getServices().size()));
-            } else
-                cart_quantity.setVisibility(View.GONE);
-
-
         }
 
         if (Common.isConnectToTheInternet(getContext())) {
@@ -106,9 +99,18 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
     public void onStart() {
         super.onStart();
 
-        if (Common.cart.getServices().size() > 0) {
+        int quantity_int = 0;
+
+        if (Common.cart.getServices().size() > 0)
+            quantity_int += Common.cart.getServices().size();
+
+        if (Common.cart.getOffers().size() > 0)
+            quantity_int += Common.cart.getOffers().size();
+
+
+        if (quantity_int > 0) {
             cart_quantity.setVisibility(View.VISIBLE);
-            cart_quantity.setText(String.valueOf(Common.cart.getServices().size()));
+            cart_quantity.setText(String.valueOf(quantity_int));
         } else
             cart_quantity.setVisibility(View.GONE);
     }
@@ -156,15 +158,23 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
                         + " "
                         + companyDetails.getWorkingToTime());
 
-        // send company id used when send order
-        servicesAdapter =
-                new ServicesAdapter(
-                        getActivity(), android.R.layout.simple_list_item_1,
-                        companyDetails.getServices(), String.valueOf(company_id),
-                        companyDetails.getNameAR(), companyDetails.getNameEN(),
-                        searchDate,searchHour,tab_tag);
-        serviceListView.setAdapter(servicesAdapter);
-        setListViewHeightBasedOnChildren(serviceListView);
+        if (companyDetails.getServices().size() == 0) {
+
+            service_border_view.setVisibility(View.GONE);
+            service_tag.setVisibility(View.GONE);
+            serviceListView.setVisibility(View.GONE);
+        } else {
+
+            // send company id used when send order
+            servicesAdapter =
+                    new ServicesAdapter(
+                            getActivity(), android.R.layout.simple_list_item_1,
+                            companyDetails.getServices(), String.valueOf(company_id),
+                            companyDetails.getNameAR(), companyDetails.getNameEN(),
+                            searchDate, searchHour, tab_tag);
+            serviceListView.setAdapter(servicesAdapter);
+            setListViewHeightBasedOnChildren(serviceListView);
+        }
 
 
         if (companyDetails.getOffers().size() == 0) {
@@ -174,10 +184,17 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
             offersListView.setVisibility(View.GONE);
         } else {
             offersAdapter =
-                    new OffersAdapter(getActivity(), android.R.layout.simple_list_item_1, companyDetails.getOffers(), tab_tag);
+                    new OffersAdapter(getActivity(), android.R.layout.simple_list_item_1,
+                            companyDetails.getOffers(), String.valueOf(company_id),
+                            companyDetails.getNameAR(), companyDetails.getNameEN(),
+                            searchDate, searchHour, tab_tag);
             offersListView.setAdapter(offersAdapter);
             setListViewHeightBasedOnChildren(offersListView);
         }
+
+        Common.cart.setPaymentMethod(companyDetails.getPaymentMethod());
+        Common.cart.setTerms_ar(companyDetails.getTermsAndConditionsAR());
+        Common.cart.setTerms_en(companyDetails.getTermsAndConditionsEn());
     }
 
     private void setupSlider() {
@@ -192,18 +209,12 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
     }
 
     private void setShare() {
-        userId =
-                (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
-        if (userId == 0) {
-            Common.booking = true;
-            getActivity().startActivity(new Intent(getContext(), Login.class));
-        } else {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, companyName.getText().toString().trim());
-            sendIntent.setType("text/plain");
-            startActivity(sendIntent);
-        }
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, companyName.getText().toString().trim());
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
     }
 
     private void setFavourite() {
@@ -229,44 +240,31 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
                                         @Override
                                         public void accept(Integer integer) throws Exception {
                                             if (integer > 0) {
-                                                /*if (companyDetails.getFavourite()) {
-                                                    favorite.setImageDrawable(
-                                                            getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
-                                                    companyDetails.setFavourite(false);
-                                                } else {
-                                                    favorite.setImageDrawable(
-                                                            getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
-                                                    companyDetails.setFavourite(true);
-                                                }*/
+
                                             }
                                         }
                                     }));
         } else {
-            Common.booking = true;
             getActivity().startActivity(new Intent(getContext(), Login.class));
         }
     }
 
     private void showRatingDialog() {
 
-        Fragment rating = new Rating();
-        Bundle bundle = new Bundle();
-        bundle.putString("com_id", String.valueOf(companyDetails.getId()));
-        bundle.putString("com_name", (Common.isArabic) ? companyDetails.getNameAR() : companyDetails.getNameEN());
-        bundle.putString("com_image", companyDetails.getLogo());
+        if(Paper.book("Monasabatcom").contains("currentUser")) {
+            Fragment rating = new Rating();
+            Bundle bundle = new Bundle();
+            bundle.putString("com_id", String.valueOf(companyDetails.getId()));
+            bundle.putString("com_name", (Common.isArabic) ? companyDetails.getNameAR() : companyDetails.getNameEN());
+            bundle.putString("com_image", companyDetails.getLogo());
 
-        rating.setArguments(bundle);
+            rating.setArguments(bundle);
 
-        ((MainActivity) getActivity()).pushFragments(Constants.TAB_HOME, rating, true);
+            ((MainActivity) getActivity()).pushFragments(Constants.TAB_HOME, rating, true);
+        }else
+            getActivity().startActivity(new Intent(getContext(),Login.class));
 
-       /* userId =
-                (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
-        if (userId != 0) {
-            ((MainActivity)getActivity()).pushFragments(Constants.TAB_HOME,new Rating(),true);
-        } else {
-            Common.booking = true;
-            getActivity().startActivity(new Intent(getContext(), Login.class));
-        }*/
+
     }
 
     @Override
@@ -308,6 +306,8 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
         ratingCount = fragmentView.findViewById(R.id.rating_count);
         workingTime = fragmentView.findViewById(R.id.working_time);
         companyDescription = fragmentView.findViewById(R.id.about);
+        service_tag = fragmentView.findViewById(R.id.services_tag);
+        service_border_view = fragmentView.findViewById(R.id.view2);
         serviceListView = fragmentView.findViewById(R.id.service_list);
         offer_border_view = fragmentView.findViewById(R.id.view4);
         offer_tag = fragmentView.findViewById(R.id.offers_tag);
@@ -319,7 +319,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
         share.setOnClickListener(this);
         favorite.setOnClickListener(this);
 
-        if(Common.isArabic)
+        if (Common.isArabic)
             backButton.setRotation(180);
 
     }

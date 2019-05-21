@@ -2,8 +2,6 @@ package com.vavisa.monasabatcom.Common;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentActivity;
@@ -11,54 +9,30 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.models.Address;
-import com.vavisa.monasabatcom.models.Offer;
-import com.vavisa.monasabatcom.models.User;
-import com.vavisa.monasabatcom.models.companyDetails.CompanyDetailsModel;
-import com.vavisa.monasabatcom.models.companyDetails.Services;
 import com.vavisa.monasabatcom.models.orderModels.CartModel;
-import com.vavisa.monasabatcom.models.orderModels.MakeAppointment;
-import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
-import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
+import com.vavisa.monasabatcom.models.profile.Address;
+import com.vavisa.monasabatcom.models.profile.User;
 import com.vavisa.monasabatcom.webService.APIInterface;
 import com.vavisa.monasabatcom.webService.Controller;
-import com.vavisa.monasabatcom.webService.Payment;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Common {
 
     public static User currentUser;
     public static boolean isArabic = false;
     public static FragmentActivity mActivity;
-/*    public static CompanyDetailsModel companyDetails;*/
-
     public static Boolean isEditAddress = false;
-    public static MakeAppointment appointment;
-    /*public static Boolean makeResr = false;*/
-    public static Boolean showReserBtn = false;
-    public static Boolean newOrder = false;
     public static Boolean booking = false;
-    public static Integer orderId = 0;
-   /* public static String date;
-    public static String time;*/
     public static Address address;
-  /*  public static List<Services> services;
-    public static List<Offer> offers;*/
     public static CartModel cart;
 
 
     public static APIInterface getAPI() {
         return new Controller().getAPI();
-    }
-
-    public static APIInterface getPayment() {
-        return new Payment().getAPI();
     }
 
     public static Boolean isConnectToTheInternet(Context context) {
@@ -118,10 +92,11 @@ public class Common {
 
     }
 
-    public static void errorAlert(Context context,String message_str) {
+    public static void errorAlert(Context context, String message_str) {
 
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_error_alert);
+        dialog.setCancelable(false);
 
         TextView message = dialog.findViewById(R.id.alert_message);
         TextView ok = dialog.findViewById(R.id.ok);
