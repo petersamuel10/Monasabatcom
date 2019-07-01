@@ -92,6 +92,10 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         return companies.size();
     }
 
+    public void clearAdapter(){
+        companies.clear();
+        notifyDataSetChanged();
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 

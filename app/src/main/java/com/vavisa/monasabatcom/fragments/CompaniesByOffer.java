@@ -33,9 +33,6 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CompaniesByOffer extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.pb)
@@ -153,6 +150,12 @@ public class CompaniesByOffer extends Fragment implements View.OnClickListener {
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
                                             }
+                                        }
+                                    }, new Consumer<Throwable>() {
+                                        @Override
+                                        public void accept(Throwable throwable) throws Exception {
+                                            pb.setVisibility(GONE);
+                                            Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));
         } else errorConnectionMess();

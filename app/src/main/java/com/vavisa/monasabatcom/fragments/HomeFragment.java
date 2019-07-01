@@ -90,9 +90,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private int timeItemPosition = 0;
 
     TextView city_txt, date_txt, time_txt;
+    Boolean isEmpty;
 
-    String search_str = "",searchDate = "-1", searchHour = "-1", cityName = "";
-    int cityId = -1, pageNo = 1, categoryId = -1,filter_id = -1;
+    String search_str = "", searchDate = "-1", searchHour = "-1", cityName = "";
+    int cityId = -1, pageNo = 1, categoryId = -1, filter_id = -1;
 
     @Override
     public View onCreateView(
@@ -125,6 +126,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         if (s.toString().trim().length() > 0) {
                             clearText.setVisibility(View.VISIBLE);
                             search_str = s.toString();
+                            pageNo = 1;
+                            adapter.clearAdapter();
+                            companyList.clear();
                             requestData();
                         } else {
                             clearText.setVisibility(GONE);
@@ -135,6 +139,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     public void afterTextChanged(Editable s) {
                     }
                 });
+
+        companyListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (llm.findLastCompletelyVisibleItemPosition() == companyList.size() - 1) {
+                    if (!isEmpty) {
+                        pageNo++;
+                        pb.setVisibility(View.VISIBLE);
+                        requestData();
+                    }
+                }
+            }
+        });
 
         return fragmentView;
     }
@@ -173,6 +192,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.clear_text:
                 searchText.setText("");
                 search_str = "";
+                companyList.clear();
+                adapter.clearAdapter();
+                pageNo = 1;
                 requestData();
                 clearText.setVisibility(GONE);
                 break;
@@ -219,7 +241,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         } else errorConnectionMess();
     }
-
     private void getTime() {
         if (Common.isConnectToTheInternet(getActivity())) {
             hoursList = new ArrayList<>();
@@ -245,7 +266,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         } else errorConnectionMess();
     }
-
     private void showPopDialog() {
 
         final Dialog dialog = new Dialog(getActivity(), R.style.MyDialog);
@@ -319,6 +339,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             search_title += ((search_title.equals("")) ? "" : " - ") + searchHour;
                         search_ed.setText(search_title);
 
+                        companyList.clear();
+                        adapter.clearAdapter();
+                        pageNo = 1;
                         requestData();
                         dialog.dismiss();
                     }
@@ -339,7 +362,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dialog.show();
 
     }
-
     public void showCityList() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -358,7 +380,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         builder.create().show();
     }
-
     public void showTimeList() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -415,9 +436,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void requestData() {
         if (Common.isConnectToTheInternet(getActivity())) {
             pb.setVisibility(View.VISIBLE);
+
             compositeDisposable.add(
                     Common.getAPI()
-                            .getCompanies(search_str,categoryId,filter_id, cityId, searchDate, searchHour, 1, pageNo, 10)
+                            .getCompanies(search_str, categoryId, filter_id, cityId, searchDate, searchHour, 1, pageNo, 10)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -425,17 +447,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void accept(ArrayList<Company> companies) throws Exception {
                                             if (companies.size() > 0) {
+                                                isEmpty = false;
                                                 emptyList.setVisibility(GONE);
                                                 companyListView.setVisibility(View.VISIBLE);
-                                                companyList = companies;
+                                                if(pageNo == 1)
+                                                    companyList.clear();
+                                                companyList.addAll(companies);
                                                 setupRecyclerView();
                                                 pb.setVisibility(GONE);
-                                            } else {
-                                                pb.setVisibility(GONE);
+                                            } else if(companyList.isEmpty()) {
                                                 companyListView.setVisibility(GONE);
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
+                                                pb.setVisibility(GONE);
+                                            }else if(companies.isEmpty()){
+                                                isEmpty = true;
+                                                pb.setVisibility(GONE);
                                             }
+                                        }
+                                    }, new Consumer<Throwable>() {
+                                        @Override
+                                        public void accept(Throwable throwable) throws Exception {
+                                            pb.setVisibility(GONE);
+                                            Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));
 
@@ -444,19 +478,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void setupRecyclerView() {
 
-        switch (viewType) {
-            case 1:
-                companyListView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                break;
+            switch (viewType) {
+                case 1:
+                    companyListView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    break;
 
-            case 2:
-            case 3:
-                companyListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                break;
-        }
+                case 2:
+                case 3:
+                    companyListView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    break;
+            }
 
-        adapter = new CompanyAdapter(getActivity(), companyList, Constants.TAB_HOME, viewType, searchDate, searchHour);
-        companyListView.setAdapter(adapter);
+            adapter = new CompanyAdapter(getActivity(), companyList, Constants.TAB_HOME, viewType, searchDate, searchHour);
+            companyListView.setAdapter(adapter);
     }
 
     private void setUpSwipeRefreshLayout() {
@@ -465,6 +499,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
+                        pageNo = 1;
+                        companyList = new ArrayList<>();
                         requestData();
                         sl.setRefreshing(false);
                     }
@@ -505,6 +541,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         if (resultCode == RESULT_OK) {
             filter_id = Integer.parseInt(data.getExtras().getString("filter"));
+            companyList.clear();
+            adapter.clearAdapter();
+            pageNo = 1;
             requestData();
         }
     }

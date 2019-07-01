@@ -94,6 +94,11 @@ public class Rating extends Fragment {
                                      else
                                          Toast.makeText(getContext(), getString(R.string.error_occure), Toast.LENGTH_SHORT).show();
                                  }
+                             }, new Consumer<Throwable>() {
+                                 @Override
+                                 public void accept(Throwable throwable) throws Exception {
+                                     Common.errorAlert(getContext(), getString(R.string.error_occure));
+                                 }
                              }));
     }
 

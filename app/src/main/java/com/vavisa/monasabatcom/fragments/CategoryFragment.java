@@ -29,6 +29,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.GONE;
+
 
 public class CategoryFragment extends Fragment {
 
@@ -74,6 +76,12 @@ public class CategoryFragment extends Fragment {
                             homeAdapter.addCategory(categories);
                             homeAdapter.notifyDataSetChanged();
                             pb.setVisibility(View.GONE);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            pb.setVisibility(GONE);
+                            Common.errorAlert(getContext(),getString(R.string.error_occure));
                         }
                     }));
         }else

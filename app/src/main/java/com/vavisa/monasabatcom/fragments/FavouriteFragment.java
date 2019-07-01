@@ -155,6 +155,12 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
                                                 emptyList.setVisibility(View.VISIBLE);
                                             }
                                         }
+                                    }, new Consumer<Throwable>() {
+                                        @Override
+                                        public void accept(Throwable throwable) throws Exception {
+                                            pb.setVisibility(GONE);
+                                            Common.errorAlert(getContext(),getString(R.string.error_occure));
+                                        }
                                     }));
         } else errorConnectionMess();
     }

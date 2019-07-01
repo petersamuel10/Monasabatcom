@@ -82,8 +82,13 @@ public class OffersFragment extends Fragment {
                                 emptyList.setVisibility(View.VISIBLE);
                             }
                         }
-                    })
-            );
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            pb.setVisibility(View.GONE);
+                            Common.errorAlert(getContext(), getString(R.string.error_occure));
+                        }
+                    }));
         } else
             errorConnectionMess();
     }

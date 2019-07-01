@@ -124,7 +124,6 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
                                     @Override
                                     public void accept(Offers offers) {
                                         pb.setVisibility(View.GONE);
-                                        scroll.setVisibility(View.VISIBLE);
                                         offersData = offers;
                                         try {
                                             bindData();
@@ -153,52 +152,48 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
         }
         offerPrice.setText(offersData.getPrice() + " " + getString(R.string.kd));
 
-        if (offersData.getServiceAndPresentationMethodEN() == null) {
-            howToOffer_tag.setVisibility(View.GONE);
-            howToOffer.setVisibility(View.GONE);
-        } else {
-
+        if (offersData.getServiceAndPresentationMethodEN() != null) {
+            howToOffer_tag.setVisibility(View.VISIBLE);
+            howToOffer.setVisibility(View.VISIBLE);
             if (Common.isArabic)
                 howToOffer.setText(offersData.getServiceAndPresentationMethodAR());
             else
                 howToOffer.setText(offersData.getServiceAndPresentationMethodEN());
         }
-        if (offersData.getPreparationTimeEN() == null) {
-            offerTime_tag.setVisibility(View.GONE);
-            offerTime.setVisibility(View.GONE);
-        } else {
+
+        if (offersData.getPreparationTimeEN() != null) {
+            offerTime_tag.setVisibility(View.VISIBLE);
+            offerTime.setVisibility(View.VISIBLE);
             if (Common.isArabic)
                 offerTime.setText(offersData.getPreparationTimeAR());
             else
                 offerTime.setText(offersData.getPreparationTimeEN());
         }
 
-        if (offersData.getRequirementsEN() == null) {
-            requirements_tag.setVisibility(View.GONE);
-            requirements.setVisibility(View.GONE);
-        } else {
+        if (offersData.getRequirementsEN() != null) {
+            requirements_tag.setVisibility(View.VISIBLE);
+            requirements.setVisibility(View.VISIBLE);
             if (Common.isArabic)
                 requirements.setText(offersData.getRequirementsAR());
             else
                 requirements.setText(offersData.getRequirementsEN());
         }
 
-        if (offersData.getStayDurationEN() == null) {
-            durationOfStay_tag.setVisibility(View.GONE);
-            durationOfStay.setVisibility(View.GONE);
-        } else {
+        if (offersData.getStayDurationEN() != null) {
+            durationOfStay_tag.setVisibility(View.VISIBLE);
+            durationOfStay.setVisibility(View.VISIBLE);
             if (Common.isArabic)
                 durationOfStay.setText(offersData.getStayDurationAR());
             else
                 durationOfStay.setText(offersData.getStayDurationEN());
         }
 
-
-        if (offersData.getDeliveryTime() == null) {
-            order_before_tag.setVisibility(View.GONE);
-            order_before.setVisibility(View.GONE);
-        } else
+        if (offersData.getDeliveryTime() != null) {
+            order_before_tag.setVisibility(View.VISIBLE);
+            order_before.setVisibility(View.VISIBLE);
             order_before.setText(offersData.getDeliveryTime() + getString(R.string.hour));
+        }
+
 
         if (offersData.getWomenService())
             womenServiceCheck.setVisibility(View.VISIBLE);
@@ -210,9 +205,11 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
                 offerPayStatus.setVisibility(View.GONE);
                 break;
             case 2:
+                offerPayStatus.setVisibility(View.VISIBLE);
                 offerPayStatus.setText(getString(R.string.pay_a_deposit));
                 break;
             case 3:
+                offerPayStatus.setVisibility(View.VISIBLE);
                 offerPayStatus.setText(getString(R.string.pay_full_amount_in_advance));
                 break;
         }

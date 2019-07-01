@@ -2,24 +2,44 @@ package com.vavisa.monasabatcom;
 
 import android.app.Application;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.onesignal.OSNotificationAction;
 import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
+import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.notification.ExampleNotificationReceivedHandler;
 
 import io.fabric.sdk.android.Fabric;
+import io.paperdb.Paper;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 public class ApplicationClass extends Application {
+
+    Locale myLocale;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         Fabric.with(this, new Crashlytics());
+       /* if (Common.isArabic)
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/Changa-Regular.ttf")
+                    .setFontAttrId(R.attr.fontPath)
+                    .build());
+        else
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/Avenir.otf")
+                    .setFontAttrId(R.attr.fontPath)
+                    .build());
+*/
         // OneSignal Initialization
         OneSignal.startInit(this)
                 .setNotificationReceivedHandler(new ExampleNotificationReceivedHandler())
@@ -27,7 +47,19 @@ public class ApplicationClass extends Application {
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
+
     }
+
+
+    /*@Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (myLocale != null) {
+            newConfig.locale = myLocale;
+            Locale.setDefault(myLocale);
+            Common.mActivity.getResources().updateConfiguration(newConfig, Common.mActivity.getResources().getDisplayMetrics());
+        }
+    }*/
 
     private class ExampleNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
         // This fires when a notification is opened by tapping on it.

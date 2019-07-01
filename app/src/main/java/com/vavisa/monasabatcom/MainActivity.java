@@ -19,13 +19,8 @@ import com.vavisa.monasabatcom.fragments.FavouriteFragment;
 import com.vavisa.monasabatcom.fragments.HomeFragment;
 import com.vavisa.monasabatcom.fragments.MyAccountFragment;
 import com.vavisa.monasabatcom.fragments.OffersFragment;
-import com.vavisa.monasabatcom.models.companyDetails.PaymentMethod;
-import com.vavisa.monasabatcom.models.orderModels.CartModel;
-import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
-import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 import com.vavisa.monasabatcom.utility.Constants;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Stack;
@@ -44,28 +39,27 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
 
+
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadLocal();
-        if (Common.isArabic) {
-                CalligraphyConfig.initDefault(
-                        new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("fonts/Changa-Regular.ttf")
-                                .setFontAttrId(R.attr.fontPath)
-                                .build());
-            } else {
-                CalligraphyConfig.initDefault(
-                        new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("fonts/Avenir.otf")
-                                .setFontAttrId(R.attr.fontPath)
-                                .build());
-            }
+        if(Common.isArabic)
+        {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/Changa-Regular.ttf")
+                    .setFontAttrId(R.attr.fontPath).build());
+        }else
+        {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/Avenir.otf")
+                    .setFontAttrId(R.attr.fontPath).build());
+        }
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 

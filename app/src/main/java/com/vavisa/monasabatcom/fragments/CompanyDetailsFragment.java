@@ -38,6 +38,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.GONE;
 import static com.vavisa.monasabatcom.utility.ListSizeUtility.setListViewHeightBasedOnChildren;
 
 public class CompanyDetailsFragment extends Fragment implements View.OnClickListener {
@@ -112,7 +113,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
             cart_quantity.setVisibility(View.VISIBLE);
             cart_quantity.setText(String.valueOf(quantity_int));
         } else
-            cart_quantity.setVisibility(View.GONE);
+            cart_quantity.setVisibility(GONE);
     }
 
     private void requestData() {
@@ -126,13 +127,19 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
                                 new Consumer<CompanyDetailsModel>() {
                                     @Override
                                     public void accept(CompanyDetailsModel companyDetailsModel) {
-                                        pb.setVisibility(View.GONE);
+                                        pb.setVisibility(GONE);
                                         scrollView.setVisibility(View.VISIBLE);
                                         companyDetails = companyDetailsModel;
                                         try {
                                             bindData();
                                         } catch (Exception e) {
                                         }
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        pb.setVisibility(GONE);
+                                        Common.errorAlert(getContext(),getString(R.string.error_occure));
                                     }
                                 }));
     }
@@ -160,9 +167,9 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
 
         if (companyDetails.getServices().size() == 0) {
 
-            service_border_view.setVisibility(View.GONE);
-            service_tag.setVisibility(View.GONE);
-            serviceListView.setVisibility(View.GONE);
+            service_border_view.setVisibility(GONE);
+            service_tag.setVisibility(GONE);
+            serviceListView.setVisibility(GONE);
         } else {
 
             // send company id used when send order
@@ -179,9 +186,9 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
 
         if (companyDetails.getOffers().size() == 0) {
 
-            offer_border_view.setVisibility(View.GONE);
-            offer_tag.setVisibility(View.GONE);
-            offersListView.setVisibility(View.GONE);
+            offer_border_view.setVisibility(GONE);
+            offer_tag.setVisibility(GONE);
+            offersListView.setVisibility(GONE);
         } else {
             offersAdapter =
                     new OffersAdapter(getActivity(), android.R.layout.simple_list_item_1,

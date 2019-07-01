@@ -26,9 +26,9 @@ public class Common {
     public static boolean isArabic = false;
     public static FragmentActivity mActivity;
     public static Boolean isEditAddress = false;
-    public static Boolean booking = false;
     public static Address address;
     public static CartModel cart;
+    public static int filter_position = 0;
 
 
     public static APIInterface getAPI() {

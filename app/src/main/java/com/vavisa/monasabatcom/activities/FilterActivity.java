@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -83,23 +84,6 @@ public class FilterActivity extends AppCompatActivity {
                 }));
     }
 
-    private class FilterViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView filterName;
-
-        public FilterViewHolder(@NonNull View itemView) {
-            super(itemView);
-            filterName = itemView.findViewById(R.id.filter_name);
-        }
-
-        public void bindData(FilterModel filter) {
-            if(Common.isArabic)
-                filterName.setText(filter.getNameAR());
-            else
-                filterName.setText(filter.getNameEN());
-        }
-    }
-
     private class FilterAdapter extends RecyclerView.Adapter<FilterViewHolder> {
 
         @NonNull
@@ -112,8 +96,10 @@ public class FilterActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull FilterViewHolder filterViewHolder, int i) {
+        public void onBindViewHolder(@NonNull FilterViewHolder filterViewHolder, final int i) {
             filterViewHolder.bindData(filters.get(i));
+            if(Common.filter_position == i)
+                filterViewHolder.ic_true.setVisibility(View.VISIBLE);
 
             final int adapterPosition = filterViewHolder.getAdapterPosition();
 
@@ -121,7 +107,8 @@ public class FilterActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
- 
+
+                            Common.filter_position = i;
                             Intent intent = new Intent();
                             intent.putExtra("filter", String.valueOf(filters.get(adapterPosition).getId()));
                             setResult(Constants.RESULT_OK, intent);
@@ -133,6 +120,25 @@ public class FilterActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return filters.size();
+        }
+    }
+
+    private class FilterViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView filterName;
+        private ImageView ic_true;
+
+        public FilterViewHolder(@NonNull View itemView) {
+            super(itemView);
+            filterName = itemView.findViewById(R.id.filter_name);
+            ic_true = itemView.findViewById(R.id.select_true);
+        }
+
+        public void bindData(FilterModel filter) {
+            if(Common.isArabic)
+                filterName.setText(filter.getNameAR());
+            else
+                filterName.setText(filter.getNameEN());
         }
     }
 }

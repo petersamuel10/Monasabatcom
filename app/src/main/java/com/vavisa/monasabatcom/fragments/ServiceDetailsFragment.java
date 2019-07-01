@@ -116,14 +116,14 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                 dialog.show();
             }
 
-           /* extraNotes.setOnTouchListener(new View.OnTouchListener() {
+            extraNotes.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     v.setFocusable(true);
                     v.setFocusableInTouchMode(true);
                     return false;
                 }
-            });*/
+            });
 
         }
 
@@ -142,7 +142,6 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                                     @Override
                                     public void accept(Services servics) {
                                         pb.setVisibility(View.GONE);
-                                        scrollView.setVisibility(View.VISIBLE);
                                         serviceData = servics;
                                         try {
                                             bindData();
@@ -171,37 +170,39 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         }
         servicePrice.setText(serviceData.getPrice() + " " + getString(R.string.kd));
 
-        if (serviceData.getServiceAndPresentationMethodEN() == null) {
-            howToServe_tag.setVisibility(View.GONE);
-            howToServe.setVisibility(View.GONE);
-        } else {
-
+        if (serviceData.getServiceAndPresentationMethodEN() != null) {
+            howToServe_tag.setVisibility(View.VISIBLE);
+            howToServe.setVisibility(View.VISIBLE);
             if (Common.isArabic)
                 howToServe.setText(serviceData.getServiceAndPresentationMethodAR());
             else
                 howToServe.setText(serviceData.getServiceAndPresentationMethodEN());
         }
-        if (serviceData.getPreparationTime() == null) {
-            serviceTime_tag.setVisibility(View.GONE);
-            serviceTime.setVisibility(View.GONE);
-        } else
+        if (serviceData.getPreparationTime() != null) {
+            serviceTime_tag.setVisibility(View.VISIBLE);
+            serviceTime.setVisibility(View.VISIBLE);
             serviceTime.setText(serviceData.getPreparationTime());
-        if (serviceData.getRequirements() == null) {
-            requirements_tag.setVisibility(View.GONE);
-            requirements.setVisibility(View.GONE);
-        } else
-            requirements.setText(serviceData.getRequirements());
-        if (serviceData.getStayDuration() == null) {
-            durationOfStay_tag.setVisibility(View.GONE);
-            durationOfStay.setVisibility(View.GONE);
-        } else
-            durationOfStay.setText(serviceData.getStayDuration());
+        }
 
-        if (serviceData.getDeliveryTime() == null) {
-            order_before_tag.setVisibility(View.GONE);
-            order_before.setVisibility(View.GONE);
-        } else
+        if (serviceData.getRequirements() != null) {
+            requirements_tag.setVisibility(View.VISIBLE);
+            requirements.setVisibility(View.VISIBLE);
+            requirements.setText(serviceData.getRequirements());
+        }
+
+        if (serviceData.getStayDuration() != null) {
+            durationOfStay_tag.setVisibility(View.VISIBLE);
+            durationOfStay.setVisibility(View.VISIBLE);
+            durationOfStay.setText(serviceData.getStayDuration());
+        }
+
+
+        if (serviceData.getDeliveryTime() != null) {
+            order_before_tag.setVisibility(View.VISIBLE);
+            order_before.setVisibility(View.VISIBLE);
             order_before.setText(serviceData.getDeliveryTime()+ getString(R.string.hour));
+        }
+
 
         if (serviceData.getWomenService())
             womenServiceCheck.setVisibility(View.VISIBLE);
@@ -213,14 +214,18 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                 servicePayStatus.setVisibility(View.GONE);
                 break;
             case 2:
+                servicePayStatus.setVisibility(View.VISIBLE);
                 servicePayStatus.setText(getString(R.string.pay_a_deposit));
                 break;
             case 3:
+                servicePayStatus.setVisibility(View.VISIBLE);
                 servicePayStatus.setText(getString(R.string.pay_full_amount_in_advance));
                 break;
         }
 
         if (serviceData.getServiceExtras().size() > 0) {
+            extra_border_view.setVisibility(View.VISIBLE);
+            service_extras_tag.setVisibility(View.VISIBLE);
             extraAdapter = new ServiceExtraAdapter(serviceData.getServiceExtras());
             serviceExtras_rec.setAdapter(extraAdapter);
         } else {

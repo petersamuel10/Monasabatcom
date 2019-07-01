@@ -277,7 +277,7 @@ public class AppointmentDetails extends AppCompatActivity {
                                         intent.putExtra("payment_method", "cash");
                                         startActivity(intent);
                                         finish();
-                                    }else
+                                    } else
                                         getPaymentPageUrl(result.getOrderId());
                                 } else if (result.getErrorId() == -1) {
                                     progressDialog.dismiss();
@@ -309,6 +309,12 @@ public class AppointmentDetails extends AppCompatActivity {
                                     }
                                     Common.errorAlert(AppointmentDetails.this, message);
                                 }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                progressDialog.dismiss();
+                                Common.errorAlert(AppointmentDetails.this, getString(R.string.error_occure));
                             }
                         }));
             }

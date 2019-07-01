@@ -94,10 +94,15 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
                     @Override
                     public void accept(ArrayList<Address> addresses) throws Exception {
                         list.addAll(addresses);
-                        adapter = new AddressAdapter(addresses,true);
+                        adapter = new AddressAdapter(addresses, true);
                         address_rec.setAdapter(adapter);
                         adapter.setListener(recyclerViewItemClickListener);
                         progressDialog.dismiss();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Common.errorAlert(AddressesActivity.this,getString(R.string.error_occure));
                     }
                 }));
 

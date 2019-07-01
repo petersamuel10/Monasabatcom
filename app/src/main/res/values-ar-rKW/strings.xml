@@ -172,6 +172,7 @@
     <string name="amount">المبلغ</string>
     <string name="the_offer_is_in_cart_select_different_time">هذا العرض موجود بالفعل فالسلة , الرجاء اختيار موعد اخر</string>
     <string name="edit_cart">تعديل السلة</string>
+    <string name="are_you_logout">هل تريد تسجيل الخروج ؟</string>
 
 
 </resources>

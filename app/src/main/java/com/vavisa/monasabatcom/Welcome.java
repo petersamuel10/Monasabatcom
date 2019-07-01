@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 public class Welcome extends AppCompatActivity {
 
     Handler handler = new Handler();
-    int duration;
+    int duration = 1000;
     String path;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -50,7 +50,7 @@ public class Welcome extends AppCompatActivity {
                         public void accept(JsonElement jsonElement) throws Exception {
                             String result = jsonElement.toString();
 
-                            if(!result.equals("error")){
+                            if(result.equals("Photo")){
                                 JSONObject object =new JSONObject(result);
 
                                 path = object.getString("Photo");
@@ -59,7 +59,8 @@ public class Welcome extends AppCompatActivity {
                                 Picasso.with(Welcome.this).load(path).into(splashImage);
 
                                 bgThread();
-                            }
+                            }else
+                                bgThread();
                         }
                     }));
         }else

@@ -1,9 +1,11 @@
 package com.vavisa.monasabatcom.fragments;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,6 @@ import com.vavisa.monasabatcom.utility.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.paperdb.Paper;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class MyAccountFragment extends Fragment implements View.OnClickListener {
 
@@ -71,32 +72,14 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
     ImageView loginBtn;
 
     @Override
-    public void onAttachFragment(Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-    }
-
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        if(Common.isArabic)
-        {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/Changa-Regular.ttf")
-                    .setFontAttrId(R.attr.fontPath).build());
-        }else
-        {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/Avenir.otf")
-                    .setFontAttrId(R.attr.fontPath).build());
-        }
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_account, container, false);
         ButterKnife.bind(this, view);
         //check if there is current user
 
-        if(Common.isArabic)
+        if (Common.isArabic)
             changeArrow();
 
 
@@ -110,6 +93,7 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
         login_logout.setOnClickListener(this);
         return view;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -174,21 +158,33 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
 
             case R.id.login_logout: {
                 if (login_logout.getText() == getString(R.string.logout)) {
-                    Paper.book("Monasabatcom").delete("currentUser");
-                    userInfo.setVisibility(View.GONE);
-                    change_password.setVisibility(View.GONE);
-                    login_logout.setText(R.string.login);
-                   // login_logout.setTextColor(getResources().getColor(R.color.colorPrimary));
-                   } else {
-                          startActivity(new Intent(getContext(), Login.class));}
-                 }
-                 break;
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage(R.string.are_you_logout);
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Paper.book("Monasabatcom").delete("currentUser");
+                            userInfo.setVisibility(View.GONE);
+                            change_password.setVisibility(View.GONE);
+                            login_logout.setText(R.string.login);
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, null);
+
+                    builder.show();
+
+                    // login_logout.setTextColor(getResources().getColor(R.color.colorPrimary));
+                } else {
+                    startActivity(new Intent(getContext(), Login.class));
+                }
+            }
+            break;
         }
     }
 
-    public void selectOption(Fragment  fragment)
-    {
-        ((MainActivity)getActivity()).pushFragments(Constants.TAB_PROFILE,fragment,true);
+    public void selectOption(Fragment fragment) {
+        ((MainActivity) getActivity()).pushFragments(Constants.TAB_PROFILE, fragment, true);
     }
 
 }

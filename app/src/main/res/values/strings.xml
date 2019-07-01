@@ -114,7 +114,7 @@
     <string name="error_occure">Error occurred</string>
     <string name="missing_data">Missing required data</string>
     <string name="not_valide">Not avaliable</string>
-    <string name="empty_list">There is no companies.</string>
+    <string name="empty_list">There are no companies.</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="search">Search</string>
     <string name="filter">Filter</string>
@@ -180,5 +180,6 @@
     <string name="payment_progress_faild">Payment progress failed.</string>
     <string name="the_offer_is_in_cart_select_different_time">The offer is aleady in cart,please select different time.</string>
     <string name="edit_cart">Edit cart</string>
+    <string name="are_you_logout">Are you want to logout?</string>
 
 </resources>

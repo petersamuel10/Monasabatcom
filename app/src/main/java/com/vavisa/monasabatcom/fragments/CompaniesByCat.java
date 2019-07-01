@@ -48,9 +48,6 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.GONE;
 import static com.vavisa.monasabatcom.utility.Constants.RESULT_OK;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CompaniesByCat extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.pb)
@@ -71,8 +68,9 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
     ImageView back;
 
     @OnClick(R.id.back)
-    public void back() { getActivity().onBackPressed(); }
-
+    public void back() {
+        getActivity().onBackPressed();
+    }
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     CompanyAdapter adapter = new CompanyAdapter();
@@ -89,40 +87,45 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
     private String[] cityList;
     private int cityItemPosition = 0;
     private int timeItemPosition = 0;
+    Boolean isEmpty;
 
     TextView city_txt, date_txt, time_txt;
-
-    String searchDate = "-1",
-            searchHour = "-1",
-            cityName = "";
-
-    int cityId = -1,
-            pageNo = 1,
-            categoryId = -1;
+    String searchDate = "-1", searchHour = "-1", cityName = "";
+    int cityId = -1, pageNo = 1, categoryId = -1;
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.companies_by_cat, container, false);
+            ButterKnife.bind(this, fragmentView);
             reference();
 
             title.setText(getArguments().getString("catName"));
             categoryId = Integer.parseInt(getArguments().getString("categoryId"));
             getCities();
             getTime();
+
+            companyListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (llm.findLastCompletelyVisibleItemPosition() == companyList.size() - 1) {
+                        if (!isEmpty) {
+                            pageNo++;
+                            pb.setVisibility(View.VISIBLE);
+                            requestData();
+                        }
+                    }
+                }
+            });
+
         }
-
-
-        ButterKnife.bind(this, fragmentView);
-
-        first.setOnClickListener(this);
-        second.setOnClickListener(this);
-        third.setOnClickListener(this);
 
         setUpSwipeRefreshLayout();
         requestData();
-        iconViewColor(first, second, third);
+
 
         return fragmentView;
     }
@@ -281,8 +284,10 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
                         String search_title = "";
                         search_ed.setTextColor(getResources().getColor(R.color.colorPrimary));
                         if (!cityName.equals("")) search_title += cityName;
-                        if (!searchDate.equals("-1")) search_title += ((search_title.equals(""))?"":" - ") + searchDate;
-                        if (!searchHour.equals("-1")) search_title += ((search_title.equals(""))?"":" - ") + searchHour;
+                        if (!searchDate.equals("-1"))
+                            search_title += ((search_title.equals("")) ? "" : " - ") + searchDate;
+                        if (!searchHour.equals("-1"))
+                            search_title += ((search_title.equals("")) ? "" : " - ") + searchHour;
                         search_ed.setText(search_title);
 
                         requestData();
@@ -383,7 +388,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
             pb.setVisibility(View.VISIBLE);
             compositeDisposable.add(
                     Common.getAPI()
-                            .getCompanies("",categoryId,-1, cityId, searchDate, searchHour, 0, pageNo, 10)
+                            .getCompanies("", categoryId, -1, cityId, searchDate, searchHour, 0, pageNo, 10)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -391,17 +396,27 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void accept(ArrayList<Company> companies) throws Exception {
                                             if (companies.size() > 0) {
+                                                isEmpty = false;
                                                 emptyList.setVisibility(GONE);
                                                 companyListView.setVisibility(View.VISIBLE);
-                                                companyList = companies;
-                                                setupRecyclerView();
-                                                pb.setVisibility(GONE);
-                                            } else {
-                                                pb.setVisibility(GONE);
+                                                if(pageNo == 1)
+                                                    companyList.clear();
+                                                companyList.addAll(companies);
+                                            } else if (companyList.isEmpty()) {
                                                 companyListView.setVisibility(GONE);
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
+                                                pb.setVisibility(GONE);
+                                            }else if (companies.isEmpty()) {
+                                                isEmpty = true;
+                                                pb.setVisibility(GONE);
                                             }
+                                        }
+                                    }, new Consumer<Throwable>() {
+                                        @Override
+                                        public void accept(Throwable throwable) throws Exception {
+                                            pb.setVisibility(GONE);
+                                            Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));
 
@@ -421,7 +436,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
                 break;
         }
 
-        adapter = new CompanyAdapter(getActivity(), companyList, Constants.TAB_CATEGORY, viewType,searchDate,searchHour);
+        adapter = new CompanyAdapter(getActivity(), companyList, Constants.TAB_CATEGORY, viewType, searchDate, searchHour);
         companyListView.setAdapter(adapter);
     }
 
@@ -431,6 +446,8 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
+                        pageNo = 1;
+                        companyList = new ArrayList<>();
                         requestData();
                         sl.setRefreshing(false);
                     }
@@ -452,9 +469,15 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
         Toolbar toolbar = fragmentView.findViewById(R.id.toolBar);
         title = toolbar.findViewById(R.id.title_cat);
         search_ed = fragmentView.findViewById(R.id.search_ed);
-        if(Common.isArabic)
+        if (Common.isArabic)
             back.setRotation(180);
 
         search_ed.setOnClickListener(this);
+        first.setOnClickListener(this);
+        second.setOnClickListener(this);
+        third.setOnClickListener(this);
+
+        iconViewColor(first, second, third);
+
     }
 }
