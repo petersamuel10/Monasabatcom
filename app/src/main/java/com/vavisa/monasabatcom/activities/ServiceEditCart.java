@@ -2,11 +2,6 @@ package com.vavisa.monasabatcom.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +11,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -28,7 +29,6 @@ import com.vavisa.monasabatcom.models.Services;
 import com.vavisa.monasabatcom.models.companyDetails.Photos;
 import com.vavisa.monasabatcom.models.companyDetails.WorkingHours;
 import com.vavisa.monasabatcom.models.orderModels.ExtrasOrder;
-import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
 import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 
 import java.util.ArrayList;
@@ -179,9 +179,9 @@ public class ServiceEditCart extends AppCompatActivity implements View.OnClickLi
 
         if (serviceData.getServiceExtras().size() > 0) {
 
-            for (ExtrasOrder extraOrder :service.getExtrasOrder()) {
-                for(ServiceExtras extraService : serviceData.getServiceExtras()){
-                    if(extraOrder.getExtraId() == extraService.getId()){
+            for (ExtrasOrder extraOrder : service.getExtrasOrder()) {
+                for (ServiceExtras extraService : serviceData.getServiceExtras()) {
+                    if (extraOrder.getExtraId() == extraService.getId()) {
                         int index = serviceData.getServiceExtras().indexOf(extraService);
                         serviceData.getServiceExtras().get(index).setQuantity(extraOrder.getQuantity());
                     }
@@ -300,7 +300,7 @@ public class ServiceEditCart extends AppCompatActivity implements View.OnClickLi
                 extrasOrderList.addAll(extraAdapter.getExtrasOrdersList());
 
             ArrayList<ServicesOrder> servicesOrderList = Common.cart.getServices();
-            servicesOrderList.set(index_cart,new ServicesOrder(serviceData.getNameAR(), serviceData.getNameEN(), serviceData.getPaymentTypeId(),
+            servicesOrderList.set(index_cart, new ServicesOrder(serviceData.getNameAR(), serviceData.getNameEN(), serviceData.getPaymentTypeId(),
                     serviceData.getDepositPercentage(), serviceId, date_ed.getText().toString(), time_ed.getText().toString(),
                     womenServiceCheck.isChecked(), 1, extraNotes.getText().toString(),
                     serviceData.getPrice(), extrasOrderList));

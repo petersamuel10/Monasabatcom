@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +35,7 @@
 
             </RelativeLayout>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <include layout="@layout/layout_common_progressbar" />
 
@@ -50,24 +51,24 @@
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
                 android:paddingEnd="2dp"
-                android:src="@drawable/grid" />
+                app:srcCompat="@drawable/grid" />
 
             <ImageView
                 android:id="@+id/second"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
                 android:paddingEnd="2dp"
-                android:src="@drawable/details" />
+                app:srcCompat="@drawable/details" />
 
             <ImageView
                 android:id="@+id/third"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
-                android:src="@drawable/ic_view_stream_black_24dp" />
+                app:srcCompat="@drawable/ic_view_stream_black_24dp" />
 
         </LinearLayout>
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sl"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -88,7 +89,7 @@
                     android:textSize="@dimen/_16ssp"
                     android:visibility="gone" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fav_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -99,7 +100,7 @@
             </LinearLayout>
 
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:id="@+id/loginLN"

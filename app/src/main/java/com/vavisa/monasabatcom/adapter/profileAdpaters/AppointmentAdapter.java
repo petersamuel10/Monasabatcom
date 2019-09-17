@@ -3,13 +3,14 @@ package com.vavisa.monasabatcom.adapter.profileAdpaters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.MainActivity;
@@ -25,9 +26,10 @@ import butterknife.ButterKnife;
 
 public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder> {
 
-    Activity activity;
-    Context context;
-    ArrayList<AppointmentModel> appointmentList;
+    private Activity activity;
+    private Context context;
+    private ArrayList<AppointmentModel> appointmentList;
+
     public AppointmentAdapter(Activity activity) {
 
         appointmentList = new ArrayList<>();
@@ -108,8 +110,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                 status.setText(appointment.getStatusNameEN());
             }
 
-            total.setText(context.getResources().getString(R.string.due_amount)+
-                    appointment.getDueAmount()+" "+context.getResources().getString(R.string.kd));
+            total.setText(context.getResources().getString(R.string.due_amount) +
+                    appointment.getDueAmount() + " " + context.getResources().getString(R.string.kd));
 
         }
     }

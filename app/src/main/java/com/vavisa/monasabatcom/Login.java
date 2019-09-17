@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.models.profile.User;
@@ -55,7 +56,7 @@ public class Login extends AppCompatActivity {
     @OnClick(R.id.btnLogin)
     public void loginClick() {
 
-        KeyboardUtility.hideKeyboardFrom(this,loginBtn);
+        KeyboardUtility.hideKeyboardFrom(this, loginBtn);
 
         if (Common.isConnectToTheInternet(getBaseContext())) {
             if (!TextUtils.isEmpty(email.getText()) && !TextUtils.isEmpty(password.getText())) {

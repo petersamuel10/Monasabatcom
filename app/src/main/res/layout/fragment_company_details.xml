@@ -10,7 +10,7 @@
     android:background="@android:color/white"
     tools:context=".fragments.CompanyDetails">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -35,9 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/arrow_left_white_24dp" />
+            app:srcCompat="@drawable/arrow_left_white_24dp" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end">
@@ -51,7 +51,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_cart"
+                app:srcCompat="@drawable/ic_cart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,9 +70,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <include
         layout="@layout/layout_common_progressbar"
@@ -91,7 +91,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
         android:visibility="gone">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp">
 
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_star_border_black_24dp"
+                app:srcCompat="@drawable/ic_star_border_black_24dp"
                 app:layout_constraintEnd_toStartOf="@+id/ic_share"
                 app:layout_constraintTop_toBottomOf="@+id/slider" />
             <ImageView
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_favorite_border_black_24dp"
+                app:srcCompat="@drawable/ic_favorite_border_black_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/slider" />
             <ImageView
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_share"
+                app:srcCompat="@drawable/ic_share"
                 app:layout_constraintEnd_toStartOf="@+id/ic_fav"
                 app:layout_constraintTop_toBottomOf="@+id/slider" />
 
@@ -289,7 +289,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 </LinearLayout>

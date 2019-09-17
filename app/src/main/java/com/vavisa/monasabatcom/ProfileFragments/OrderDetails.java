@@ -2,26 +2,21 @@ package com.vavisa.monasabatcom.ProfileFragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.adapter.Cart.OfferCartAdapter;
-import com.vavisa.monasabatcom.adapter.Cart.ServiceCartAdapter;
 import com.vavisa.monasabatcom.adapter.profileAdpaters.OfferDetailsAdapter;
 import com.vavisa.monasabatcom.adapter.profileAdpaters.ServiceDetailsAdapter;
-import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
-import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 import com.vavisa.monasabatcom.models.profile.OfferDetails;
 import com.vavisa.monasabatcom.models.profile.OrderDetailsModel;
 import com.vavisa.monasabatcom.models.profile.ServiceDetails;
@@ -146,10 +141,10 @@ public class OrderDetails extends Fragment {
             address_details_txt.setText(order.getAddress().getFullAddressEN());
 
 
-        total_txt.setText(order.getTotalAmount()+" "+getString(R.string.kd));
-        delivery_txt.setText(order.getDeliveryCost()+" "+getString(R.string.kd));
-        due_amount_txt.setText(order.getDueAmount()+" "+getString(R.string.kd));
-        paid_amount_txt.setText(order.getPaidAmount()+" "+getString(R.string.kd));
+        total_txt.setText(order.getTotalAmount() + " " + getString(R.string.kd));
+        delivery_txt.setText(order.getDeliveryCost() + " " + getString(R.string.kd));
+        due_amount_txt.setText(order.getDueAmount() + " " + getString(R.string.kd));
+        paid_amount_txt.setText(order.getPaidAmount() + " " + getString(R.string.kd));
 
     }
 }

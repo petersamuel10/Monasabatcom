@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "345175507876",
+    "firebase_url": "https://monasabatcom-74db3.firebaseio.com",
+    "project_id": "monasabatcom-74db3",
+    "storage_bucket": "monasabatcom-74db3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345175507876:android:942089a7250e9dc86a7731",
+        "android_client_info": {
+          "package_name": "com.vavisa.monasabatcom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345175507876-umehjg5um6udif81oqvi0sc4g4lcglfq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO7gJ8ILZvfEiMkP6P-pg96yA-7VfwPeo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345175507876-umehjg5um6udif81oqvi0sc4g4lcglfq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

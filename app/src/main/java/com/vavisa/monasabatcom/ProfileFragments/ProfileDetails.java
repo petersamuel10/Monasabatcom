@@ -2,8 +2,6 @@ package com.vavisa.monasabatcom.ProfileFragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -100,9 +101,9 @@ public class ProfileDetails extends Fragment implements View.OnClickListener {
                             updateProfileView(name, email, mobile);
                             getActivity().onBackPressed();
                         } else if (integer == -5)
-                            Common.errorAlert(getContext(),getString(R.string.user_not_exist));
+                            Common.errorAlert(getContext(), getString(R.string.user_not_exist));
                         else if (integer == -5)
-                            Common.errorAlert(getContext(),getString(R.string.email_reg_before));
+                            Common.errorAlert(getContext(), getString(R.string.email_reg_before));
                     }
                 }));
     }

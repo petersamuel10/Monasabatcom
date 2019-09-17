@@ -4,14 +4,15 @@ package com.vavisa.monasabatcom.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.Login;
@@ -52,6 +53,8 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
     LinearLayout conditions;
     @BindView(R.id.change_pass)
     LinearLayout change_password;
+    @BindView(R.id.loginBtn)
+    LinearLayout login_logoutLn;
     @BindView(R.id.login_logout)
     TextView login_logout;
     @BindView(R.id.l1)
@@ -90,7 +93,7 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
         settings.setOnClickListener(this);
         conditions.setOnClickListener(this);
         change_password.setOnClickListener(this);
-        login_logout.setOnClickListener(this);
+        login_logoutLn.setOnClickListener(this);
         return view;
     }
 
@@ -156,7 +159,7 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
                 selectOption(new ChangePassword());
                 break;
 
-            case R.id.login_logout: {
+            case R.id.loginBtn: {
                 if (login_logout.getText() == getString(R.string.logout)) {
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

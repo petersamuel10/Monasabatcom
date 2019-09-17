@@ -4,15 +4,16 @@ package com.vavisa.monasabatcom.ProfileFragments;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.AddNewAddress;
 import com.vavisa.monasabatcom.Common.Common;
@@ -43,7 +44,7 @@ public class Addresses extends Fragment implements RecyclerViewItemClickListener
     ProgressBar address_progress;
 
     @OnClick(R.id.add_address_icon)
-    public void addAddress() {
+    void addAddress() {
         startActivity(new Intent(getActivity(), AddNewAddress.class));
     }
 
@@ -52,12 +53,12 @@ public class Addresses extends Fragment implements RecyclerViewItemClickListener
         getActivity().onBackPressed();
     }
 
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    AddressAdapter adapter;
-    ProgressDialog progressDialog;
-    List<Address> list = new ArrayList<>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private AddressAdapter adapter;
+    private ProgressDialog progressDialog;
+    private List<Address> list = new ArrayList<>();
 
-    RecyclerViewItemClickListener recyclerViewItemClickListener;
+    private RecyclerViewItemClickListener recyclerViewItemClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +84,7 @@ public class Addresses extends Fragment implements RecyclerViewItemClickListener
         super.onStart();
         list.clear();
 
-       /* setupRecyclerView();*/
+        /* setupRecyclerView();*/
         if (Common.isConnectToTheInternet(getContext())) {
             requestData();
         } else {
@@ -104,7 +105,7 @@ public class Addresses extends Fragment implements RecyclerViewItemClickListener
                     @Override
                     public void accept(ArrayList<Address> addresses) throws Exception {
                         list.addAll(addresses);
-                        adapter = new AddressAdapter(addresses,false);
+                        adapter = new AddressAdapter(addresses, false);
                         address_rec.setAdapter(adapter);
                         adapter.setListener(recyclerViewItemClickListener);
                         progressDialog.dismiss();

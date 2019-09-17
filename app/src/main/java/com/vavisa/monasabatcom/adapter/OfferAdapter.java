@@ -2,23 +2,21 @@ package com.vavisa.monasabatcom.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Picasso;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.MainActivity;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.fragments.CompaniesByCat;
 import com.vavisa.monasabatcom.fragments.CompaniesByOffer;
 import com.vavisa.monasabatcom.models.Offer;
 import com.vavisa.monasabatcom.utility.Constants;
@@ -27,12 +25,11 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> {
 
-    ArrayList<Offer> offers;
-    Activity activity;
+    private ArrayList<Offer> offers;
+    private Activity activity;
 
     public OfferAdapter(Activity activity) {
         offers = new ArrayList<>();
@@ -42,7 +39,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     @NonNull
     @Override
     public OfferAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_offer,null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_offer, null);
 
         return new OfferAdapter.ViewHolder(view);
     }
@@ -57,7 +54,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
                 Bundle bundle = new Bundle();
                 bundle.putString("offerId", String.valueOf(offers.get(position).getId()));
-                bundle.putString("offerName",(Common.isArabic)? offers.get(position).getNameAR():offers.get(position).getNameEN());
+                bundle.putString("offerName", (Common.isArabic) ? offers.get(position).getNameAR() : offers.get(position).getNameEN());
 
                 Fragment companiesByCatFrag = new CompaniesByOffer();
                 companiesByCatFrag.setArguments(bundle);
@@ -72,7 +69,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         return offers.size();
     }
 
-    public void addOffer(ArrayList<Offer> newOffer) { offers.addAll(newOffer); }
+    public void addOffer(ArrayList<Offer> newOffer) {
+        offers.addAll(newOffer);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -85,13 +84,12 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Offer offer)
-        {
+        public void bind(Offer offer) {
             Picasso.with(Common.mActivity).load(offer.getPhoto()).into(offer_logo);
-            if(Common.isArabic)
+            if (Common.isArabic)
                 offer_title.setText(offer.getNameAR());
             else
                 offer_title.setText(offer.getNameEN());

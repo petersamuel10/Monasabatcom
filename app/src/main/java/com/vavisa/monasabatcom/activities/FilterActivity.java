@@ -2,13 +2,6 @@ package com.vavisa.monasabatcom.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +9,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.models.FilterModel;
-import com.vavisa.monasabatcom.models.profile.User;
 import com.vavisa.monasabatcom.utility.Constants;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -46,10 +45,9 @@ public class FilterActivity extends AppCompatActivity {
         pb = findViewById(R.id.pb);
         filterList = findViewById(R.id.filter_list);
 
-        if(Common.isConnectToTheInternet(getBaseContext())) {
+        if (Common.isConnectToTheInternet(getBaseContext())) {
             requestData();
-        }else
-        {
+        } else {
             AlertDialog.Builder error = new AlertDialog.Builder(this);
             error.setMessage(R.string.error_connection);
             AlertDialog dialog = error.create();
@@ -75,9 +73,9 @@ public class FilterActivity extends AppCompatActivity {
                         pb.setVisibility(View.GONE);
 
                         // first one is to all
-                        FilterModel firstFilter = new FilterModel(-1,"الكل","All");
+                        FilterModel firstFilter = new FilterModel(-1, "الكل", "All");
                         filters.addAll(filterModel);
-                        filters.add(0,firstFilter);
+                        filters.add(0, firstFilter);
 
                         filterList.setAdapter(new FilterAdapter());
                     }
@@ -98,7 +96,7 @@ public class FilterActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull FilterViewHolder filterViewHolder, final int i) {
             filterViewHolder.bindData(filters.get(i));
-            if(Common.filter_position == i)
+            if (Common.filter_position == i)
                 filterViewHolder.ic_true.setVisibility(View.VISIBLE);
 
             final int adapterPosition = filterViewHolder.getAdapterPosition();
@@ -135,7 +133,7 @@ public class FilterActivity extends AppCompatActivity {
         }
 
         public void bindData(FilterModel filter) {
-            if(Common.isArabic)
+            if (Common.isArabic)
                 filterName.setText(filter.getNameAR());
             else
                 filterName.setText(filter.getNameEN());

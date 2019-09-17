@@ -41,11 +41,11 @@
     <style name="Sugar.Switch.Affiliate" parent="Base.Widget.AppCompat.CompoundButton.Switch">
         <item name="colorSwitchThumbNormal">@android:color/white</item>
         <item name="colorAccent">@color/blue</item>
-        <item name="android:color">@color/nav_color</item>
+        <item name="color">@color/nav_color</item>
     </style>
 
     <style name="MyDialog" parent="AppTheme">
-        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
         <item name="android:backgroundDimEnabled">true</item>

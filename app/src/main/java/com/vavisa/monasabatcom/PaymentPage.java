@@ -2,12 +2,13 @@ package com.vavisa.monasabatcom;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vavisa.monasabatcom.Common.Common;
 
@@ -22,14 +23,16 @@ public class PaymentPage extends AppCompatActivity {
     WebView wb_payment;
     @BindView(R.id.back)
     ImageView back_arrow;
+
     @OnClick(R.id.back)
     public void back() {
         onBackPressed();
     }
+
     String url;
     String postData;
 
-    String hf_ReferenceNo,hf_Result,hf_TransactionId,hf_PaymentId,total;
+    String hf_ReferenceNo, hf_Result, hf_TransactionId, hf_PaymentId, total;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +76,9 @@ public class PaymentPage extends AppCompatActivity {
                     public void onReceiveValue(String value) {
 
                         Log.i("xx6", value);
-                        if(value.equals("\"1\""))
+                        if (value.equals("\"1\""))
                             getHiddenField();
-                        else if (value.equals("\"0\"")){
+                        else if (value.equals("\"0\"")) {
                             Intent intent = new Intent(PaymentPage.this, PaymentResult.class);
                             intent.putExtra("payment_method", "knet");
                             intent.putExtra("paymentId", "error");
@@ -123,7 +126,7 @@ public class PaymentPage extends AppCompatActivity {
             public void onReceiveValue(String value) {
 
                 Log.i("xx4", value);
-              //  paymentId = value.substring(1, value.length() - 1);
+                //  paymentId = value.substring(1, value.length() - 1);
                 hf_PaymentId = value.substring(1, value.length() - 1);
             }
         });
@@ -132,16 +135,16 @@ public class PaymentPage extends AppCompatActivity {
             @Override
             public void onReceiveValue(String value) {
 
-                    Intent intent = new Intent(PaymentPage.this, PaymentResult.class);
-                    intent.putExtra("payment_method", "knet");
-                    intent.putExtra("result", hf_Result);
-                    intent.putExtra("paymentId", hf_PaymentId);
-                    intent.putExtra("transactionId", hf_TransactionId);
-                    intent.putExtra("referenceNo", hf_ReferenceNo);
-                    intent.putExtra("post_data", value.substring(1, value.length() - 1));
-                    intent.putExtra("total", total);
-                    startActivity(intent);
-                    finish();
+                Intent intent = new Intent(PaymentPage.this, PaymentResult.class);
+                intent.putExtra("payment_method", "knet");
+                intent.putExtra("result", hf_Result);
+                intent.putExtra("paymentId", hf_PaymentId);
+                intent.putExtra("transactionId", hf_TransactionId);
+                intent.putExtra("referenceNo", hf_ReferenceNo);
+                intent.putExtra("post_data", value.substring(1, value.length() - 1));
+                // intent.putExtra("total", total);
+                startActivity(intent);
+                finish();
 
             }
         });

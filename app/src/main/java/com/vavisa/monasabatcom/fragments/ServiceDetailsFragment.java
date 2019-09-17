@@ -2,18 +2,10 @@ package com.vavisa.monasabatcom.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,11 +19,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.vavisa.monasabatcom.Common.Common;
-import com.vavisa.monasabatcom.MainActivity;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.activities.CartActivity;
 import com.vavisa.monasabatcom.adapter.services_offersAdapters.ServiceExtraAdapter;
@@ -49,7 +48,6 @@ import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ServiceDetailsFragment extends Fragment implements View.OnClickListener {
@@ -61,9 +59,9 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
     private SliderLayout slider;
     private TextView cart_quantity, serviceName, servicePayStatus, servicePrice, serviceDescription, howToServe_tag,
             howToServe, serviceTime_tag, serviceTime, requirements_tag, requirements, durationOfStay_tag, durationOfStay,
-            order_before_tag,order_before;
+            order_before_tag, order_before;
     private EditText extraNotes;
-    private TextView date_ed,time_ed;
+    private TextView date_ed, time_ed;
     private RecyclerView serviceExtras_rec;
     private CheckBox womenServiceCheck;
     private Button addToCart;
@@ -117,7 +115,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
             }
 
             extraNotes.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
+                @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     v.setFocusable(true);
                     v.setFocusableInTouchMode(true);
@@ -138,23 +136,18 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                new Consumer<Services>() {
-                                    @Override
-                                    public void accept(Services servics) {
-                                        pb.setVisibility(View.GONE);
-                                        serviceData = servics;
-                                        try {
-                                            bindData();
-                                        } catch (Exception e) {
-                                        }
+                                servics -> {
+                                    pb.setVisibility(View.GONE);
+                                    scrollView.setVisibility(View.VISIBLE);
+                                    serviceData = servics;
+                                    try {
+                                        bindData();
+                                    } catch (Exception e) {
+                                    }
 
-                                    }
-                                }, new Consumer<Throwable>() {
-                                    @Override
-                                    public void accept(Throwable throwable) throws Exception {
-                                        pb.setVisibility(View.GONE);
-                                        Common.errorAlert(getContext(), getString(R.string.error_occure));
-                                    }
+                                }, throwable -> {
+                                    pb.setVisibility(View.GONE);
+                                    Common.errorAlert(getContext(), getString(R.string.error_occure));
                                 }));
 
     }
@@ -200,7 +193,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         if (serviceData.getDeliveryTime() != null) {
             order_before_tag.setVisibility(View.VISIBLE);
             order_before.setVisibility(View.VISIBLE);
-            order_before.setText(serviceData.getDeliveryTime()+ getString(R.string.hour));
+            order_before.setText(serviceData.getDeliveryTime() + getString(R.string.hour));
         }
 
 
@@ -300,15 +293,12 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.select_date);
 
-        builder.setSingleChoiceItems(dateList, date_item_position, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position) {
-                date_item_position = position;
-                date_ed.setText(dateList[position]);
-                time_ed.setText("");
-                dialog.dismiss();
+        builder.setSingleChoiceItems(dateList, date_item_position, (dialog, position) -> {
+            date_item_position = position;
+            date_ed.setText(dateList[position]);
+            time_ed.setText("");
+            dialog.dismiss();
 
-            }
         });
 
         builder.create().show();
@@ -320,13 +310,10 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.select_time);
 
-        builder.setSingleChoiceItems(timeList, time_item_position, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position) {
-                time_item_position = position;
-                time_ed.setText(ServiceDetailsFragment.this.timeList[position]);
-                dialog.dismiss();
-            }
+        builder.setSingleChoiceItems(timeList, time_item_position, (dialog, position) -> {
+            time_item_position = position;
+            time_ed.setText(ServiceDetailsFragment.this.timeList[position]);
+            dialog.dismiss();
         });
 
         builder.create().show();
@@ -335,13 +322,13 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
     private void addToCart() {
 
         ArrayList<ExtrasOrder> extrasOrderList = new ArrayList<>();
-        if(serviceData.getServiceExtras().size()>0)
+        if (serviceData.getServiceExtras().size() > 0)
             extrasOrderList.addAll(extraAdapter.getExtrasOrdersList());
 
         ArrayList<ServicesOrder> servicesOrderList = Common.cart.getServices();
         servicesOrderList.add(new ServicesOrder(serviceData.getNameAR(), serviceData.getNameEN(), serviceData.getPaymentTypeId(),
                 serviceData.getDepositPercentage(), serviceId, date_ed.getText().toString(), time_ed.getText().toString(),
-                womenServiceCheck.isChecked(),1, extraNotes.getText().toString(),
+                womenServiceCheck.isChecked(), 1, extraNotes.getText().toString(),
                 serviceData.getPrice(), extrasOrderList));
 
         Common.cart.setCompany_id(companyId);
@@ -350,7 +337,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         Common.cart.setServices(servicesOrderList);
         Common.cart.setPaymentMethodId(serviceData.getPaymentTypeId());
 
-        ((MainActivity) getActivity()).onBackPressed();
+        getActivity().onBackPressed();
 
     }
 
@@ -382,7 +369,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
 
                 // clear cart to start new order from another company
                 Common.cart = new CartModel(1, -1, -1, -1,
-                        0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(),new ArrayList<PaymentMethod>());
+                        0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(), new ArrayList<PaymentMethod>());
                 addToCart();
                 dialog.dismiss();
             }

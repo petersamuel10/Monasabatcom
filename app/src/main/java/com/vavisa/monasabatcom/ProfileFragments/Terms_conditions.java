@@ -3,14 +3,15 @@ package com.vavisa.monasabatcom.ProfileFragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -63,7 +64,7 @@ public class Terms_conditions extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(Common.isArabic)
+        if (Common.isArabic)
             setLanguage("ar");
         else
             setLanguage("en");
@@ -108,12 +109,11 @@ public class Terms_conditions extends Fragment {
         dialog.show();
     }
 
-    public void setLanguage(String lang)
-    {
+    public void setLanguage(String lang) {
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
-        config.locale= locale;
-        getContext().getResources().updateConfiguration(config,getContext().getResources().getDisplayMetrics());
+        config.locale = locale;
+        getContext().getResources().updateConfiguration(config, getContext().getResources().getDisplayMetrics());
     }
 }

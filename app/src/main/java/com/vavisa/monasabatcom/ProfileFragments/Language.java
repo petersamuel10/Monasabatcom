@@ -3,13 +3,14 @@ package com.vavisa.monasabatcom.ProfileFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.fragment.app.Fragment;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -33,6 +34,7 @@ public class Language extends Fragment implements View.OnClickListener {
     LinearLayout back;
     @BindView(R.id.arrow)
     ImageView arrowAr;
+
     @OnClick(R.id.back)
     public void setBack() {
         getActivity().onBackPressed();
@@ -48,11 +50,10 @@ public class Language extends Fragment implements View.OnClickListener {
 
         Paper.init(getContext());
 
-        if(Common.isArabic) {
+        if (Common.isArabic) {
             true_arabic.setVisibility(View.VISIBLE);
             arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
-        }
-        else
+        } else
             true_english.setVisibility(View.VISIBLE);
 
         english.setOnClickListener(this);
@@ -68,20 +69,20 @@ public class Language extends Fragment implements View.OnClickListener {
             case R.id.english:
                 true_english.setVisibility(View.VISIBLE);
                 true_arabic.setVisibility(View.GONE);
-                Paper.book("Monasabatcom").write("language","en");
-                Common.isArabic =false;
+                Paper.book("Monasabatcom").write("language", "en");
+                Common.isArabic = false;
                 break;
 
             case R.id.arabic:
                 true_arabic.setVisibility(View.VISIBLE);
                 true_english.setVisibility(View.GONE);
-                Paper.book("Monasabatcom").write("language","ar");
-                Common.isArabic =true;
+                Paper.book("Monasabatcom").write("language", "ar");
+                Common.isArabic = true;
                 break;
         }
 
         Intent i = getContext().getPackageManager()
-                .getLaunchIntentForPackage( getContext().getPackageName() );
+                .getLaunchIntentForPackage(getContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         getActivity().finish();
         startActivity(i);

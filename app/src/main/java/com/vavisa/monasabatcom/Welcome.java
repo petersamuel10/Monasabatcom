@@ -3,8 +3,9 @@ package com.vavisa.monasabatcom;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonElement;
 import com.squareup.picasso.Picasso;
@@ -41,7 +42,7 @@ public class Welcome extends AppCompatActivity {
         Common.cart = new CartModel(-1, -1, -1, -1,
                 0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(), new ArrayList<PaymentMethod>());
 
-        if(Common.isConnectToTheInternet(getBaseContext())) {
+        if (Common.isConnectToTheInternet(getBaseContext())) {
             compositeDisposable.add(Common.getAPI().getSplashScreen()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -50,21 +51,21 @@ public class Welcome extends AppCompatActivity {
                         public void accept(JsonElement jsonElement) throws Exception {
                             String result = jsonElement.toString();
 
-                            if(result.equals("Photo")){
-                                JSONObject object =new JSONObject(result);
+                            if (result.equals("Photo")) {
+                                JSONObject object = new JSONObject(result);
 
                                 path = object.getString("Photo");
-                                duration = object.getInt("DisplayDurationInSeconds")*1000+2000;
+                                duration = object.getInt("DisplayDurationInSeconds") * 1000 + 2000;
 
                                 Picasso.with(Welcome.this).load(path).into(splashImage);
 
                                 bgThread();
-                            }else
+                            } else
                                 bgThread();
                         }
                     }));
-        }else
-            Common.errorAlert(this,getString(R.string.error_connection));
+        } else
+            Common.errorAlert(this, getString(R.string.error_connection));
 
     }
 

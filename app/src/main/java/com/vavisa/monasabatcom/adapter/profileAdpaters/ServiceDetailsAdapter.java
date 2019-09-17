@@ -1,12 +1,13 @@
 package com.vavisa.monasabatcom.adapter.profileAdpaters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -72,16 +73,16 @@ public class ServiceDetailsAdapter extends RecyclerView.Adapter<ServiceDetailsAd
 
             if (Common.isArabic) {
                 service_name.setText(service.getNameAR());
-                if(service.getErviceExtras().size()>0)
+                if (service.getErviceExtras().size() > 0)
                     extra_str = "الإضافات \n";
                 for (ServiceExtrasDetails extra : service.getErviceExtras()) {
-                    extra_str +=  "1x  " +
+                    extra_str += "1x  " +
                             extra.getNameAR() +
                             "  (" + extra.getPrice() + " " + context.getString(R.string.kd) + ")\n";
                 }
             } else {
                 service_name.setText(service.getNameEN());
-                if(service.getErviceExtras().size()>0)
+                if (service.getErviceExtras().size() > 0)
                     extra_str = "Extra notes\n";
 
                 for (ServiceExtrasDetails extra : service.getErviceExtras()) {
@@ -92,15 +93,15 @@ public class ServiceDetailsAdapter extends RecyclerView.Adapter<ServiceDetailsAd
 
             }
 
-            if(service.getNote().equals(""))
+            if (service.getNote().equals(""))
                 notes.setVisibility(View.GONE);
             else
-                notes.setText(context.getString(R.string.extra_note)+service.getNote());
+                notes.setText(context.getString(R.string.extra_note) + service.getNote());
 
             service_extra.setText(extra_str);
-            date.setText(context.getString(R.string.date)+": "+service.getDate());
-            time.setText(context.getString(R.string.time)+": "+service.getTime());
-            service_price.setText(context.getString(R.string.price)+service.getPrice() + " " + context.getString(R.string.kd));
+            date.setText(context.getString(R.string.date) + ": " + service.getDate());
+            time.setText(context.getString(R.string.time) + ": " + service.getTime());
+            service_price.setText(context.getString(R.string.price) + service.getPrice() + " " + context.getString(R.string.kd));
         }
     }
 }

@@ -3,15 +3,16 @@ package com.vavisa.monasabatcom.activities;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.AddNewAddress;
 import com.vavisa.monasabatcom.Common.Common;
@@ -44,7 +45,9 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
     }
 
     @OnClick(R.id.back)
-    public void setBack() { onBackPressed(); }
+    public void setBack() {
+        onBackPressed();
+    }
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     AddressAdapter adapter;
@@ -102,7 +105,7 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Common.errorAlert(AddressesActivity.this,getString(R.string.error_occure));
+                        Common.errorAlert(AddressesActivity.this, getString(R.string.error_occure));
                     }
                 }));
 
@@ -137,8 +140,8 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
             Common.isEditAddress = true;
             startActivity(new Intent(this, AddNewAddress.class));
 
-        }else if(flag == 2)
-            checkAndGetDeliveryCost(Common.cart.getCompany_id(),list.get(position).getId(),list.get(position));
+        } else if (flag == 2)
+            checkAndGetDeliveryCost(Common.cart.getCompany_id(), list.get(position).getId(), list.get(position));
 
     }
 
@@ -158,17 +161,16 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
 
                         result[0] = integer;
 
-                        if (result[0] >= 0){
+                        if (result[0] >= 0) {
                             Common.cart.setAddressId(addressId);
                             Common.cart.setAddress(address);
                             Common.cart.setDeliveryCost(integer);
                             startActivity(new Intent(AddressesActivity.this, AppointmentDetails.class));
-                        }
-                        else if(result[0] == -1)
+                        } else if (result[0] == -1)
                             showErrorAlert(getString(R.string.missing_required_data));
-                        else if(result[0] == -2)
+                        else if (result[0] == -2)
                             showErrorAlert(getString(R.string.the_company_cant_deliver_to));
-                        else if(result[0] == -3)
+                        else if (result[0] == -3)
                             showErrorAlert(getBaseContext().getString(R.string.error_occure));
                     }
                 }));
@@ -176,7 +178,7 @@ public class AddressesActivity extends AppCompatActivity implements RecyclerView
 
     }
 
-    private void showErrorAlert(String message_str){
+    private void showErrorAlert(String message_str) {
 
         final Dialog dialog = new Dialog(AddressesActivity.this);
         dialog.setContentView(R.layout.custom_error_alert);

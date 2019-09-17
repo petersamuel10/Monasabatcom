@@ -6,14 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +15,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.activities.FilterActivity;
 import com.vavisa.monasabatcom.adapter.CompanyAdapter;
-import com.vavisa.monasabatcom.models.profile.City;
 import com.vavisa.monasabatcom.models.Company;
 import com.vavisa.monasabatcom.models.SearchHour;
+import com.vavisa.monasabatcom.models.profile.City;
 import com.vavisa.monasabatcom.utility.Constants;
 
 import java.util.ArrayList;
@@ -106,6 +107,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
             getCities();
             getTime();
 
+
             companyListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -125,7 +127,6 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
 
         setUpSwipeRefreshLayout();
         requestData();
-
 
         return fragmentView;
     }
@@ -399,15 +400,17 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
                                                 isEmpty = false;
                                                 emptyList.setVisibility(GONE);
                                                 companyListView.setVisibility(View.VISIBLE);
-                                                if(pageNo == 1)
+                                                if (pageNo == 1)
                                                     companyList.clear();
                                                 companyList.addAll(companies);
+                                                setupRecyclerView();
+                                                pb.setVisibility(GONE);
                                             } else if (companyList.isEmpty()) {
                                                 companyListView.setVisibility(GONE);
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
                                                 pb.setVisibility(GONE);
-                                            }else if (companies.isEmpty()) {
+                                            } else if (companies.isEmpty()) {
                                                 isEmpty = true;
                                                 pb.setVisibility(GONE);
                                             }

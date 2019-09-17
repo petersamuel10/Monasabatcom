@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.models.profile.User;
@@ -57,7 +58,7 @@ public class Register extends AppCompatActivity {
     @OnClick(R.id.btnRegister)
     public void registerClick() {
 
-        KeyboardUtility.hideKeyboardFrom(this,register);
+        KeyboardUtility.hideKeyboardFrom(this, register);
         if (Common.isConnectToTheInternet(getBaseContext())) {
 
             newUser = new User(full_name.getText().toString(),

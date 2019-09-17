@@ -2,12 +2,13 @@ package com.vavisa.monasabatcom.ProfileFragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.Fragment;
 
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;

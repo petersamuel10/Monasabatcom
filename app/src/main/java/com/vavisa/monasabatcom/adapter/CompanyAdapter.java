@@ -2,11 +2,6 @@ package com.vavisa.monasabatcom.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.vavisa.monasabatcom.Common.Common;
@@ -32,9 +32,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     private ArrayList<Company> companies;
     private Activity activity;
     private int viewType;
-    private String tab_tag,searchDate,searchHour;
+    private String tab_tag, searchDate, searchHour;
 
-    public CompanyAdapter(Activity activity, ArrayList<Company> companies, String tab_tag, int viewType,String searchDate, String searchHour) {
+    public CompanyAdapter(Activity activity, ArrayList<Company> companies, String tab_tag, int viewType, String searchDate, String searchHour) {
         this.activity = activity;
         this.companies = companies;
         this.viewType = viewType;
@@ -43,7 +43,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         this.searchHour = searchHour;
     }
 
-    public CompanyAdapter() { }
+    public CompanyAdapter() {
+    }
 
     @NonNull
     @Override
@@ -75,9 +76,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
 
                 Bundle bundle = new Bundle();
                 bundle.putString("companyId", String.valueOf(companies.get(position).getId()));
-                bundle.putString("tag",tab_tag);
-                bundle.putString("searchDate",searchDate);
-                bundle.putString("searchHour",searchHour);
+                bundle.putString("tag", tab_tag);
+                bundle.putString("searchDate", searchDate);
+                bundle.putString("searchHour", searchHour);
                 Fragment companyDetailsFragment = new CompanyDetailsFragment();
                 companyDetailsFragment.setArguments(bundle);
 
@@ -92,7 +93,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         return companies.size();
     }
 
-    public void clearAdapter(){
+    public void clearAdapter() {
         companies.clear();
         notifyDataSetChanged();
     }

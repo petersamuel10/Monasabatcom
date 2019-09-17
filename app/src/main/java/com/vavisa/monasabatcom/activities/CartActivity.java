@@ -2,16 +2,16 @@ package com.vavisa.monasabatcom.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.Login;
@@ -129,6 +129,7 @@ public class CartActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(offer_rec);
     }
+
     private void enableSwipeToDeleteService() {
 
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
@@ -163,7 +164,7 @@ public class CartActivity extends AppCompatActivity {
 
             // init new cart to new order
             Common.cart = new CartModel(-1, -1, -1, -1,
-                    0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(),new ArrayList<PaymentMethod>());
+                    0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(), new ArrayList<PaymentMethod>());
 
         } else {
 
@@ -182,7 +183,7 @@ public class CartActivity extends AppCompatActivity {
     @OnClick(R.id.continue_button)
     public void continue_() {
 
-        if(Paper.book("Monasabatcom").contains("currentUser"))
+        if (Paper.book("Monasabatcom").contains("currentUser"))
             startActivity(new Intent(this, AddressesActivity.class));
         else
             startActivity(new Intent(this, Login.class));

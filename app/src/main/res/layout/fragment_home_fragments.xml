@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/filter"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_search_white_24dp" />
+                    app:srcCompat="@drawable/ic_search_white_24dp" />
 
                 <ImageButton
                     android:id="@+id/filter"
@@ -39,7 +39,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="12dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_filter" />
+                    app:srcCompat="@drawable/ic_filter" />
 
                 <TextView
                     android:id="@+id/title_name"
@@ -51,7 +51,7 @@
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/search_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/ic_cancel_filled"
+                        app:srcCompat="@drawable/ic_cancel_filled"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/search_text"
@@ -103,11 +103,11 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </RelativeLayout>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,24 +143,24 @@
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
                 android:paddingEnd="2dp"
-                android:src="@drawable/grid" />
+                app:srcCompat="@drawable/grid" />
 
             <ImageView
                 android:id="@+id/second"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
                 android:paddingEnd="2dp"
-                android:src="@drawable/details" />
+                app:srcCompat="@drawable/details" />
 
             <ImageView
                 android:id="@+id/third"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
-                android:src="@drawable/ic_view_stream_black_24dp" />
+                app:srcCompat="@drawable/ic_view_stream_black_24dp" />
 
         </LinearLayout>
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sl"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -180,7 +180,7 @@
                     android:textColor="@color/grey"
                     android:textSize="@dimen/_16ssp" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/home_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -190,7 +190,7 @@
 
             </LinearLayout>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

@@ -2,9 +2,10 @@ package com.vavisa.monasabatcom;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,8 +17,11 @@ public class ChooseLanguage extends AppCompatActivity {
     RadioButton lanRB;
     @BindView(R.id.lanGroup)
     RadioGroup radioGroup;
+
     @OnClick(R.id.lanBtn)
-    public void setLanguage() { getLanguage(); }
+    public void setLanguage() {
+        getLanguage();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +34,13 @@ public class ChooseLanguage extends AppCompatActivity {
 
     private void getLanguage() {
         int lanId = radioGroup.getCheckedRadioButtonId();
-        lanRB  = findViewById(lanId);
-        if(lanRB.getText().equals("English"))
-            Paper.book("Monasabatcom").write("language","en");
+        lanRB = findViewById(lanId);
+        if (lanRB.getText().equals("English"))
+            Paper.book("Monasabatcom").write("language", "en");
         else
-            Paper.book("Monasabatcom").write("language","ar");
+            Paper.book("Monasabatcom").write("language", "ar");
 
-        startActivity(new Intent(ChooseLanguage.this,MainActivity.class));
+        startActivity(new Intent(ChooseLanguage.this, MainActivity.class));
         finish();
 
     }

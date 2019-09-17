@@ -2,19 +2,18 @@ package com.vavisa.monasabatcom.adapter.Cart;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
-import com.vavisa.monasabatcom.activities.OfferEditCart;
 import com.vavisa.monasabatcom.activities.ServiceEditCart;
 import com.vavisa.monasabatcom.models.orderModels.ExtrasOrder;
-import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
 import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 
 import java.util.ArrayList;
@@ -48,8 +47,8 @@ public class ServiceCartAdapter extends RecyclerView.Adapter<ServiceCartAdapter.
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ServiceEditCart.class);
-                intent.putExtra("index",position);
-                intent.putExtra("service_order",servicesList.get(position));
+                intent.putExtra("index", position);
+                intent.putExtra("service_order", servicesList.get(position));
                 context.startActivity(intent);
             }
         });
@@ -64,6 +63,7 @@ public class ServiceCartAdapter extends RecyclerView.Adapter<ServiceCartAdapter.
         servicesList.remove(position);
         notifyItemRemoved(position);
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.service_name)
@@ -93,7 +93,7 @@ public class ServiceCartAdapter extends RecyclerView.Adapter<ServiceCartAdapter.
                         continue;
                     extra_str += extra.getQuantity() + "x  " +
                             extra.getService_name_ar() +
-                            "  (" + extra.getPrice() + " "+context.getString(R.string.kd) + ")\n";
+                            "  (" + extra.getPrice() + " " + context.getString(R.string.kd) + ")\n";
                 }
             } else {
                 service_name.setText(service.getService_name_en());
@@ -103,7 +103,7 @@ public class ServiceCartAdapter extends RecyclerView.Adapter<ServiceCartAdapter.
                         continue;
                     extra_str += extra.getQuantity() + "x  " +
                             extra.getService_name_en() +
-                            "  (" + extra.getPrice() +" "+ context.getString(R.string.kd) + ")\n";
+                            "  (" + extra.getPrice() + " " + context.getString(R.string.kd) + ")\n";
                 }
 
             }
@@ -117,13 +117,13 @@ public class ServiceCartAdapter extends RecyclerView.Adapter<ServiceCartAdapter.
                     pay_status.setVisibility(View.GONE);
                     break;
                 case 2:
-                    pay_status.setText(context.getString(R.string.pay_a_deposit)+" "+ service.getDepositPercentage()+"%");
+                    pay_status.setText(context.getString(R.string.pay_a_deposit) + " " + service.getDepositPercentage() + "%");
                     break;
                 case 3:
                     pay_status.setText(context.getString(R.string.pay_full_amount_in_advance));
                     break;
             }
-            service_price.setText(service.getPrice() + " "+context.getString(R.string.kd));
+            service_price.setText(service.getPrice() + " " + context.getString(R.string.kd));
         }
     }
 }

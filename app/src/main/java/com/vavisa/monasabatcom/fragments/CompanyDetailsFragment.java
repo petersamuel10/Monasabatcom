@@ -2,11 +2,6 @@ package com.vavisa.monasabatcom.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +12,12 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -139,7 +140,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
                                         pb.setVisibility(GONE);
-                                        Common.errorAlert(getContext(),getString(R.string.error_occure));
+                                        Common.errorAlert(getContext(), getString(R.string.error_occure));
                                     }
                                 }));
     }
@@ -258,7 +259,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
 
     private void showRatingDialog() {
 
-        if(Paper.book("Monasabatcom").contains("currentUser")) {
+        if (Paper.book("Monasabatcom").contains("currentUser")) {
             Fragment rating = new Rating();
             Bundle bundle = new Bundle();
             bundle.putString("com_id", String.valueOf(companyDetails.getId()));
@@ -268,8 +269,8 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
             rating.setArguments(bundle);
 
             ((MainActivity) getActivity()).pushFragments(Constants.TAB_HOME, rating, true);
-        }else
-            getActivity().startActivity(new Intent(getContext(),Login.class));
+        } else
+            getActivity().startActivity(new Intent(getContext(), Login.class));
 
 
     }

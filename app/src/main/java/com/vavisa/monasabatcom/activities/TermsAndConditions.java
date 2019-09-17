@@ -1,8 +1,9 @@
 package com.vavisa.monasabatcom.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -26,7 +27,7 @@ public class TermsAndConditions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms_and_conditions);
         ButterKnife.bind(this);
-        if(Common.isArabic)
+        if (Common.isArabic)
             terms.setText(Common.cart.getTerms_ar());
         else
             terms.setText(Common.cart.getTerms_en());

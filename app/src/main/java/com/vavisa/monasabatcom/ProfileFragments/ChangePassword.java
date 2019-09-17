@@ -3,8 +3,6 @@ package com.vavisa.monasabatcom.ProfileFragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -92,7 +92,7 @@ public class ChangePassword extends Fragment implements View.OnClickListener {
                         if (integer > 0) {
                             Toast.makeText(getContext(), R.string.change_password_successfully, Toast.LENGTH_SHORT).show();
                             getActivity().onBackPressed();
-                        }else if (integer == -4) {
+                        } else if (integer == -4) {
                             Common.errorAlert(getContext(), getString(R.string.incorrect_password));
                             oldPasswordEt.setText("");
                         } else if (integer == -3)

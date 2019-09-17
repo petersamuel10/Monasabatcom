@@ -1,12 +1,13 @@
 package com.vavisa.monasabatcom;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.models.companyDetails.PaymentMethod;
@@ -15,7 +16,6 @@ import com.vavisa.monasabatcom.models.orderModels.OfferOrder;
 import com.vavisa.monasabatcom.models.orderModels.ServicesOrder;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +44,7 @@ public class PaymentResult extends AppCompatActivity {
 
     @OnClick(R.id.continueBtn)
     public void continue_() {
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @Override
@@ -56,14 +56,14 @@ public class PaymentResult extends AppCompatActivity {
         Common.cart = new CartModel(-1, -1, -1, -1,
                 0.0f, new ArrayList<ServicesOrder>(), new ArrayList<OfferOrder>(), new ArrayList<PaymentMethod>());
 
-        if(getIntent().getExtras().getString("payment_method").equals("knet")){
-            if(getIntent().getExtras().getString("paymentId").equals("error")){
+        if (getIntent().getExtras().getString("payment_method").equals("knet")) {
+            if (getIntent().getExtras().getString("paymentId").equals("error")) {
 
                 message_txt.setText(getString(R.string.payment_progress_faild));
                 image.setImageDrawable(getDrawable(R.drawable.failed_payment));
                 payment_info.setVisibility(View.GONE);
 
-            }else {
+            } else {
                 message_txt.setText(getString(R.string.message_payment));
                 payment_info.setVisibility(View.VISIBLE);
 
@@ -72,10 +72,10 @@ public class PaymentResult extends AppCompatActivity {
                 transaction_txt.setText(getIntent().getExtras().getString("transactionId"));
                 reference_txt.setText(getIntent().getExtras().getString("referenceNo"));
                 date_txt.setText(getIntent().getExtras().getString("post_data"));
-                amount_txt.setText(getIntent().getExtras().getString("total"));
+                //   amount_txt.setText(getIntent().getExtras().getString("total"));
             }
 
-        }else{
+        } else {
             message_txt.setText(getString(R.string.your_appointment_has_been_booked));
             payment_info.setVisibility(View.GONE);
         }

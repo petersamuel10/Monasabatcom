@@ -3,7 +3,6 @@ package com.vavisa.monasabatcom.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 import com.vavisa.monasabatcom.Common.Common;
@@ -28,7 +29,10 @@ import io.reactivex.schedulers.Schedulers;
 public class Rating extends Fragment {
 
     @OnClick(R.id.back_button)
-    public void back(){getActivity().onBackPressed();}
+    public void back() {
+        getActivity().onBackPressed();
+    }
+
     @BindView(R.id.rating_bar)
     RatingBar ratingBar;
     @BindView(R.id.com_image)
@@ -38,7 +42,7 @@ public class Rating extends Fragment {
     @BindView(R.id.rate_button)
     Button rating_btn;
 
-    String com_id, com_name, com_image,comment ="";
+    String com_id, com_name, com_image, comment = "";
     float rating_value;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -69,10 +73,10 @@ public class Rating extends Fragment {
             public void onRatingChanged(RatingBar ratingBar, float rating,
                                         boolean fromUser) {
 
-                if(rating == 0){
+                if (rating == 0) {
                     rating_btn.setAlpha(0.5f);
                     rating_btn.setEnabled(false);
-                }else {
+                } else {
                     rating_btn.setAlpha(1.0f);
                     rating_btn.setEnabled(true);
                     rating_value = rating;
@@ -82,24 +86,24 @@ public class Rating extends Fragment {
     }
 
     @OnClick(R.id.rate_button)
-    public void rateFun(){
-        compositeDisposable.add(Common.getAPI().rating(Common.currentUser.getId(),Integer.parseInt(com_id),rating_value,comment)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                             .subscribe(new Consumer<Integer>() {
-                                 @Override
-                                 public void accept(Integer integer) throws Exception {
-                                     if (integer == 1)
-                                         showMessage();
-                                     else
-                                         Toast.makeText(getContext(), getString(R.string.error_occure), Toast.LENGTH_SHORT).show();
-                                 }
-                             }, new Consumer<Throwable>() {
-                                 @Override
-                                 public void accept(Throwable throwable) throws Exception {
-                                     Common.errorAlert(getContext(), getString(R.string.error_occure));
-                                 }
-                             }));
+    public void rateFun() {
+        compositeDisposable.add(Common.getAPI().rating(Common.currentUser.getId(), Integer.parseInt(com_id), rating_value, comment)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        if (integer == 1)
+                            showMessage();
+                        else
+                            Toast.makeText(getContext(), getString(R.string.error_occure), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Common.errorAlert(getContext(), getString(R.string.error_occure));
+                    }
+                }));
     }
 
     private void showMessage() {

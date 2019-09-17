@@ -3,12 +3,6 @@ package com.vavisa.monasabatcom.fragments;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.Login;
@@ -57,8 +58,8 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     ImageView third;
 
     @OnClick(R.id.loginText)
-    public void login(){
-        getActivity().startActivity(new Intent(getContext(),Login.class));
+    public void login() {
+        getActivity().startActivity(new Intent(getContext(), Login.class));
     }
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -159,7 +160,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
                                         @Override
                                         public void accept(Throwable throwable) throws Exception {
                                             pb.setVisibility(GONE);
-                                            Common.errorAlert(getContext(),getString(R.string.error_occure));
+                                            Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));
         } else errorConnectionMess();

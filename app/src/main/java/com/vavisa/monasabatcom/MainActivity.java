@@ -4,15 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.fragments.CategoryFragment;
 import com.vavisa.monasabatcom.fragments.FavouriteFragment;
@@ -49,13 +50,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadLocal();
-        if(Common.isArabic)
-        {
+        if (Common.isArabic) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                     .setDefaultFontPath("fonts/Changa-Regular.ttf")
                     .setFontAttrId(R.attr.fontPath).build());
-        }else
-        {
+        } else {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                     .setDefaultFontPath("fonts/Avenir.otf")
                     .setFontAttrId(R.attr.fontPath).build());

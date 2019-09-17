@@ -2,12 +2,13 @@ package com.vavisa.monasabatcom.adapter.Cart;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -44,11 +45,11 @@ public class OfferCartAdapter extends RecyclerView.Adapter<OfferCartAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, OfferEditCart.class);
-                intent.putExtra("index",position);
-                intent.putExtra("offerId",offersList.get(position).getOfferIdId().toString());
-                intent.putExtra("searchDate",offersList.get(position).getDate());
-                intent.putExtra("searchHour",offersList.get(position).getTime());
-                intent.putExtra("notes",offersList.get(position).getNote());
+                intent.putExtra("index", position);
+                intent.putExtra("offerId", offersList.get(position).getOfferIdId().toString());
+                intent.putExtra("searchDate", offersList.get(position).getDate());
+                intent.putExtra("searchHour", offersList.get(position).getTime());
+                intent.putExtra("notes", offersList.get(position).getNote());
                 context.startActivity(intent);
             }
         });

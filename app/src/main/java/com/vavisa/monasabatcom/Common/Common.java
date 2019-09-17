@@ -4,9 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.models.orderModels.CartModel;

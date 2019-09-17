@@ -3,10 +3,6 @@ package com.vavisa.monasabatcom.ProfileFragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +10,11 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -38,54 +39,55 @@ public class Appointment extends Fragment {
     ProgressBar progressBar;
     @BindView(R.id.arrow)
     ImageView arrowAr;
-    @OnClick(R.id.back)
-    public void setBack()
-    {getActivity().onBackPressed();}
 
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    AppointmentAdapter adapter;
-    ProgressDialog progressDialog;
+    @OnClick(R.id.back)
+    public void setBack() {
+        getActivity().onBackPressed();
+    }
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private AppointmentAdapter adapter;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       View view = inflater.inflate(R.layout.profile_appointment, container, false);
+        View view = inflater.inflate(R.layout.profile_appointment, container, false);
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
 
-        if(Common.isArabic)
+        if (Common.isArabic)
             arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
 
         setupRecyclerView();
-        if(Common.isConnectToTheInternet(getContext())){
+        if (Common.isConnectToTheInternet(getContext())) {
             requestData();
-        } else
-        {
+        } else {
             AlertDialog.Builder error = new AlertDialog.Builder(getContext());
             error.setMessage(R.string.error_connection);
             AlertDialog dialog = error.create();
             dialog.show();
         }
 
-    return view;
+        return view;
     }
 
     private void requestData() {
         progressDialog.show();
         compositeDisposable.add(Common.getAPI().getUserOrders(Common.currentUser.getId())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<ArrayList<AppointmentModel>>() {
-                                    @Override
-                                    public void accept(ArrayList<AppointmentModel> appointments) throws Exception {
-                                        adapter.addAppointment(appointments);
-                                        adapter.notifyDataSetChanged();
-                                        progressDialog.dismiss();
-                                    }
-                                }));
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ArrayList<AppointmentModel>>() {
+                    @Override
+                    public void accept(ArrayList<AppointmentModel> appointments) throws Exception {
+                        adapter.addAppointment(appointments);
+                        adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
+                }));
     }
 
     private void setupRecyclerView() {
@@ -93,7 +95,7 @@ public class Appointment extends Fragment {
         appointment_rec.setHasFixedSize(true);
         appointment_rec.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AppointmentAdapter(getActivity());
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(appointment_rec.getContext(),R.anim.layout_fall_down);
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(appointment_rec.getContext(), R.anim.layout_fall_down);
         appointment_rec.setLayoutAnimation(controller);
         appointment_rec.setAdapter(adapter);
     }

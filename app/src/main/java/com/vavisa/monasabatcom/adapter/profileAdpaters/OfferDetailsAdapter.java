@@ -1,12 +1,13 @@
 package com.vavisa.monasabatcom.adapter.profileAdpaters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
@@ -72,14 +73,14 @@ public class OfferDetailsAdapter extends RecyclerView.Adapter<OfferDetailsAdapte
             else
                 offer_name.setText(offer.getNameEN());
 
-            date.setText(context.getString(R.string.date)+": "+offer.getDate());
-            time.setText(context.getString(R.string.time)+": "+offer.getTime());
-            offer_price.setText(context.getString(R.string.price)+offer.getPrice() + " " + context.getString(R.string.kd));
+            date.setText(context.getString(R.string.date) + ": " + offer.getDate());
+            time.setText(context.getString(R.string.time) + ": " + offer.getTime());
+            offer_price.setText(context.getString(R.string.price) + offer.getPrice() + " " + context.getString(R.string.kd));
 
-            if(offer.getNote().equals(""))
+            if (offer.getNote().equals(""))
                 notes.setVisibility(View.GONE);
             else
-                notes.setText(context.getString(R.string.extra_note)+offer.getNote());
+                notes.setText(context.getString(R.string.extra_note) + offer.getNote());
 
             service_extra.setVisibility(View.GONE);
         }

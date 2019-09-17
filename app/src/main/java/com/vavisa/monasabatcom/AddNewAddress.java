@@ -3,8 +3,6 @@ package com.vavisa.monasabatcom;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.models.profile.Address;
@@ -34,7 +35,7 @@ import io.reactivex.schedulers.Schedulers;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class AddNewAddress extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener {
+public class AddNewAddress extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     @BindView(R.id.address_name)
     EditText address_name;
@@ -56,18 +57,21 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
     EditText address_apartment;
     @BindView(R.id.save_address)
     Button save_address;
-    @OnClick(R.id.cancel)
-    public void getBack(){finish();}
 
-    List<String> governorateList = new ArrayList<>() ;
+    @OnClick(R.id.cancel)
+    public void getBack() {
+        finish();
+    }
+
+    List<String> governorateList = new ArrayList<>();
     List<String> citiesList;
     List<City> allCitiesList;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    String name,phone,block,street,building,floor,apartment;
+    String name, phone, block, street, building, floor, apartment;
 
-    int userId,cityId;
-    Address address,editAddress;
+    int userId, cityId;
+    Address address, editAddress;
     ProgressDialog progressDialog;
 
     @Override
@@ -79,13 +83,11 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Common.isArabic)
-        {
+        if (Common.isArabic) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                     .setDefaultFontPath("fonts/Changa-Regular.ttf")
                     .setFontAttrId(R.attr.fontPath).build());
-        }else
-        {
+        } else {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                     .setDefaultFontPath("fonts/Avenir.otf")
                     .setFontAttrId(R.attr.fontPath).build());
@@ -96,12 +98,10 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
         progressDialog = new ProgressDialog(getBaseContext());
         progressDialog.setCancelable(false);
 
-        if(Common.isConnectToTheInternet(this))
-        {
+        if (Common.isConnectToTheInternet(this)) {
             getGovernorates();
             getAllCities();
-        }
-        else
+        } else
             errorConnectionMess();
 
         governorate.setOnItemSelectedListener(this);
@@ -111,7 +111,7 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
 
 
     private void getGovernorates() {
-        io.reactivex.Observable<ArrayList<Governorate>> govList  = Common.getAPI().getGovernorates().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        io.reactivex.Observable<ArrayList<Governorate>> govList = Common.getAPI().getGovernorates().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
         govList.subscribe(new Observer<ArrayList<Governorate>>() {
             @Override
@@ -121,14 +121,14 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onNext(ArrayList<Governorate> governorates) {
-                for (Governorate governorate:governorates) {
-                    if(Common.isArabic)
+                for (Governorate governorate : governorates) {
+                    if (Common.isArabic)
                         governorateList.add(governorate.getNameAR());
                     else
                         governorateList.add(governorate.getNameEN());
                 }
 
-                ArrayAdapter<String> gov_adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_spinner_item, governorateList);
+                ArrayAdapter<String> gov_adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, governorateList);
                 gov_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 gov_adapter.notifyDataSetChanged();
                 governorate.setAdapter(gov_adapter);
@@ -145,16 +145,15 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
                 if (Common.isEditAddress) {
                     editAddress = new Address();
                     editAddress = Common.address;
-                   // Common.isEditAddress = false;
+                    // Common.isEditAddress = false;
                     setEditAddressData();
-                }else
-                {
+                } else {
 
                 }
 
 
-               // Toast.makeText(AddNewAddress.this, "ccccc"+String.valueOf(governorateList.size()), Toast.LENGTH_SHORT).show();
-               // Toast.makeText(AddNewAddress.this, "gigikgikglk", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(AddNewAddress.this, "ccccc"+String.valueOf(governorateList.size()), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(AddNewAddress.this, "gigikgikglk", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -169,7 +168,7 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
                 .subscribe(new Consumer<ArrayList<City>>() {
                     @Override
                     public void accept(ArrayList<City> cities) throws Exception {
-                        for (City city:cities) {
+                        for (City city : cities) {
                             allCitiesList.add(city);
 
                         }
@@ -184,15 +183,14 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
         address_phone.setText(editAddress.getPhone());
 
         int governorateId = editAddress.getGovernorateId();
-        governorate.setSelection(governorateId-1);
+        governorate.setSelection(governorateId - 1);
         //get cities for this governorate and select this city in spinner
-        getCities(governorateId,true);
+        getCities(governorateId, true);
 
         address_block.setText(editAddress.getBlock());
         address_street.setText(editAddress.getStreet());
         address_building.setText(editAddress.getBuilding());
-        if(!TextUtils.isEmpty(editAddress.getFloor()))
-        {
+        if (!TextUtils.isEmpty(editAddress.getFloor())) {
             address_floor.setText(editAddress.getFloor());
             address_apartment.setText(editAddress.getApartment());
         }
@@ -210,20 +208,20 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
                 .subscribe(new Consumer<ArrayList<City>>() {
                     @Override
                     public void accept(ArrayList<City> cities) throws Exception {
-                        for (City city:cities) {
-                            if(Common.isArabic)
+                        for (City city : cities) {
+                            if (Common.isArabic)
                                 citiesList.add(city.getNameAR());
                             else
                                 citiesList.add(city.getNameEN());
                         }
-                        ArrayAdapter<String> city_adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_spinner_item, citiesList);
+                        ArrayAdapter<String> city_adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, citiesList);
                         city_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         city_adapter.notifyDataSetChanged();
                         city.setAdapter(city_adapter);
 
                         int index = 0;
-                        if(isEdit){
-                            if(Common.isArabic)
+                        if (isEdit) {
+                            if (Common.isArabic)
                                 index = citiesList.indexOf(editAddress.getCityNameAR());
                             else
                                 index = citiesList.indexOf(editAddress.getCityNameEN());
@@ -269,7 +267,7 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void add_address(){
+    public void add_address() {
         compositeDisposable.add(Common.getAPI().addAddress(address)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -289,12 +287,12 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
 
                         } else
                             Toast.makeText(AddNewAddress.this, getResources().getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
-                            finish();
+                        finish();
                     }
                 }));
     }
 
-    public void edit_address(){
+    public void edit_address() {
 
         address.setAddressId(editAddress.getId());
 
@@ -324,8 +322,7 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
 
     private boolean validation(String name, String phone, int cityId, String block, String street, String building) {
 
-        if(TextUtils.isEmpty(name) ||TextUtils.isEmpty(phone) || TextUtils.isEmpty(block) || TextUtils.isEmpty(street)||TextUtils.isEmpty(building))
-        {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(block) || TextUtils.isEmpty(street) || TextUtils.isEmpty(building)) {
             Toast.makeText(this, R.string.missing_required_data, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -336,8 +333,8 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //to prevent call this method when run and change the index of city to select from api
-        if(!Common.isEditAddress)
-            getCities(position+1,false);
+        if (!Common.isEditAddress)
+            getCities(position + 1, false);
         else
             Common.isEditAddress = false;
     }
@@ -345,15 +342,15 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
     private void getCityId() {
         String cityName = city.getSelectedItem().toString();
 
-        for (City city:allCitiesList) {
-            if(Common.isArabic){
-                if(city.getNameAR().equals(cityName)) {
+        for (City city : allCitiesList) {
+            if (Common.isArabic) {
+                if (city.getNameAR().equals(cityName)) {
                     cityId = city.getId();
                     break;
                 }
 
-            }else {
-                if(city.getNameEN().equals(cityName)) {
+            } else {
+                if (city.getNameEN().equals(cityName)) {
                     cityId = city.getId();
                     break;
                 }
@@ -367,7 +364,7 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void errorConnectionMess(){
+    public void errorConnectionMess() {
 
         AlertDialog.Builder error = new AlertDialog.Builder(this);
         error.setMessage(R.string.error_connection);

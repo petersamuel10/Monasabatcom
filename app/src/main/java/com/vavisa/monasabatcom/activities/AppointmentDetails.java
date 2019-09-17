@@ -2,16 +2,16 @@ package com.vavisa.monasabatcom.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.vavisa.monasabatcom.Common.Common;
@@ -82,9 +82,10 @@ public class AppointmentDetails extends AppCompatActivity {
     public void back() {
         onBackPressed();
     }
+
     @OnClick(R.id.terms)
     public void terms() {
-        startActivity(new Intent(this,TermsAndConditions.class));
+        startActivity(new Intent(this, TermsAndConditions.class));
     }
 
     private CartModel cartModel;
@@ -104,7 +105,7 @@ public class AppointmentDetails extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 
-        if(Common.isArabic)
+        if (Common.isArabic)
             back.setRotation(180);
 
         cartModel = Common.cart;
@@ -161,10 +162,10 @@ public class AppointmentDetails extends AppCompatActivity {
 
         if (Common.isArabic) {
             com_name_txt.setText(cartModel.getCompany_name_ar());
-            terms_txt.setText(getString(R.string.by_complete_this_order_i)+cartModel.getCompany_name_ar() );
-        }else {
+            terms_txt.setText(getString(R.string.by_complete_this_order_i) + cartModel.getCompany_name_ar());
+        } else {
             com_name_txt.setText(cartModel.getCompany_name_en());
-            terms_txt.setText(getString(R.string.by_complete_this_order_i)+cartModel.getCompany_name_en() );
+            terms_txt.setText(getString(R.string.by_complete_this_order_i) + cartModel.getCompany_name_en());
         }
 
         if (cartModel.getServices().size() > 0) {
@@ -262,7 +263,7 @@ public class AppointmentDetails extends AppCompatActivity {
 
                 Gson gson = new Gson();
                 String result = gson.toJson(orderModel);
-                Log.d("orderId",result);
+                Log.d("orderId", result);
                 progressDialog.show();
                 compositeDisposable.add(Common.getAPI().addOrder(orderModel)
                         .subscribeOn(Schedulers.io())

@@ -1,10 +1,7 @@
 package com.vavisa.monasabatcom.adapter.services_offersAdapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.MainActivity;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.fragments.OfferDetailsFragment;
-import com.vavisa.monasabatcom.fragments.ServiceDetailsFragment;
 import com.vavisa.monasabatcom.models.companyDetails.Offers;
-import com.vavisa.monasabatcom.utility.Constants;
 
 import java.util.ArrayList;
 
@@ -30,7 +26,7 @@ public class OffersAdapter extends ArrayAdapter<Offers> {
     private Activity activity;
     private String tab_tag;
     private String companyId, company_name_ar,
-            company_name_en,searchDate,searchHour;
+            company_name_en, searchDate, searchHour;
 
     public OffersAdapter(
             @NonNull Activity activity, int resource, @NonNull ArrayList<Offers> objects,
@@ -59,10 +55,10 @@ public class OffersAdapter extends ArrayAdapter<Offers> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        final ViewHolder viewHolder ;
-        if(convertView == null){
+        final ViewHolder viewHolder;
+        if (convertView == null) {
             convertView = LayoutInflater.from(activity)
-                    .inflate(R.layout.service_list_item,parent,false);
+                    .inflate(R.layout.service_list_item, parent, false);
 
             viewHolder = new OffersAdapter.ViewHolder();
             viewHolder.offerName = convertView.findViewById(R.id.service_name);
@@ -90,7 +86,7 @@ public class OffersAdapter extends ArrayAdapter<Offers> {
             convertView.setTag(viewHolder);
 
 
-        }else {
+        } else {
             viewHolder = (OffersAdapter.ViewHolder) convertView.getTag();
         }
 

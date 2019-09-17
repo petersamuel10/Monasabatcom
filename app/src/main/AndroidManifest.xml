@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.vavisa.monasabatcom">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"
@@ -15,15 +12,19 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".activities.ServiceEditCart" android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activities.OfferEditCart" android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.ServiceEditCart"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.OfferEditCart"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.TermsAndConditions" />
         <activity android:name=".PaymentResult" />
         <activity android:name=".activities.AddressesActivity" />
         <activity android:name=".activities.AppointmentDetails" />
         <activity
             android:name=".MainActivity"
-           android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Login" />
         <activity
             android:name=".activities.CartActivity"
@@ -48,20 +49,14 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".notification.NotificationExtenderBareBonesExample"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-            <intent-filter>
-                <action android:name="com.onesignal.NotificationExtender" />
-            </intent-filter>
-        </service>
-
         <activity android:name=".ChooseLanguage" />
 
-       <meta-data
+        <meta-data
             android:name="io.fabric.ApiKey"
             android:value="54cc6074b05a01d36002627727aa0c29a5022a6c" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

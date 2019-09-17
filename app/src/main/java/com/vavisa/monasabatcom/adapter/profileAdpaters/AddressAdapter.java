@@ -1,13 +1,14 @@
 package com.vavisa.monasabatcom.adapter.profileAdpaters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.vavisa.monasabatcom.Common.Common;
@@ -126,9 +127,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
                     sw.close(true);
                 }
 
-            }else if(v == addressCart){
-                if(listener != null){
-                    listener.onItemClick(getAdapterPosition(),2,v);
+            } else if (v == addressCart) {
+                if (listener != null) {
+                    listener.onItemClick(getAdapterPosition(), 2, v);
                     sw.close(true);
                 }
             }
