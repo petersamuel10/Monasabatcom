@@ -3,6 +3,7 @@ package com.vavisa.monasabatcom.fragments;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,8 +52,6 @@ import static com.vavisa.monasabatcom.utility.Constants.RESULT_OK;
 
 public class CompaniesByCat extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.category_rec)
@@ -75,6 +74,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     CompanyAdapter adapter = new CompanyAdapter();
+    private  ProgressDialog progressDialog;
     private View fragmentView;
     private TextView title, search_ed;
     private ArrayList<Company> companyList = new ArrayList<>();
@@ -100,6 +100,8 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.companies_by_cat, container, false);
             ButterKnife.bind(this, fragmentView);
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
             reference();
 
             title.setText(getArguments().getString("catName"));
@@ -116,7 +118,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
                     if (llm.findLastCompletelyVisibleItemPosition() == companyList.size() - 1) {
                         if (!isEmpty) {
                             pageNo++;
-                            pb.setVisibility(View.VISIBLE);
+                            progressDialog.show();
                             requestData();
                         }
                     }
@@ -386,7 +388,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
 
     private void requestData() {
         if (Common.isConnectToTheInternet(getActivity())) {
-            pb.setVisibility(View.VISIBLE);
+           progressDialog.show();
             compositeDisposable.add(
                     Common.getAPI()
                             .getCompanies("", categoryId, -1, cityId, searchDate, searchHour, 0, pageNo, 10)
@@ -404,21 +406,21 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
                                                     companyList.clear();
                                                 companyList.addAll(companies);
                                                 setupRecyclerView();
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             } else if (companyList.isEmpty()) {
                                                 companyListView.setVisibility(GONE);
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             } else if (companies.isEmpty()) {
                                                 isEmpty = true;
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             }
                                         }
                                     }, new Consumer<Throwable>() {
                                         @Override
                                         public void accept(Throwable throwable) throws Exception {
-                                            pb.setVisibility(GONE);
+                                           progressDialog.dismiss();
                                             Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));
@@ -463,7 +465,7 @@ public class CompaniesByCat extends Fragment implements View.OnClickListener {
         error.setMessage(R.string.error_connection);
         AlertDialog dialog = error.create();
         dialog.show();
-        pb.setVisibility(GONE);
+       progressDialog.dismiss();
         sl.setRefreshing(false);
     }
 

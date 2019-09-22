@@ -1,13 +1,13 @@
 package com.vavisa.monasabatcom.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -19,23 +19,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.vavisa.monasabatcom.Common.Common;
 import com.vavisa.monasabatcom.R;
 import com.vavisa.monasabatcom.adapter.OfferAdapter;
-import com.vavisa.monasabatcom.models.Offer;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
 
 public class OffersFragment extends Fragment {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.offer_recyclerView)
@@ -45,6 +39,7 @@ public class OffersFragment extends Fragment {
 
     private OfferAdapter offerAdapter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -53,6 +48,8 @@ public class OffersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_offers_fragments, container, false);
         ButterKnife.bind(this, view);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
 
         setUpSwipeRefreshLayout();
 
@@ -64,31 +61,25 @@ public class OffersFragment extends Fragment {
 
     private void requestData() {
         if (Common.isConnectToTheInternet(getContext())) {
-            pb.setVisibility(View.VISIBLE);
+            progressDialog.show();
             compositeDisposable.add(Common.getAPI().getOffers()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<ArrayList<Offer>>() {
-                        @Override
-                        public void accept(ArrayList<Offer> offers) throws Exception {
-                            if (offers.size() > 0) {
-                                pb.setVisibility(GONE);
-                                emptyList.setVisibility(View.GONE);
-                                offerAdapter.addOffer(offers);
-                                offer_recyclerView.setVisibility(View.VISIBLE);
-                            } else {
-                                pb.setVisibility(GONE);
-                                offer_recyclerView.setVisibility(GONE);
-                                offerAdapter.notifyDataSetChanged();
-                                emptyList.setVisibility(View.VISIBLE);
-                            }
+                    .subscribe(offers -> {
+                        if (offers.size() > 0) {
+                            progressDialog.dismiss();
+                            emptyList.setVisibility(View.GONE);
+                            offerAdapter.addOffer(offers);
+                            offer_recyclerView.setVisibility(View.VISIBLE);
+                        } else {
+                            progressDialog.dismiss();
+                            offer_recyclerView.setVisibility(GONE);
+                            offerAdapter.notifyDataSetChanged();
+                            emptyList.setVisibility(View.VISIBLE);
                         }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            pb.setVisibility(View.GONE);
-                            Common.errorAlert(getContext(), getString(R.string.error_occure));
-                        }
+                    }, throwable -> {
+                        progressDialog.dismiss();
+                        Common.errorAlert(getContext(), getString(R.string.error_occure));
                     }));
         } else
             errorConnectionMess();
@@ -106,16 +97,13 @@ public class OffersFragment extends Fragment {
 
     private void setUpSwipeRefreshLayout() {
         sl.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-        sl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        sl.setOnRefreshListener(() -> {
 
-                if (offerAdapter != null) {
-                    setupRecyclerView();
-                    requestData();
-                }
-                sl.setRefreshing(false);
+            if (offerAdapter != null) {
+                setupRecyclerView();
+                requestData();
             }
+            sl.setRefreshing(false);
         });
     }
 

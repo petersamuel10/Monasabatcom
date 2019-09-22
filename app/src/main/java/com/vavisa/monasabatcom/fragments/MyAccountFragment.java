@@ -187,7 +187,7 @@ public class MyAccountFragment extends Fragment implements View.OnClickListener 
     }
 
     public void selectOption(Fragment fragment) {
-        ((MainActivity) getActivity()).pushFragments(Constants.TAB_PROFILE, fragment, true);
+        ((MainActivity) getActivity()).pushFragments(Constants.TAB_PROFILE, fragment, true );
     }
 
 }

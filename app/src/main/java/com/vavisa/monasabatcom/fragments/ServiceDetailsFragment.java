@@ -2,6 +2,7 @@ package com.vavisa.monasabatcom.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +52,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ServiceDetailsFragment extends Fragment implements View.OnClickListener {
 
-    private ProgressBar pb;
+    private ProgressDialog progressDialog;
     private NestedScrollView scrollView;
     private View fragmentView, extra_border_view;
     private TextView service_extras_tag;
@@ -84,6 +84,8 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_service_details, container, false);
             reference();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
 
             serviceId = Integer.parseInt(getArguments().getString("serviceId"));
             companyId = Integer.parseInt(getArguments().getString("companyId"));
@@ -129,7 +131,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
     }
 
     private void requestData() {
-        pb.setVisibility(View.VISIBLE);
+        progressDialog.show();
         compositeDisposable.add(
                 Common.getAPI()
                         .getServiceDetails(serviceId)
@@ -137,7 +139,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 servics -> {
-                                    pb.setVisibility(View.GONE);
+                                    progressDialog.dismiss();
                                     scrollView.setVisibility(View.VISIBLE);
                                     serviceData = servics;
                                     try {
@@ -146,7 +148,7 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
                                     }
 
                                 }, throwable -> {
-                                    pb.setVisibility(View.GONE);
+                                    progressDialog.dismiss();
                                     Common.errorAlert(getContext(), getString(R.string.error_occure));
                                 }));
 
@@ -423,8 +425,6 @@ public class ServiceDetailsFragment extends Fragment implements View.OnClickList
         ImageView cart = toolbar.findViewById(R.id.cart_icon);
         cart_quantity = toolbar.findViewById(R.id.cart_quantity);
 
-
-        pb = fragmentView.findViewById(R.id.pb);
         scrollView = fragmentView.findViewById(R.id.scroll);
         slider = fragmentView.findViewById(R.id.service_images);
         serviceName = fragmentView.findViewById(R.id.service_name);

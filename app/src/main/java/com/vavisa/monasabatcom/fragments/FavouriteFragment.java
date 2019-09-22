@@ -40,8 +40,6 @@ import static android.view.View.GONE;
 
 public class FavouriteFragment extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.loginLN)
@@ -133,7 +131,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     private void requestData() {
 
         if (Common.isConnectToTheInternet(getActivity())) {
-            pb.setVisibility(GONE);
+           progressDialog.show();
             compositeDisposable.add(
                     Common.getAPI()
                             .getFavouriteList(Common.currentUser.getId())
@@ -148,9 +146,9 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
                                                 fav_recyclerView.setVisibility(View.VISIBLE);
                                                 companyList = favourites;
                                                 setupRecyclerView();
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             } else {
-                                                pb.setVisibility(GONE);
+                                               progressDialog.dismiss();
                                                 fav_recyclerView.setVisibility(GONE);
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
@@ -159,7 +157,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
                                     }, new Consumer<Throwable>() {
                                         @Override
                                         public void accept(Throwable throwable) throws Exception {
-                                            pb.setVisibility(GONE);
+                                           progressDialog.dismiss();
                                             Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));

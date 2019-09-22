@@ -29,7 +29,7 @@ public class ProfileDetails extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.fullName_ed)
     EditText edtName;
-    @BindView(R.id.email_ed)
+    @BindView(R.id.email_ed_details)
     EditText edtEmail;
     @BindView(R.id.mobile_ed)
     EditText edtMobile;

@@ -139,17 +139,14 @@ public class Register extends AppCompatActivity {
         compositeDisposable.add(Common.getAPI().register(newUser)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        if (integer > 0) {
-                            Common.currentUser = newUser;
-                            Common.currentUser.setId(integer);
-                            requestProfileInfo();
-                        } else if (integer == -5) {
-                            progressDialog.dismiss();
-                            Toast.makeText(Register.this, getResources().getString(R.string.email_reg_before), Toast.LENGTH_SHORT).show();
-                        }
+                .subscribe(integer -> {
+                    if (integer > 0) {
+                        Common.currentUser = newUser;
+                        Common.currentUser.setId(integer);
+                        requestProfileInfo();
+                    } else if (integer == -5) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Register.this, getResources().getString(R.string.email_reg_before), Toast.LENGTH_SHORT).show();
                     }
                 }));
 
@@ -160,15 +157,12 @@ public class Register extends AppCompatActivity {
         compositeDisposable.add(Common.getAPI().getProfile(Common.currentUser.getId(), Common.currentUser.getPassword())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
-                    @Override
-                    public void accept(User user) throws Exception {
-                        progressDialog.dismiss();
-                        Common.currentUser.setName(user.getName());
-                        Common.currentUser.setMobile(user.getMobile());
-                        Paper.book("Monasabatcom").write("currentUser", Common.currentUser);
-                        onBackPressed();
-                    }
+                .subscribe(user -> {
+                    progressDialog.dismiss();
+                    Common.currentUser.setName(user.getName());
+                    Common.currentUser.setMobile(user.getMobile());
+                    Paper.book("Monasabatcom").write("currentUser", Common.currentUser);
+                    onBackPressed();
                 }));
     }
 }

@@ -3,6 +3,7 @@ package com.vavisa.monasabatcom.fragments;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,8 +56,6 @@ import static com.vavisa.monasabatcom.utility.Constants.RESULT_OK;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.home_recyclerView)
@@ -80,6 +78,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private EditText searchText;
     private ArrayList<Company> companyList = new ArrayList<>();
     private int viewType = 1;
+    private ProgressDialog progressDialog;
 
     List<City> allCitiesList = new ArrayList<>();
     ArrayList<SearchHour> searchHoursList_ = new ArrayList<>();
@@ -102,6 +101,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_home_fragments, container, false);
             reference();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
             getCities();
             getTime();
         }
@@ -149,7 +150,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (llm.findLastCompletelyVisibleItemPosition() == companyList.size() - 1) {
                     if (!isEmpty) {
                         pageNo++;
-                        pb.setVisibility(View.VISIBLE);
+                        progressDialog.show();
                         requestData();
                     }
                 }
@@ -440,7 +441,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void requestData() {
         if (Common.isConnectToTheInternet(getActivity())) {
-            pb.setVisibility(View.VISIBLE);
+            progressDialog.show();
 
             compositeDisposable.add(
                     Common.getAPI()
@@ -459,21 +460,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                                     companyList.clear();
                                                 companyList.addAll(companies);
                                                 setupRecyclerView();
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             } else if (companyList.isEmpty()) {
                                                 companyListView.setVisibility(GONE);
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             } else if (companies.isEmpty()) {
                                                 isEmpty = true;
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             }
                                         }
                                     }, new Consumer<Throwable>() {
                                         @Override
                                         public void accept(Throwable throwable) throws Exception {
-                                            pb.setVisibility(GONE);
+                                            progressDialog.dismiss();
                                             Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));
@@ -518,7 +519,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         error.setMessage(R.string.error_connection);
         AlertDialog dialog = error.create();
         dialog.show();
-        pb.setVisibility(GONE);
+        progressDialog.dismiss();
         sl.setRefreshing(false);
     }
 

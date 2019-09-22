@@ -36,8 +36,6 @@ import static android.view.View.GONE;
 
 public class CompaniesByOffer extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.com_by_offer_recy)
@@ -127,7 +125,7 @@ public class CompaniesByOffer extends Fragment implements View.OnClickListener {
     private void requestData() {
         if (Common.isConnectToTheInternet(getActivity())) {
 
-            pb.setVisibility(View.VISIBLE);
+           progressDialog.show();
 
             compositeDisposable.add(
                     Common.getAPI()
@@ -144,9 +142,9 @@ public class CompaniesByOffer extends Fragment implements View.OnClickListener {
                                                 com_offer_recy.setVisibility(View.VISIBLE);
                                                 companyList = companies;
                                                 setupRecyclerView();
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                             } else {
-                                                pb.setVisibility(GONE);
+                                                progressDialog.dismiss();
                                                 com_offer_recy.setVisibility(GONE);
                                                 adapter.notifyDataSetChanged();
                                                 emptyList.setVisibility(View.VISIBLE);
@@ -155,7 +153,7 @@ public class CompaniesByOffer extends Fragment implements View.OnClickListener {
                                     }, new Consumer<Throwable>() {
                                         @Override
                                         public void accept(Throwable throwable) throws Exception {
-                                            pb.setVisibility(GONE);
+                                            progressDialog.dismiss();
                                             Common.errorAlert(getContext(), getString(R.string.error_occure));
                                         }
                                     }));

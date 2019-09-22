@@ -1,5 +1,6 @@
 package com.vavisa.monasabatcom.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -44,7 +45,7 @@ import static com.vavisa.monasabatcom.utility.ListSizeUtility.setListViewHeightB
 
 public class CompanyDetailsFragment extends Fragment implements View.OnClickListener {
 
-    private ProgressBar pb;
+    private ProgressDialog progressDialog;
     private ScrollView scrollView;
     private View fragmentView, service_border_view, offer_border_view;
     private SliderLayout slider;
@@ -73,6 +74,8 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_company_details, container, false);
             reference();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
 
             userId =
                     (Paper.book("Monasabatcom").contains("currentUser")) ? Common.currentUser.getId() : 0;
@@ -118,7 +121,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
     }
 
     private void requestData() {
-        pb.setVisibility(View.VISIBLE);
+        progressDialog.show();
         compositeDisposable.add(
                 Common.getAPI()
                         .getCompanyDetails(company_id, searchDate, searchHour, userId)
@@ -128,7 +131,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
                                 new Consumer<CompanyDetailsModel>() {
                                     @Override
                                     public void accept(CompanyDetailsModel companyDetailsModel) {
-                                        pb.setVisibility(GONE);
+                                       progressDialog.dismiss();
                                         scrollView.setVisibility(View.VISIBLE);
                                         companyDetails = companyDetailsModel;
                                         try {
@@ -139,7 +142,7 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
                                 }, new Consumer<Throwable>() {
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
-                                        pb.setVisibility(GONE);
+                                        progressDialog.dismiss();
                                         Common.errorAlert(getContext(), getString(R.string.error_occure));
                                     }
                                 }));
@@ -303,7 +306,6 @@ public class CompanyDetailsFragment extends Fragment implements View.OnClickList
         ImageView cart = toolbar.findViewById(R.id.cart_icon);
         cart_quantity = toolbar.findViewById(R.id.cart_quantity);
 
-        pb = fragmentView.findViewById(R.id.pb);
         scrollView = fragmentView.findViewById(R.id.scroll);
         slider = fragmentView.findViewById(R.id.slider);
         companyName = fragmentView.findViewById(R.id.company_name);

@@ -1,6 +1,7 @@
 package com.vavisa.monasabatcom.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +35,6 @@ import static android.view.View.GONE;
 
 public class CategoryFragment extends Fragment {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.sl)
     SwipeRefreshLayout sl;
     @BindView(R.id.category_recyclerView)
@@ -44,6 +43,7 @@ public class CategoryFragment extends Fragment {
 
     private CategoryAdapter homeAdapter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -51,8 +51,9 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_category, container, false);
-
         ButterKnife.bind(this, view);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
 
         setUpSwipeRefreshLayout();
 
@@ -66,7 +67,7 @@ public class CategoryFragment extends Fragment {
 
     private void requestData() {
         if (Common.isConnectToTheInternet(getActivity())) {
-            pb.setVisibility(View.VISIBLE);
+           progressDialog.show();
             compositeDisposable.add(Common.getAPI().getCategory()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -75,12 +76,12 @@ public class CategoryFragment extends Fragment {
                         public void accept(ArrayList<Category> categories) throws Exception {
                             homeAdapter.addCategory(categories);
                             homeAdapter.notifyDataSetChanged();
-                            pb.setVisibility(View.GONE);
+                            progressDialog.dismiss();
                         }
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
-                            pb.setVisibility(GONE);
+                           progressDialog.dismiss();
                             Common.errorAlert(getContext(), getString(R.string.error_occure));
                         }
                     }));

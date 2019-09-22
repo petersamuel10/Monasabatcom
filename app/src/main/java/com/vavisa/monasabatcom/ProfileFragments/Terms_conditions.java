@@ -1,6 +1,7 @@
 package com.vavisa.monasabatcom.ProfileFragments;
 
 
+import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,8 +33,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class Terms_conditions extends Fragment {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.wb_terms)
     WebView webView_terms;
     @BindView(R.id.arrow)
@@ -45,6 +44,7 @@ public class Terms_conditions extends Fragment {
     }
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +52,8 @@ public class Terms_conditions extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.profile_terms_conditions, container, false);
         ButterKnife.bind(this, view);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
 
         if (Common.isArabic)
             arrowAr.setImageDrawable(getResources().getDrawable(R.drawable.arrow_right_white_24dp));
@@ -72,7 +74,7 @@ public class Terms_conditions extends Fragment {
 
     private void getData() {
         if (Common.isConnectToTheInternet(getActivity())) {
-            pb.setVisibility(View.VISIBLE);
+            progressDialog.show();
             compositeDisposable.add(Common.getAPI().getPages(1)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -80,7 +82,7 @@ public class Terms_conditions extends Fragment {
                         @Override
                         public void accept(PageData pageData) throws Exception {
                             bindData(pageData);
-                            pb.setVisibility(View.GONE);
+                           progressDialog.dismiss();
                         }
                     }));
         } else

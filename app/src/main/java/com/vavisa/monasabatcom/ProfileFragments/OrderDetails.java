@@ -1,6 +1,7 @@
 package com.vavisa.monasabatcom.ProfileFragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OrderDetails extends Fragment {
 
-    @BindView(R.id.pb)
-    ProgressBar pb;
     @BindView(R.id.scroll)
     NestedScrollView scroll;
     @BindView(R.id.order_num)
@@ -74,6 +73,7 @@ public class OrderDetails extends Fragment {
     private Integer order_id;
     private ServiceDetailsAdapter serviceAdapter;
     private OfferDetailsAdapter offerAdapter;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,6 +81,8 @@ public class OrderDetails extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.profile_order_details, container, false);
         ButterKnife.bind(this, view);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
         ImageView arrowAr = view.findViewById(R.id.cancel);
         if (Common.isArabic)
             arrowAr.setRotation(180);
@@ -94,7 +96,7 @@ public class OrderDetails extends Fragment {
 
 
     private void requestData() {
-        pb.setVisibility(View.VISIBLE);
+        progressDialog.show();
 
         compositeDisposable.add(Common.getAPI().getOrderDetails(order_id)
                 .subscribeOn(Schedulers.io())
@@ -102,7 +104,7 @@ public class OrderDetails extends Fragment {
                 .subscribe(new Consumer<OrderDetailsModel>() {
                     @Override
                     public void accept(OrderDetailsModel orderDetails) throws Exception {
-                        pb.setVisibility(View.GONE);
+                        progressDialog.dismiss();
                         scroll.setVisibility(View.VISIBLE);
                         bindData(orderDetails);
                     }

@@ -2,6 +2,7 @@ package com.vavisa.monasabatcom.fragments;
 
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OfferDetailsFragment extends Fragment implements View.OnClickListener {
 
-    private ProgressBar pb;
+    private ProgressDialog progressDialog;
     private NestedScrollView scroll;
     private View fragmentView;
     private SliderLayout slider;
@@ -76,6 +76,8 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_offer_details, container, false);
             reference();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
 
             offerId = Integer.parseInt(getArguments().getString("offerId"));
             companyId = Integer.parseInt(getArguments().getString("companyId"));
@@ -114,7 +116,7 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
 
 
     private void requestData() {
-        pb.setVisibility(View.VISIBLE);
+        progressDialog.show();
         compositeDisposable.add(
                 Common.getAPI()
                         .getOfferDetails(offerId)
@@ -124,7 +126,7 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
                                 new Consumer<Offers>() {
                                     @Override
                                     public void accept(Offers offers) {
-                                        pb.setVisibility(View.GONE);
+                                        progressDialog.dismiss();
                                         offersData = offers;
                                         try {
                                             bindData();
@@ -135,7 +137,7 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
                                 }, new Consumer<Throwable>() {
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
-                                        pb.setVisibility(View.GONE);
+                                        progressDialog.dismiss();
                                         Common.errorAlert(getContext(), getString(R.string.error_occure));
                                     }
                                 }));
@@ -432,7 +434,6 @@ public class OfferDetailsFragment extends Fragment implements View.OnClickListen
         ImageView cart = toolbar.findViewById(R.id.cart_icon);
         cart_quantity = toolbar.findViewById(R.id.cart_quantity);
 
-        pb = fragmentView.findViewById(R.id.pb);
         scroll = fragmentView.findViewById(R.id.scroll);
         slider = fragmentView.findViewById(R.id.offer_images);
         offerName = fragmentView.findViewById(R.id.offer_name);

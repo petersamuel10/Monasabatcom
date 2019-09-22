@@ -104,12 +104,7 @@ public class Common {
 
         message.setText(message_str);
 
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        ok.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
     }

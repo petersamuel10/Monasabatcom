@@ -23,7 +23,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class Rating extends Fragment {
@@ -90,20 +89,12 @@ public class Rating extends Fragment {
         compositeDisposable.add(Common.getAPI().rating(Common.currentUser.getId(), Integer.parseInt(com_id), rating_value, comment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        if (integer == 1)
-                            showMessage();
-                        else
-                            Toast.makeText(getContext(), getString(R.string.error_occure), Toast.LENGTH_SHORT).show();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Common.errorAlert(getContext(), getString(R.string.error_occure));
-                    }
-                }));
+                .subscribe(integer -> {
+                    if (integer == 1)
+                        showMessage();
+                    else
+                        Toast.makeText(getContext(), getString(R.string.error_occure), Toast.LENGTH_SHORT).show();
+                }, throwable -> Common.errorAlert(getContext(), getString(R.string.error_occure))));
     }
 
     private void showMessage() {
@@ -117,12 +108,9 @@ public class Rating extends Fragment {
 
         message.setText(getString(R.string.thanks_rating));
 
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                getActivity().onBackPressed();
-            }
+        ok.setOnClickListener(v -> {
+            dialog.dismiss();
+            getActivity().onBackPressed();
         });
 
         dialog.show();

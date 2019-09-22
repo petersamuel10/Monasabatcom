@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileFragments.ProfileDetails">
 
@@ -92,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fullName_ed" />
 
     <EditText
-        android:id="@+id/email-ed"
+        android:id="@+id/email_ed_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -118,7 +119,7 @@
         android:text="@string/mobile"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email-ed" />
+        app:layout_constraintTop_toBottomOf="@+id/email_ed_details" />
 
     <EditText
         android:id="@+id/mobile_ed"
